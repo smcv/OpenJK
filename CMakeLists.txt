@@ -25,6 +25,18 @@ option(BuildJK2SPEngine "Whether to create projects for the jk2 SP engine (openj
 option(BuildJK2SPGame "Whether to create projects for the jk2 sp gamecode mod (jk2gamex86.dll)" OFF)
 option(BuildJK2SPRdVanilla "Whether to create projects for the jk2 sp renderer (rdjosp-vanilla_x86.dll)" OFF)
 
+# Common Code used by MP & SP Engine & MP Dedicated Server
+set(BuildCommonLib OFF)
+if(BuildMPEngine OR BuildMPDed OR BuildSPEngine OR BuildJK2SPEngine)
+	set(BuildCommonLib ON)
+endif(BuildMPEngine OR BuildMPDed OR BuildSPEngine OR BuildJK2SPEngine)
+
+# Common Window-related Code used by MP & SP Engine
+set(BuildWindowLib OFF)
+if(BuildMPEngine OR  BuildSPEngine OR BuildJK2SPEngine)
+	set(BuildWindowLib ON)
+endif(BuildMPEngine  OR BuildSPEngine OR BuildJK2SPEngine)
+
 # Customizable libraries
 if(WIN32)
 	option(UseInternalOpenAL "Whether to use the included OpenAL instead of a locally installed one" ON)
@@ -90,11 +102,14 @@ set(JK2SPGame "jospgame${Architecture}")
 set(JK2SPVanillaRenderer "rdjosp-vanilla_${Architecture}")
 # Library names
 set(MPBotLib "botlib")
+set(CommonLib "commonlib")
+set(WindowLib "windowlib")
 
 # Paths
 set(SPDir "${CMAKE_SOURCE_DIR}/code")
 set(MPDir "${CMAKE_SOURCE_DIR}/codemp")
 set(JK2SPDir "${CMAKE_SOURCE_DIR}/codeJK2")
+set(SharedDir "${CMAKE_SOURCE_DIR}/codeshared") # shared code between MP & SP
 
 # Common settings
 if(WIN32)
@@ -192,6 +207,7 @@ if(BuildJK2SPGame)
 	add_subdirectory("${JK2SPDir}/game")
 endif()
 add_subdirectory(${MPDir})
+add_subdirectory(${SharedDir})
 
 # CPack for installer creation
 # TODO: Which version are we?
