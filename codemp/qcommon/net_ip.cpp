@@ -932,14 +932,15 @@ void NET_Config( qboolean enableNetworking ) {
 	}
 }
 
-static void NET_GenerateEvent()
+void NET_Frame( void )
 {
 	static byte sys_packetReceived[MAX_MSGLEN];
 	msg_t		netmsg;
 	netadr_t	adr;
 	// check for network packets
 	MSG_Init( &netmsg, sys_packetReceived, sizeof( sys_packetReceived ) );
-	if ( Sys_GetPacket ( &adr, &netmsg ) ) {
+	while( Sys_GetPacket ( &adr, &netmsg ) )
+	{
 		netadr_t		*buf;
 		int				len;
 
@@ -971,9 +972,6 @@ void NET_Init( void ) {
 #endif
 
 	NET_Config( qtrue );
-	
-	// Make Sys_GetEvent() retrieve Network events
-	Sys_RegisterEventSource( NET_GenerateEvent );
 
 	Cmd_AddCommand ("net_restart", NET_Restart_f );
 }
@@ -984,8 +982,6 @@ NET_Shutdown
 ====================
 */
 void NET_Shutdown( void ) {
-	// Stop Sys_GetEvent() from retrieving Network events
-	Sys_UnregisterEventSource( NET_GenerateEvent );
 	if ( networkingEnabled ) {
 		NET_Config( qfalse );
 	}

@@ -10,6 +10,7 @@
 
 #include "sys/sys_public.h"
 #include "window/window_public.h"
+#include "console/con_public.h"
 
 #define	MAXPRINTMSG	4096
 
@@ -133,7 +134,7 @@ void QDECL Com_Printf( const char *fmt, ... ) {
 #endif
 
 	// echo to dedicated console and early console
-	Sys_Print( msg );
+	Con_Print( msg );
 
 	// logfile
 	if ( com_logfile && com_logfile->integer ) {
@@ -1141,6 +1142,8 @@ Com_Init
 =================
 */
 void Com_Init( char *commandLine ) {
+	// Create Console for errors
+	Con_CreateConsole( );
 	char	*s;
 	int		qport;
 
@@ -1296,8 +1299,8 @@ void Com_Init( char *commandLine ) {
 
 		Sys_Init();
 
-#ifndef _DEDICATED
-		IN_Init();
+#ifndef DEDICATED
+		Con_Init();
 #endif
 
 		// Pick a random port value
@@ -1310,7 +1313,7 @@ void Com_Init( char *commandLine ) {
 		com_dedicated->modified = qfalse;
 		if ( !com_dedicated->integer ) {
 			CL_Init();
-			Sys_ShowConsole( com_viewlog->integer, qfalse );
+			Con_ShowConsole( com_viewlog->integer, qfalse );
 		}
 
 		// set com_frameTime so that if a map is started on the
@@ -1351,6 +1354,14 @@ void Com_Init( char *commandLine ) {
 	{
 		Com_CatchError (code);
 		Sys_Error ("Error during initialization: %s", Com_ErrorString (code));
+	}
+
+	NET_Init();
+
+	// hide the early console since we've reached the point where we
+	// have a working graphics subsystems
+	if( !com_dedicated->integer && !com_viewlog->integer ) {
+		Con_ShowConsole( 0, qfalse );
 	}
 }
 
@@ -1488,6 +1499,11 @@ Com_Frame
 =================
 */
 void Com_Frame( void ) {
+#	ifndef DEDICATED
+		Window_Frame();
+#	endif
+
+	NET_Frame();
 
 	try
 	{
@@ -1518,7 +1534,7 @@ void Com_Frame( void ) {
 		// if "viewlog" has been modified, show or hide the log console
 		if ( com_viewlog->modified ) {
 			if ( !com_dedicated->value ) {
-				Sys_ShowConsole( com_viewlog->integer, qfalse );
+				Con_ShowConsole( com_viewlog->integer, qfalse );
 			}
 			com_viewlog->modified = qfalse;
 		}
@@ -1570,11 +1586,11 @@ void Com_Frame( void ) {
 			com_dedicated->modified = qfalse;
 			if ( !com_dedicated->integer ) {
 				CL_Init();
-				Sys_ShowConsole( com_viewlog->integer, qfalse );
+				Con_ShowConsole( com_viewlog->integer, qfalse );
 				CL_StartHunkUsers();	//fire up the UI!
 			} else {
 				CL_Shutdown();
-				Sys_ShowConsole( 1, qtrue );
+				Con_ShowConsole( 1, qtrue );
 			}
 		}
 

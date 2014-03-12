@@ -338,8 +338,8 @@ if(BuildMPEngine)
 
 	#    Dependencies
 	
-	# WindowLib
-	set(MPEngineLibraries ${MPEngineLibraries} ${WindowLib})
+	# WindowLib, ClientConsoleLib
+	set(MPEngineLibraries ${MPEngineLibraries} ${WindowLib} ${ClientConsoleLib})
 
 	# OpenAL (is optionally included for Windows)
 	if(UseInternalOpenAL)
@@ -519,7 +519,7 @@ endif(BuildMPEngine)
 #        Dedicated Server (Engine) (jampded.exe)
 
 if(BuildMPDed)
-	set(MPDedLibraries ${MPEngineAndDedLibraries})
+	set(MPDedLibraries ${MPEngineAndDedLibraries} ${DedicatedConsoleLib})
 	set(MPDedIncludeDirectories ${MPEngineAndDedIncludeDirectories})
 	set(MPDedFiles ${MPEngineAndDedFiles})
 	set(MPDedDefines ${MPSharedDefines} "_CONSOLE" "DEDICATED")

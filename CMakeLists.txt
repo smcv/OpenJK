@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 2.8.8)
 # For checks in subdirectories
 set(InOpenJK TRUE)
 
+if (NOT CMAKE_BUILD_TYPE)
+	message("No build type selected, default to RELEASE")
+	set( CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: None(CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." )
+endif (NOT CMAKE_BUILD_TYPE)
+
 # Project name
 set(ProjectName "OpenJK" CACHE STRING "Project Name")
 project(${ProjectName})
@@ -33,9 +38,16 @@ endif(BuildMPEngine OR BuildMPDed OR BuildSPEngine OR BuildJK2SPEngine)
 
 # Common Window-related Code used by MP & SP Engine
 set(BuildWindowLib OFF)
+set(BuildClientConsoleLib OFF)
 if(BuildMPEngine OR  BuildSPEngine OR BuildJK2SPEngine)
 	set(BuildWindowLib ON)
+	set(BuildClientConsoleLib ON)
 endif(BuildMPEngine  OR BuildSPEngine OR BuildJK2SPEngine)
+
+set(BuildDedicatedConsoleLib OFF)
+if(BuildMPDed)
+	set(BuildDedicatedConsoleLib ON)
+endif(BuildMPDed)
 
 # Customizable libraries
 if(WIN32)
@@ -105,6 +117,8 @@ set(JK2SPVanillaRenderer "rdjosp-vanilla_${Architecture}")
 set(MPBotLib "botlib")
 set(CommonLib "commonlib")
 set(WindowLib "windowlib")
+set(ClientConsoleLib "conclientlib")
+set(DedicatedConsoleLib "dedclientlib")
 
 # Paths
 set(SPDir "${CMAKE_SOURCE_DIR}/code")
@@ -181,11 +195,6 @@ else()
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-comment")
 		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-offsetof")
 	endif()
-endif()
-
-if (NOT CMAKE_BUILD_TYPE)
-	message("No build type selected, default to RELEASE")
-	set(CMAKE_BUILD_TYPE "RELEASE")
 endif()
 
 # Settings

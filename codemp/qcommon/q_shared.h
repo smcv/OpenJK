@@ -15,6 +15,14 @@
 #define HOMEPATH_NAME_WIN "OpenJK"
 #define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
 
+#ifdef _WIN32
+#	define HOMEPATH_NAME HOMEPATH_NAME_WIN
+#elif defined(MACOS_X)
+#	define HOMEPATH_NAME HOMEPATH_NAME_MACOSX
+#else
+#	define HOMEPATH_NAME HOMEPATH_NAME_UNIX
+#endif
+
 #define	BASEGAME "base"
 
 //NOTENOTE: Only change this to re-point ICARUS to a new script directory
@@ -170,9 +178,7 @@ typedef int32_t qhandle_t, thandle_t, fxHandle_t, sfxHandle_t, fileHandle_t, cli
 #define	YAW					1		// left / right
 #define	ROLL				2		// fall over
 
-// the game guarantees that no string from the network will ever
-// exceed MAX_STRING_CHARS
-#define	MAX_STRING_CHARS	1024	// max length of a string passed to Cmd_TokenizeString
+// MAX_STRING_CHARS now in codeshared/qcommon/q_sharedtypes.h
 #define	MAX_STRING_TOKENS	1024	// max tokens resulting from Cmd_TokenizeString
 #define	MAX_TOKEN_CHARS		1024	// max length of an individual token
 
@@ -191,13 +197,6 @@ typedef int32_t qhandle_t, thandle_t, fxHandle_t, sfxHandle_t, fileHandle_t, cli
 #define MAX_HOSTNAMELENGTH		256//22
 #define MAX_MAPNAMELENGTH		256//16
 #define MAX_STATUSLENGTH		256//64
-
-#define	MAX_QPATH			64		// max length of a quake game pathname
-#ifdef PATH_MAX
-#define MAX_OSPATH			PATH_MAX
-#else
-#define	MAX_OSPATH			256		// max length of a filesystem pathname
-#endif
 
 #define	MAX_NAME_LENGTH		32		// max length of a client name
 #define MAX_NETNAME			36

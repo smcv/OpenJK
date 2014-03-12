@@ -84,6 +84,7 @@ typedef enum { qfalse=0, qtrue } qboolean;
 
 
 
+#define	CVAR_NONE			(0x00000000u)	// can be set even when cheats are disabled, but is not archived
 #define	CVAR_ARCHIVE		(0x00000001u)	// set to cause it to be saved to configuration file. used for system variables,
 											//	not for player specific configurations
 #define	CVAR_USERINFO		(0x00000002u)	// sent to server on connect or change
@@ -103,7 +104,8 @@ typedef enum { qfalse=0, qtrue } qboolean;
 #define CVAR_NONEXISTENT	(0x80000000u)	// Cvar doesn't exist.
 
 // nothing outside the Cvar_*() functions should modify these fields!
-typedef struct cvar_s {
+typedef struct cvar_s
+{
 	char			*name;
 	char			*string;
 	char			*resetString;		// cvar_restart will reset to this value
@@ -121,3 +123,14 @@ typedef struct cvar_s {
 	struct cvar_s	*hashNext, *hashPrev;
 	int				hashIndex;
 } cvar_t;
+
+#define	MAX_QPATH			64		// max length of a quake game pathname
+#ifdef PATH_MAX
+#define MAX_OSPATH			PATH_MAX
+#else
+#define	MAX_OSPATH			256		// max length of a filesystem pathname
+#endif
+
+// the game guarantees that no string from the network will ever
+// exceed MAX_STRING_CHARS
+#define	MAX_STRING_CHARS	1024	// max length of a string passed to Cmd_TokenizeString

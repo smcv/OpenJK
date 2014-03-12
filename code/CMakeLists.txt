@@ -22,8 +22,8 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 	
 	#    Dependencies
 	
-	# CommonLib, WindowLib
-	set(SPEngineLibraries ${SPEngineLibraries} ${CommonLib} ${WindowLib})
+	# CommonLib, WindowLib, ClientConsoleLib
+	set(SPEngineLibraries ${SPEngineLibraries} ${CommonLib} ${WindowLib} ${ClientConsoleLib})
 
 	# OpenAL (is optionally included for Windows)
 	if(UseInternalOpenAL)

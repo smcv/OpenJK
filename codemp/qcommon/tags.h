@@ -7,10 +7,15 @@
 	TAGDEF(ALL),
 	TAGDEF(BOTLIB),
 	TAGDEF(CLIENTS),					// Memory used for client info
+	
+	// KEEP THESE HERE! This is where they are in SP, we need them at the same indices for the shared code! --mrw
+	TAGDEF(FILESYS),					// general filesystem usage
+	TAGDEF(EVENT),
+	TAGDEF(CLIPBOARD),
+	
 	TAGDEF(BOTGAME),
 	TAGDEF(DOWNLOAD),					// used by the downloading system
 	TAGDEF(GENERAL),
-	TAGDEF(CLIPBOARD),
 	TAGDEF(SND_MP3STREAMHDR),			// specific MP3 struct for decoding (about 18..22K each?), not the actual MP3 binary
 	TAGDEF(SND_DYNAMICMUSIC),			// in-mem MP3 files
 	TAGDEF(BSP_DISKIMAGE),				// temp during loading, to save both server and renderer fread()ing the same file. Only used if not low physical memory (currently 96MB)
@@ -18,8 +23,6 @@
 	TAGDEF(SPECIAL_MEM_TEST),			// special usage for testing z_malloc recover only
 	TAGDEF(HUNK_MARK1),					//hunk allocations before the mark is set
 	TAGDEF(HUNK_MARK2),					//hunk allocations after the mark is set
-	TAGDEF(EVENT),
-	TAGDEF(FILESYS),					// general filesystem usage
 	TAGDEF(GHOUL2),						// Ghoul2 stuff
 	TAGDEF(GHOUL2_GORE),				// Ghoul2 gore stuff
 	TAGDEF(LISTFILES),					// for "*.blah" lists

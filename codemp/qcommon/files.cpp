@@ -3363,7 +3363,7 @@ void FS_Startup( const char *gameName ) {
 	fs_cdpath = Cvar_Get ("fs_cdpath", "", CVAR_INIT|CVAR_PROTECTED );
 	fs_basepath = Cvar_Get ("fs_basepath", Sys_DefaultInstallPath(), CVAR_INIT|CVAR_PROTECTED );
 	fs_basegame = Cvar_Get ("fs_basegame", "", CVAR_INIT );
-	homePath = Sys_DefaultHomePath();
+	homePath = Sys_DefaultHomePath( HOMEPATH_NAME );
 	if (!homePath || !homePath[0]) {
 		homePath = fs_basepath->string;
 	}

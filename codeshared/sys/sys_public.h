@@ -88,9 +88,7 @@ typedef struct sysEvent_s {
 /**
 	\brief Retrieves an event from the queue.
 	
-	If the queue is empty, the registered event sources are run to get more.
-	
-	\return The first event in the Queue, or an SE_NONE event if there are none.
+	\return The first event in the Queue, or an SE_NONE event if there are none. (Whose time will still be correct.)
 	
 	\see Sys_AddEventSource()
 **/
@@ -104,54 +102,37 @@ sysEvent_t Sys_GetEvent( void );
 **/
 void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr );
 
-/**
-	Event Sources: Functions with no parameters returning nothing.
-**/
-typedef void ( *Sys_EventSource_t )();
-
-/**
-	Registers an event source, which will be called by Sys_GetEvent() when the queue is empty.
-	
-	\see Sys_UnregisterEventSource()
-**/
-void Sys_RegisterEventSource( Sys_EventSource_t source );
-
-/**
-	Unregisters an even source previously registered by Sys_RegisterEventSource() so it will no longer be called by Sys_GetEvent() when the queue is empty.
-**/
-void Sys_UnregisterEventSource( Sys_EventSource_t source );
-
-
-//    Console
-
-/**
-	\brief Write to system console
-*/
-void Sys_Print( const char *message );
-
-/**
-	\brief Changes visibility of the console window.
-	
-	On Unix the console is visible if and only if the game was started from there. There's no showing or hiding it.
-	
-	\param level 0 -> invisible, 1 -> visible, 2 -> visible and minimized
-	\param quitOnClose Whether to Quit the game when the console window is closed.
-*/
-void Sys_ShowConsole( int level, qboolean quitOnClose );
-
 
 //    File System
 
+/**
+	\brief Tries creating a directory.
+	\return Success. The directory already existing is treated as success.
+**/
 qboolean Sys_Mkdir( const char *path );
-char *Sys_Cwd( void );
-char *Sys_DefaultCDPath( void );
-void Sys_SetDefaultInstallPath( const char *path );
-char *Sys_DefaultInstallPath( void );
+
+/**
+	\brief Returns the current working directory.
+**/
+const char *Sys_Cwd( void );
+
+/**
+	\brief Install Path is where the Base/ folder with the original assets is.
+**/
+const char *Sys_DefaultInstallPath( void );
+
 #ifdef MACOS_X
-char *Sys_DefaultAppPath( void );
+/**
+	\brief App Path on OSX contains assets as well.
+**/
+const char *Sys_DefaultAppPath( void );
 #endif
-char *Sys_DefaultHomePath( void );
-const char *Sys_Dirname( char *path );
+
+/**
+	\brief Home Path is where files are written - config, safegames, screenshots and the like.
+	\param homepathName name 
+**/
+const char *Sys_DefaultHomePath( const char *subDir );
 const char *Sys_Basename( char *path );
 
 qboolean Sys_PathCmp( const char *path1, const char *path2 );

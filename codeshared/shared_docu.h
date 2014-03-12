@@ -9,6 +9,16 @@
 	Code for Window creation & Input. Shared between SP and MP client, but not the dedicated server.
 	
 	
+	\defgroup console ConsoleLib
+	Code for the different Consoles
+	
+	
+	\dir codeshared/con
+	Contains code for the console that's displayed prior to start/when running a dedicated server.
+	
+	There are two versions, one for dedicated servers and one for normal clients.
+	
+	
 	\dir codeshared/forward
 	Contains forward declarations of functions with client-specific implementation. They have to be provided by the clients linking SharedLib or WindowLib.
 	

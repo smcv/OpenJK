@@ -1296,10 +1296,6 @@ void R_Init( void ) {
 	memset( &backEnd, 0, sizeof( backEnd ) );
 	memset( &tess, 0, sizeof( tess ) );
 
-#ifdef _WIN32
-	tr.wv = (WinVars_t *)ri->GetWinVars();
-#endif
-
 //	Swap_Init();
 
 #ifndef FINAL_BUILD

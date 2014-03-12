@@ -21,7 +21,7 @@ if(BuildCommonLib)
 	set(CommonLibForwardFiles
 		"${SharedDir}/forward/cl_public.h"
 		)
-	source_group("Forward Definitions" FILES ${CommonLibForwardFiles})
+	source_group("Forward Declarations" FILES ${CommonLibForwardFiles})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibForwardFiles})
 	
 	
@@ -33,8 +33,13 @@ if(BuildCommonLib)
 	
 	set(CommonLibSysFiles
 		"${SharedDir}/sys/sys_public.h"
-		"${SharedDir}/sys/${Platform}/sys_dynlib.c"
-		"${SharedDir}/sys/${Platform}/sys_filesystem.c"
+		"${SharedDir}/sys/sys_local.h"
+		"${SharedDir}/sys/sys_main.cpp"
+		"${SharedDir}/sys/sys_paths.cpp"
+		"${SharedDir}/sys/sys_events.cpp"
+		"${SharedDir}/sys/${Platform}/${Platform}_local.h"
+		"${SharedDir}/sys/${Platform}/sys_dynlib.cpp"
+		"${SharedDir}/sys/${Platform}/sys_filesystem.cpp"
 		)
 	source_group("System" FILES ${CommonLibSysFiles})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibSysFiles})
@@ -72,3 +77,6 @@ endif(BuildCommonLib)
 if(BuildWindowLib)
 	add_subdirectory("window")
 endif(BuildWindowLib)
+
+add_subdirectory("console/client")
+add_subdirectory("console/dedicated")

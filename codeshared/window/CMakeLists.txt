@@ -42,7 +42,7 @@ endif(UseInternalSDL)
 set(WindowLibForwardFiles
 	"${SharedDir}/forward/cl_public.h"
 	)
-source_group("Forward Definitions" FILES ${WindowLibForwardFiles})
+source_group("Forward Declarations" FILES ${WindowLibForwardFiles})
 set(WindowLibFiles ${WindowLibFiles} ${WindowLibForwardFiles})
 
 set(WindowLibWindowFiles

@@ -25,6 +25,7 @@ This file is part of Jedi Academy.
 
 #include "sys/sys_public.h"
 #include "window/window_public.h"
+#include "console/con_public.h"
 
 // Because renderer.
 #include "../rd-common/tr_public.h"
@@ -151,7 +152,7 @@ void QDECL Com_Printf( const char *fmt, ... ) {
 	Q_StripColor( msg );
 
 	// echo to dedicated console and early console
-	Sys_Print( msg );
+	Con_Print( msg );
 
 
 #ifdef OUTPUT_TO_BUILD_WINDOW
@@ -1060,6 +1061,9 @@ Com_Init
 */
 extern void Com_InitZoneMemory();
 void Com_Init( char *commandLine ) {
+	// Create Console for errors
+	Con_CreateConsole();
+
 	char	*s;
 
 	Com_Printf( "%s %s %s\n", Q3_VERSION, PLATFORM_STRING, __DATE__ );
@@ -1153,7 +1157,7 @@ void Com_Init( char *commandLine ) {
 		Sys_Init();	// this also detects CPU type, so I can now do this CPU check below...
 
 #ifndef _DEDICATED
-		IN_Init();
+		Window_Init();
 #endif
 
 		Netchan_Init( Com_Milliseconds() & 0xffff );	// pick a port value that should be nice and random
@@ -1162,7 +1166,7 @@ void Com_Init( char *commandLine ) {
 		
 		CL_Init();
 
-		Sys_ShowConsole( com_viewlog->integer, qfalse );
+		Con_ShowConsole( com_viewlog->integer, qfalse );
 		
 		// set com_frameTime so that if a map is started on the
 		// command line it will still be able to count on com_frameTime
@@ -1195,6 +1199,12 @@ void Com_Init( char *commandLine ) {
 	{
 		Com_CatchError (code);
 		Sys_Error ("Error during initialization %s", Com_ErrorString (code));
+	}
+
+	// hide the early console since we've reached the point where we
+	// have a working graphics subsystems
+	if( !com_viewlog->integer ) {
+		Con_ShowConsole( 0, qfalse );
 	}
 }
 
@@ -1343,6 +1353,8 @@ void G2Time_ReportTimers(void);
 #pragma warning (disable: 4701)	//local may have been used without init (timing info vars)
 #endif
 void Com_Frame( void ) {
+	Window_Frame();
+
 	try 
 	{
 		int		timeBeforeFirstEvents, timeBeforeServer, timeBeforeEvents, timeBeforeClient, timeAfter;
@@ -1354,7 +1366,7 @@ void Com_Frame( void ) {
 
 		// if "viewlog" has been modified, show or hide the log console
 		if ( com_viewlog->modified ) {
-			Sys_ShowConsole( com_viewlog->integer, qfalse );
+			Con_ShowConsole( com_viewlog->integer, qfalse );
 			com_viewlog->modified = qfalse;
 		}
 

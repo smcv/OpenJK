@@ -1,6 +1,6 @@
 #include "sys_public.h"
+#include "forward/cl_public.h"
 
-#include <set>
 #include <cstring> // memset
 
 enum
@@ -35,7 +35,7 @@ static void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, 
 
 	if( time == 0 )
 	{
-		time = Sys_Milliseconds();
+		time = Sys_Milliseconds( qfalse );
 	}
 
 	ev->evTime = time;
@@ -46,22 +46,12 @@ static void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, 
 	ev->evPtr = ptr;
 }
 
-typedef std::set< Sys_EventSource_t > EventSourceSet;
-
-static EventSourceSet g_eventSources;
-
 sysEvent_t Sys_GetEvent( void )
 {
 	// return if we have data
 	if( g_eventHead > g_eventTail )
 	{
 		return g_eventQue[ ( g_eventTail++ ) & MASK_QUED_EVENTS ];
-	}
-	// Nothing in queue? Tell sources to go to work, maybe they'll produce something.
-	for( EventSourceSet::iterator it = g_eventSources.begin(); it != g_eventSources.end(); ++it )
-	{
-		Sys_EventSource_t source = *it;
-		source();
 	}
 	// return if we have data now
 	if( g_eventHead > g_eventTail )
@@ -70,19 +60,9 @@ sysEvent_t Sys_GetEvent( void )
 	}
 
 	// create an empty event to return
-
+	sysEvent_t ev;
 	memset( &ev, 0, sizeof( ev ) );
-	ev.evTime = Sys_Milliseconds();
+	ev.evTime = Sys_Milliseconds( qfalse );
 
 	return ev;
-}
-
-void Sys_RegisterEventSource( Sys_EventSource_t source )
-{
-	g_eventSources.insert( source );
-}
-
-void Sys_UnregisterEventSource( Sys_EventSource_t source )
-{
-	g_eventSources.erase( source );
 }

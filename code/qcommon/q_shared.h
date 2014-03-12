@@ -53,21 +53,29 @@ This file is part of Jedi Academy.
 #define _G2_GORE
 
 #if JK2_MODE
-#define PRODUCT_NAME			"openjo_sp"
+#	define PRODUCT_NAME			"openjo_sp"
 
-#define CLIENT_WINDOW_TITLE "OpenJO (SP)"
-#define CLIENT_CONSOLE_TITLE "OpenJO Console (SP)"
-#define HOMEPATH_NAME_UNIX "openjo"
-#define HOMEPATH_NAME_WIN "OpenJO"
-#define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
+#	define CLIENT_WINDOW_TITLE "OpenJO (SP)"
+#	define CLIENT_CONSOLE_TITLE "OpenJO Console (SP)"
+#	define HOMEPATH_NAME_UNIX "openjo"
+#	define HOMEPATH_NAME_WIN "OpenJO"
+#	define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
 #else
-#define PRODUCT_NAME			"openjk_sp"
+#	define PRODUCT_NAME			"openjk_sp"
 
-#define CLIENT_WINDOW_TITLE "OpenJK (SP)"
-#define CLIENT_CONSOLE_TITLE "OpenJK Console (SP)"
-#define HOMEPATH_NAME_UNIX "openjk"
-#define HOMEPATH_NAME_WIN "OpenJK"
-#define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
+#	define CLIENT_WINDOW_TITLE "OpenJK (SP)"
+#	define CLIENT_CONSOLE_TITLE "OpenJK Console (SP)"
+#	define HOMEPATH_NAME_UNIX "openjk"
+#	define HOMEPATH_NAME_WIN "OpenJK"
+#	define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
+#endif
+
+#ifdef _WIN32
+#	define HOMEPATH_NAME HOMEPATH_NAME_WIN
+#elif defined(MACOS_X)
+#	define HOMEPATH_NAME HOMEPATH_NAME_MACOSX
+#else
+#	define HOMEPATH_NAME HOMEPATH_NAME_UNIX
 #endif
 
 #define	BASEGAME "base"
@@ -175,9 +183,7 @@ typedef int32_t qhandle_t, thandle_t, fxHandle_t, sfxHandle_t, fileHandle_t, cli
 #define	YAW					1		// left / right
 #define	ROLL				2		// fall over
 
-// the game guarantees that no string from the network will ever
-// exceed MAX_STRING_CHARS
-#define	MAX_STRING_CHARS	1024	// max length of a string passed to Cmd_TokenizeString
+// MAX_STRING_CHARS now in codeshared/qcommon/q_sharedtypes.h
 #define	MAX_STRING_TOKENS	1024	// max tokens resulting from Cmd_TokenizeString
 #define	MAX_TOKEN_CHARS		1024	// max length of an individual token
 
@@ -188,13 +194,6 @@ typedef int32_t qhandle_t, thandle_t, fxHandle_t, sfxHandle_t, fileHandle_t, cli
 #define	BIG_INFO_STRING		8192  // used for system info key only
 #define	BIG_INFO_KEY		  8192
 #define	BIG_INFO_VALUE		8192
-
-#define	MAX_QPATH			64		// max length of a quake game pathname
-#ifdef PATH_MAX
-#define MAX_OSPATH			PATH_MAX
-#else
-#define	MAX_OSPATH			256		// max length of a filesystem pathname
-#endif
 
 #define	MAX_NAME_LENGTH		32		// max length of a client name
 

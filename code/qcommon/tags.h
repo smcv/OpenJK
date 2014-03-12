@@ -22,6 +22,8 @@ This file is part of Jedi Academy.
 //
 // these macro args get "TAG_" prepended on them for enum purposes, and appear as literal strings for "meminfo" command
 
+// DO NOT CHANGE THESE! It will break compat with base jagamex86.dll! --mrw
+
 	TAGDEF(ALL),
 	TAGDEF(HUNKALLOC),					// mem that was formerly from the hunk AFTER the SetMark (ie discarded during vid_reset)
 	TAGDEF(HUNKMISCMODELS),			// sub-hunk alloc to track misc models
