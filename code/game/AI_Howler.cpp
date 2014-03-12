@@ -492,7 +492,7 @@ static void Howler_Combat( void )
 			}
 			else if ( TIMER_Done( NPC, "standing" ) )
 			{
-				faced = Howler_Move( 1 );
+				faced = Howler_Move( qtrue );
 			}
 		}
 		else
@@ -734,7 +734,7 @@ void NPC_BSHowler_Default( void )
 		{
 			gentity_t *sav_enemy = NPC->enemy;//FIXME: what about NPC->lastEnemy?
 			NPC->enemy = NULL;
-			gentity_t *newEnemy = NPC_CheckEnemy( NPCInfo->confusionTime < level.time, qfalse, qfalse );
+			gentity_t *newEnemy = NPC_CheckEnemy( ToQBoolean( NPCInfo->confusionTime < level.time ), qfalse, qfalse );
 			NPC->enemy = sav_enemy;
 			if ( newEnemy && newEnemy != sav_enemy )
 			{//picked up a new enemy!

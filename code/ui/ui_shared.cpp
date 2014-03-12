@@ -5136,7 +5136,7 @@ qboolean String_Parse(const char **p, const char **out)
 	if (token && token[0] != 0) 
 	{
 		*(out) = String_Alloc(token);
-		return *(out)!=NULL;
+		return ToQBoolean( *(out)!=NULL );
 	}
 	return qfalse;
 }
@@ -5834,7 +5834,7 @@ qboolean PC_ParseString(const char **string)
 		hold = COM_ParseString(&parseData[parseDataCount].bufferCurrent,string);
 	}
 
-	return(hold);
+	return ToQBoolean( hold );
 }
 
 qboolean PC_ParseInt(int *number)
@@ -9193,7 +9193,7 @@ IsVisible
 */
 qboolean IsVisible(int flags) 
 {
-  return (flags & WINDOW_VISIBLE && !(flags & WINDOW_FADINGOUT));
+	return ToQBoolean( flags & WINDOW_VISIBLE && !( flags & WINDOW_FADINGOUT ) );
 }
 
 /*
@@ -11055,9 +11055,9 @@ qboolean Item_HandleAccept(itemDef_t * item)
 	if (item->accept)
 	{
 		Item_RunScript(item, item->accept);
-		return true;
+		return qtrue;
 	}
-	return false;
+	return qfalse;
 }
 
 
@@ -11073,9 +11073,9 @@ qboolean Item_HandleSelectionNext(itemDef_t * item)
 	if (item->selectionNext)
 	{
 		Item_RunScript(item, item->selectionNext);
-		return true;
+		return qtrue;
 	}
-	return false;
+	return qfalse;
 }
 
 //JLFDPADSCRIPT MPMOVED
@@ -11090,9 +11090,9 @@ qboolean Item_HandleSelectionPrev(itemDef_t * item)
 	if (item->selectionPrev)
 	{
 		Item_RunScript(item, item->selectionPrev);
-		return true;
+		return qtrue;
 	}
-	return false;
+	return qfalse;
 }
 
 
@@ -11225,7 +11225,7 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down)
 		case A_F11:
 			if (DC->getCVarValue("developer")) 
 			{
-				uis.debugMode ^= 1;
+				uis.debugMode ^= qtrue;
 			}
 			break;
 

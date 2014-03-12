@@ -15,6 +15,12 @@
 #endif
 #include "unzip.h"
 
+#include "sys/sys_public.h"
+
+#ifdef _WIN32
+#	include <Windows.h>
+#endif
+
 // for rmdir
 #if defined (_MSC_VER)
 	#include <direct.h>
@@ -1173,7 +1179,7 @@ bool Sys_GetFileTime(LPCSTR psFileName, FILETIME &ft)
 	return bSuccess;
 }
 
-bool Sys_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFileName /* src */ )
+qboolean Sys_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFileName /* src */ )
 {
 	FILETIME ftFinalFile, ftDataFile;
 
@@ -1186,9 +1192,9 @@ bool Sys_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFileName
 				  ftFinalFile.dwHighDateTime == ftDataFile.dwHighDateTime
 			)
 		{
-			return false;	// file not out of date, ie use it.
+			return qfalse;	// file not out of date, ie use it.
 		}
-		return true;	// flag return code to copy over a replacement version of this file
+		return qtrue;	// flag return code to copy over a replacement version of this file
 	}
 
 
@@ -1202,7 +1208,7 @@ bool Sys_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFileName
 		}
 	}
 
-	return false;
+	return qfalse;
 }
 
 #endif // _WIN32

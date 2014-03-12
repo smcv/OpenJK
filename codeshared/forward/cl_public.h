@@ -8,3 +8,11 @@
 **/
 
 #pragma once
+
+#include "qcommon/q_platform.h"
+#include "qcommon/q_sharedtypes.h"
+
+/**
+	\brief Print a formatted string to the console. Format like printf.
+**/
+void	QDECL Com_Printf( const char *format, ... );

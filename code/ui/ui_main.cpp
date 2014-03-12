@@ -45,6 +45,8 @@ extern stringID_table_t animTable [MAX_ANIMATIONS+1];
 
 #include "../qcommon/q_shared.h"
 
+#include <algorithm>
+
 extern qboolean ItemParse_model_g2anim_go( itemDef_t *item, const char *animName );
 extern qboolean ItemParse_asset_model_go( itemDef_t *item, const char *name );
 extern qboolean ItemParse_model_g2skin_go( itemDef_t *item, const char *skinName );
@@ -593,8 +595,8 @@ void Text_PaintWithCursor(float x, float y, float scale, vec4_t color, const cha
 	// now print the cursor as well...
 	//
 	char sTemp[1024];
-	int iCopyCount = min((int)strlen(text), cursorPos);
-		iCopyCount = min(iCopyCount,(int)sizeof(sTemp));
+	int iCopyCount = std::min((int)strlen(text), cursorPos);
+	    iCopyCount = std::min( iCopyCount, ( int )sizeof( sTemp ) );
 
 	// copy text into temp buffer for pixel measure...
 	//
@@ -2249,7 +2251,7 @@ static qboolean UI_ParseColorData(char* buf, playerSpeciesInfo_t &species)
 		if ( token[0] == 0 )
 		{
 			COM_EndParseSession(  );
-			return species.ColorCount;
+			return ToQBoolean( species.ColorCount );
 		}
 		Q_strncpyz( species.ColorShader[species.ColorCount], token, sizeof(species.ColorShader[0]), qtrue );
 
@@ -2390,7 +2392,7 @@ static void UI_BuildPlayerModel_List( qboolean inGameLoad )
 				filelen = strlen(fileptr);
 				COM_StripExtension(fileptr,skinname, sizeof(skinname));
 
-				if (bIsImageFile(dirptr, skinname, building))
+				if (bIsImageFile(dirptr, skinname, ToQBoolean(building)))
 				{ //if it exists
 					if (Q_stricmpn(skinname,"head_",5) == 0)
 					{
@@ -2755,7 +2757,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset)
 	const char *holdBuffer;
 	int len;
 
-	start = Sys_Milliseconds();
+	start = Sys_Milliseconds( qfalse );
 
 	len = ui.FS_ReadFile(menuFile,(void **) &buffer);
 
@@ -2814,7 +2816,7 @@ void UI_LoadMenus(const char *menuFile, qboolean reset)
 	}
 	COM_EndParseSession();
 
-	Com_Printf("UI menu load time = %d milli seconds\n", Sys_Milliseconds() - start);
+	Com_Printf("UI menu load time = %d milli seconds\n", Sys_Milliseconds( qfalse ) - start);
 
 	ui.FS_FreeFile( buffer );	//let go of the buffer
 }
@@ -4624,15 +4626,15 @@ static void	UI_DemoSetForceLevels( void )
 
 	if (pState)
 	{//i am carrying over from a previous level, so get the increased power! (non-core only)
-		uiInfo.forcePowerLevel[FP_HEAL] = max(pState->forcePowerLevel[FP_HEAL], uiInfo.forcePowerLevel[FP_HEAL]);
-		uiInfo.forcePowerLevel[FP_TELEPATHY]=max(pState->forcePowerLevel[FP_TELEPATHY], uiInfo.forcePowerLevel[FP_TELEPATHY]);
-		uiInfo.forcePowerLevel[FP_GRIP]=max(pState->forcePowerLevel[FP_GRIP], uiInfo.forcePowerLevel[FP_GRIP]);
-		uiInfo.forcePowerLevel[FP_LIGHTNING]=max(pState->forcePowerLevel[FP_LIGHTNING], uiInfo.forcePowerLevel[FP_LIGHTNING]);
-		uiInfo.forcePowerLevel[FP_PROTECT]=max(pState->forcePowerLevel[FP_PROTECT], uiInfo.forcePowerLevel[FP_PROTECT]);
+		uiInfo.forcePowerLevel[ FP_HEAL ] = std::max( pState->forcePowerLevel[ FP_HEAL ], uiInfo.forcePowerLevel[ FP_HEAL ] );
+		uiInfo.forcePowerLevel[ FP_TELEPATHY ] = std::max( pState->forcePowerLevel[ FP_TELEPATHY ], uiInfo.forcePowerLevel[ FP_TELEPATHY ] );
+		uiInfo.forcePowerLevel[ FP_GRIP ] = std::max( pState->forcePowerLevel[ FP_GRIP ], uiInfo.forcePowerLevel[ FP_GRIP ] );
+		uiInfo.forcePowerLevel[ FP_LIGHTNING ] = std::max( pState->forcePowerLevel[ FP_LIGHTNING ], uiInfo.forcePowerLevel[ FP_LIGHTNING ] );
+		uiInfo.forcePowerLevel[ FP_PROTECT ] = std::max( pState->forcePowerLevel[ FP_PROTECT ], uiInfo.forcePowerLevel[ FP_PROTECT ] );
 				
-		uiInfo.forcePowerLevel[FP_ABSORB]=max(pState->forcePowerLevel[FP_ABSORB], uiInfo.forcePowerLevel[FP_ABSORB]);
-		uiInfo.forcePowerLevel[FP_DRAIN]=max(pState->forcePowerLevel[FP_DRAIN], uiInfo.forcePowerLevel[FP_DRAIN]);
-		uiInfo.forcePowerLevel[FP_RAGE]=max(pState->forcePowerLevel[FP_RAGE], uiInfo.forcePowerLevel[FP_RAGE]);
+		uiInfo.forcePowerLevel[ FP_ABSORB ] = std::max( pState->forcePowerLevel[ FP_ABSORB ], uiInfo.forcePowerLevel[ FP_ABSORB ] );
+		uiInfo.forcePowerLevel[ FP_DRAIN ] = std::max( pState->forcePowerLevel[ FP_DRAIN ], uiInfo.forcePowerLevel[ FP_DRAIN ] );
+		uiInfo.forcePowerLevel[ FP_RAGE ] = std::max( pState->forcePowerLevel[ FP_RAGE ], uiInfo.forcePowerLevel[ FP_RAGE ] );
 	}
 }
 

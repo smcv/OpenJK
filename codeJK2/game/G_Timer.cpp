@@ -198,9 +198,9 @@ qboolean TIMER_Done( gentity_t *ent, const char *identifier )
 	auto it = g_timers[ent->s.number].find( identifier );
 
 	if ( it == g_timers[ent->s.number].end() )
-		return true;
+		return qtrue;
 
-	return ( it->second < level.time );
+	return ToQBoolean( it->second < level.time );
 }
 
 /*
@@ -229,7 +229,7 @@ qboolean TIMER_Done2( gentity_t *ent, const char *identifier, qboolean remove )
 		return qfalse;
 	}
 
-	qboolean res = ( it->second < level.time );
+	qboolean res = ToQBoolean( it->second < level.time );
 
 	if ( res && remove )
 	{

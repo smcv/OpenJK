@@ -2,7 +2,6 @@
 #include "qcommon/qcommon.h"
 #include "../rd-vanilla/tr_local.h"
 #include "sdl_qgl.h"
-#include "sys/sys_local.h"
 
 static float displayAspect;
 cvar_t *r_allowSoftwareGL; // Don't abort out if a hardware visual can't be obtained

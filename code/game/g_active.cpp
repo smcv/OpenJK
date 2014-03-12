@@ -4479,8 +4479,8 @@ void	ClientAlterSpeed(gentity_t *ent, usercmd_t *ucmd, qboolean	controlledByPlay
 		{
 			if ( !(ucmd->buttons & BUTTON_USE) )
 			{//Not leaning
-				qboolean Flying = (ucmd->upmove && ent->client->moveType == MT_FLYSWIM);
-				qboolean Climbing = (ucmd->upmove && ent->watertype&CONTENTS_LADDER );
+				qboolean Flying = ToQBoolean( ucmd->upmove && ent->client->moveType == MT_FLYSWIM );
+				qboolean Climbing = ToQBoolean( ucmd->upmove && ent->watertype&CONTENTS_LADDER );
 
 				client->ps.friction = 6;
 
@@ -5447,7 +5447,7 @@ extern cvar_t	*g_skippingcin;
 	pm.trace = gi.trace;
 	pm.pointcontents = gi.pointcontents;
 	pm.debugLevel = g_debugMove->integer;
-	pm.noFootsteps = 0;//( g_dmflags->integer & DF_NO_FOOTSTEPS ) > 0;
+	pm.noFootsteps = qfalse;//( g_dmflags->integer & DF_NO_FOOTSTEPS ) > 0;
 
 	if ( ent->client && ent->NPC )
 	{

@@ -728,7 +728,7 @@ Precaches NPC skins, tgas and md3s.
 */
 void NPC_Precache ( gentity_t *spawner )
 {
-	clientInfo_t	ci={0};
+	clientInfo_t	ci={qfalse};
 	renderInfo_t	ri={0};
 	team_t			playerTeam = TEAM_FREE;
 	const char	*token;

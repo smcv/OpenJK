@@ -856,7 +856,7 @@ int AAS_ClientMovementPrediction(struct aas_clientmove_s *move,
 			feet[2] -= 22;
 			pc = AAS_PointContents(feet);
 			//get event from pc
-			event = SE_NONE;
+			event = SE_NONE_BUT_A_DIFFERENT_ONE;
 			if (pc & CONTENTS_LAVA) event |= SE_ENTERLAVA;
 			if (pc & CONTENTS_SLIME) event |= SE_ENTERSLIME;
 			if (pc & CONTENTS_WATER) event |= SE_ENTERWATER;
@@ -949,7 +949,7 @@ int AAS_ClientMovementPrediction(struct aas_clientmove_s *move,
 	VectorCopy(org, move->endpos);
 	move->endarea = AAS_PointAreaNum(org);
 	VectorScale(frame_test_vel, 1/frametime, move->velocity);
-	move->stopevent = SE_NONE;
+	move->stopevent = SE_NONE_BUT_A_DIFFERENT_ONE;
 	move->presencetype = presencetype;
 	move->endcontents = 0;
 	move->time = n * frametime;

@@ -8,7 +8,7 @@ endif(NOT InOpenJK)
 if(BuildSPRdVanilla OR BuildJK2SPRdVanilla)
 
 	set(SPRDVanillaRendererIncludeDirectories ${SPDir})
-	set(SPRDVanillaRendererIncludeDirectories ${SPRDVanillaRendererIncludeDirectories} "${SPDir}/rd-vanilla")
+	set(SPRDVanillaRendererIncludeDirectories ${SPRDVanillaRendererIncludeDirectories} "${SPDir}/rd-vanilla" ${SharedDir})
 
 	# Modular Renderer crap (let's hope this works..)
 
@@ -89,7 +89,7 @@ if(BuildSPRdVanilla OR BuildJK2SPRdVanilla)
 		"${SPDir}/qcommon/q_math.cpp"
 		"${SPDir}/qcommon/q_shared.cpp"
 		"${SPDir}/qcommon/q_shared.h"
-		"${SPDir}/qcommon/q_platform.h"
+		"${SharedDir}/qcommon/q_platform.h"
 		"${SPDir}/qcommon/cm_landscape.h"
 		)
 	source_group("common" FILES ${SPRDVanillaCommonFiles})
@@ -153,20 +153,10 @@ if(BuildSPRdVanilla OR BuildJK2SPRdVanilla)
 	source_group("rd-common" FILES ${SPRDVanillaRdCommonFiles})
 	set(SPRDVanillaFiles ${SPRDVanillaFiles} ${SPRDVanillaRdCommonFiles})
 
-	if(WIN32)
-		set(SPRDVanillaWin32Files
-			"${SPDir}/win32/win_gamma.cpp"
-			"${SPDir}/win32/win_glimp.cpp"
-			"${SPDir}/win32/win_qgl.cpp"
-			)
-		source_group("win32" FILES ${SPRDVanillaWin32Files})
-		set(SPRDVanillaFiles ${SPRDVanillaFiles} ${SPRDVanillaWin32Files})
-	else(WIN32)
-		set(SPRDVanillaSdlFiles
-			"${SPDir}/sdl/sdl_glimp.cpp")
-		source_group("sdl" FILES ${SPRDVanillaSdlFiles})
-		set(SPRDVanillaFiles ${SPRDVanillaFiles} ${SPRDVanillaSdlFiles})
-	endif(WIN32)
+	set(SPRDVanillaSdlFiles
+		"${SPDir}/sdl/sdl_glimp.cpp")
+	source_group("sdl" FILES ${SPRDVanillaSdlFiles})
+	set(SPRDVanillaFiles ${SPRDVanillaFiles} ${SPRDVanillaSdlFiles})
 
 	if(NOT WIN32)
 		find_package(OpenGL REQUIRED)

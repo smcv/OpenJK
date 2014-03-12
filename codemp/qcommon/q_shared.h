@@ -84,56 +84,17 @@
 #include <errno.h>
 #include <stddef.h>
 
-//Ignore __attribute__ on non-gcc platforms
-#if !defined(__GNUC__) && !defined(__attribute__)
-	#define __attribute__(x)
-#endif
-
-#if defined(__GNUC__)
-	#define UNUSED_VAR __attribute__((unused))
-#else
-	#define UNUSED_VAR
-#endif
-
-#if (defined _MSC_VER)
-	#define Q_EXPORT __declspec(dllexport)
-#elif (defined __SUNPRO_C)
-	#define Q_EXPORT __global
-#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
-	#define Q_EXPORT __attribute__((visibility("default")))
-#else
-	#define Q_EXPORT
-#endif
-
-// this is the define for determining if we have an asm version of a C function
-#if (defined(_M_IX86) || defined(__i386__)) && !defined(__sun__)
-	#define id386	1
-#else
-	#define id386	0
-#endif
-
-#if (defined(powerc) || defined(powerpc) || defined(ppc) || defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
-	#define idppc	1
-#else
-	#define idppc	0
-#endif
-
 short ShortSwap( short l );
 int LongSwap( int l );
 float FloatSwap( const float *f );
 
 
 #include "qcommon/q_platform.h"
+#include "qcommon/q_sharedtypes.h" // qboolean, cvar, intX_t
 
 // ================================================================
 // TYPE DEFINITIONS
 // ================================================================
-
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef unsigned long ulong;
-
-typedef enum qboolean_e { qfalse=0, qtrue } qboolean;
 
 #ifndef min
 	#define min(x,y) ((x)<(y)?(x):(y))
@@ -144,31 +105,16 @@ typedef enum qboolean_e { qfalse=0, qtrue } qboolean;
 
 #if defined (_MSC_VER) && (_MSC_VER >= 1600)
 
-	#include <stdint.h>
-
 	// vsnprintf is ISO/IEC 9899:1999
 	// abstracting this to make it portable
 	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
 
 #elif defined (_MSC_VER)
 
-	#include <io.h>
-
-	typedef signed __int64 int64_t;
-	typedef signed __int32 int32_t;
-	typedef signed __int16 int16_t;
-	typedef signed __int8  int8_t;
-	typedef unsigned __int64 uint64_t;
-	typedef unsigned __int32 uint32_t;
-	typedef unsigned __int16 uint16_t;
-	typedef unsigned __int8  uint8_t;
-
 	// vsnprintf is ISO/IEC 9899:1999
 	// abstracting this to make it portable
 	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
 #else // not using MSVC
-
-	#include <stdint.h>
 
 	#define Q_vsnprintf vsnprintf
 
@@ -1150,49 +1096,18 @@ Many variables can be used for cheating purposes, so when cheats is zero,
 ==========================================================
 */
 
+// these are only the cvar flags that differ between MP and SP.
+// The others and cvar_t are defined in codeshared/qcommon/q_sharedtypes.h
+
 #define	CVAR_NONE			(0x00000000u)
-#define	CVAR_ARCHIVE		(0x00000001u)	// set to cause it to be saved to configuration file. used for system variables,
-											//	not for player specific configurations
-#define	CVAR_USERINFO		(0x00000002u)	// sent to server on connect or change
-#define	CVAR_SERVERINFO		(0x00000004u)	// sent in response to front end requests
-#define	CVAR_SYSTEMINFO		(0x00000008u)	// these cvars will be duplicated on all clients
-#define	CVAR_INIT			(0x00000010u)	// don't allow change from console at all, but can be set from the command line
-#define	CVAR_LATCH			(0x00000020u)	// will only change when C code next does a Cvar_Get(), so it can't be changed
-											//	without proper initialization. modified will be set, even though the value
-											//	hasn't changed yet
-#define	CVAR_ROM			(0x00000040u)	// display only, cannot be set by user at all (can be set by code)
-#define	CVAR_USER_CREATED	(0x00000080u)	// created by a set command
 #define	CVAR_TEMP			(0x00000100u)	// can be set even when cheats are disabled, but is not archived
-#define CVAR_CHEAT			(0x00000200u)	// can not be changed if cheats are disabled
-#define CVAR_NORESTART		(0x00000400u)	// do not clear when a cvar_restart is issued
 #define CVAR_INTERNAL		(0x00000800u)	// cvar won't be displayed, ever (for passwords and such)
 #define	CVAR_PARENTAL		(0x00001000u)	// lets cvar system know that parental stuff needs to be updated
 #define CVAR_SERVER_CREATED	(0x00002000u)	// cvar was created by a server the client connected to.
 #define CVAR_VM_CREATED		(0x00004000u)	// cvar was created exclusively in one of the VMs.
 #define CVAR_PROTECTED		(0x00008000u)	// prevent modifying this var from VMs or the server
-// These flags are only returned by the Cvar_Flags() function
-#define CVAR_MODIFIED		(0x40000000u)	// Cvar was modified
-#define CVAR_NONEXISTENT	(0x80000000u)	// Cvar doesn't exist.
 
-// nothing outside the Cvar_*() functions should modify these fields!
-typedef struct cvar_s {
-	char			*name;
-	char			*string;
-	char			*resetString;		// cvar_restart will reset to this value
-	char			*latchedString;		// for CVAR_LATCH vars
-	uint32_t		flags;
-	qboolean		modified;			// set each time the cvar is changed
-	int				modificationCount;	// incremented each time the cvar is changed
-	float			value;				// atof( string )
-	int				integer;			// atoi( string )
-	qboolean		validate;
-	qboolean		integral;
-	float			min, max;
 
-	struct cvar_s	*next, *prev;
-	struct cvar_s	*hashNext, *hashPrev;
-	int				hashIndex;
-} cvar_t;
 
 #define	MAX_CVAR_VALUE_STRING	256
 

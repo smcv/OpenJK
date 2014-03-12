@@ -276,7 +276,7 @@ weightconfig_t *ReadWeightConfig(char *filename)
 #ifdef DEBUG
 	int starttime;
 
-	starttime = Sys_MilliSeconds();
+	starttime = Sys_Milliseconds( qfalse );
 #endif //DEBUG
 
 	if (!LibVarGetValue("bot_reloadcharacters"))
@@ -414,7 +414,7 @@ weightconfig_t *ReadWeightConfig(char *filename)
 #ifdef DEBUG
 	if (botDeveloper)
 	{
-		botimport.Print(PRT_MESSAGE, "weights loaded in %d msec\n", Sys_MilliSeconds() - starttime);
+		botimport.Print(PRT_MESSAGE, "weights loaded in %d msec\n", Sys_Milliseconds( qfalse ) - starttime);
 	} //end if
 #endif //DEBUG
 	//

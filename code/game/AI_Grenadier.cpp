@@ -355,7 +355,7 @@ static void Grenadier_CheckMoveState( void )
 	if ( ( NPCInfo->goalEntity != NPC->enemy ) && ( NPCInfo->goalEntity != NULL ) )
 	{
 		//Did we make it?
-		if ( STEER::Reached(NPC, NPCInfo->goalEntity, 16, !!FlyingCreature(NPC)) || 
+		if ( STEER::Reached(NPC, NPCInfo->goalEntity, 16, FlyingCreature(NPC)) || 
 			( NPCInfo->squadState == SQUAD_SCOUT && enemyLOS && enemyDist <= 10000 ) )
 		{
 			int	newSquadState = SQUAD_STAND_AND_SHOOT;

@@ -7,7 +7,7 @@ endif(NOT InOpenJK)
 
 set(JK2SPGameDefines ${JK2SPGameDefines} "JK2_MODE")
 
-set(JK2SPGameIncludeDirectories "${JK2SPDir}/game")
+set(JK2SPGameIncludeDirectories ${SharedDir} "${JK2SPDir}/game")
 if(WIN32)
 	set(JK2SPGameLibraries "winmm")
 endif(WIN32)
@@ -218,7 +218,7 @@ set(JK2SPGameCommonFiles
 	"${SPDir}/qcommon/q_math.cpp"
 	"${SPDir}/qcommon/q_shared.cpp"
 	"${SPDir}/qcommon/q_shared.h"
-	"${SPDir}/qcommon/q_platform.h"
+	"${SharedDir}/qcommon/q_platform.h"
 	)
 source_group("common" FILES ${JK2SPGameCommonFiles})
 set(JK2SPGameFiles ${JK2SPGameFiles} ${JK2SPGameCommonFiles})

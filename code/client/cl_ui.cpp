@@ -20,6 +20,8 @@ This file is part of Jedi Academy.
 //
 #include "../server/exe_headers.h"
 
+#include "window/window_public.h"
+
 
 #include "client.h"
 #include "client_ui.h"
@@ -69,7 +71,7 @@ GetClipboardData
 static void GetClipboardData( char *buf, int buflen ) {
 	char	*cbd;
 
-	cbd = Sys_GetClipboardData();
+	cbd = Window_GetClipboardData();
 
 	if ( !cbd ) {
 		*buf = 0;
@@ -192,6 +194,11 @@ void UI_Init( int apiVersion, uiimport_t *uiimport, qboolean inGameLoad );
 CL_InitUI
 ====================
 */
+static int Sys_Milliseconds2( void )
+{
+	return Sys_Milliseconds( qfalse );
+}
+
 void CL_InitUI( void ) {
 #ifdef JK2_MODE
 	JK2SP_Register("keynames", 0	/*SP_REGISTER_REQUIRED*/);		// reference is KEYNAMES
@@ -290,9 +297,9 @@ void CL_InitUI( void ) {
 
 	uii.GetConfigString			= (void (*)(int, char *, int))GetConfigString;
 
-	uii.Milliseconds			= Sys_Milliseconds;
+	uii.Milliseconds			= Sys_Milliseconds2;
 
-	UI_Init(UI_API_VERSION, &uii, (cls.state > CA_DISCONNECTED && cls.state <= CA_ACTIVE));
+	UI_Init(UI_API_VERSION, &uii, ToQBoolean(cls.state > CA_DISCONNECTED && cls.state <= CA_ACTIVE));
 
 //	uie->UI_Init( UI_API_VERSION, &uii );
 
@@ -437,7 +444,7 @@ intptr_t CL_UISystemCalls( intptr_t *args )
 		return Key_GetCatcher();
 
 	case UI_MILLISECONDS:
-		return Sys_Milliseconds();
+		return Sys_Milliseconds( qfalse );
 
 	case UI_S_REGISTERSOUND:
 		return S_RegisterSound((const char *) VMA(1));

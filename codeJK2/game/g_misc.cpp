@@ -1937,7 +1937,7 @@ USETARGET - when used it fires off target
 //------------------------------------------------------------
 void SP_misc_model_shield_power_converter( gentity_t *ent )
 {
-	SetMiscModelDefaults( ent, useF_shield_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, NULL );
+	SetMiscModelDefaults( ent, useF_shield_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, qfalse );
 
 	ent->takedamage = qfalse;
 
@@ -1968,7 +1968,7 @@ void SP_misc_shield_floor_unit( gentity_t *ent )
 	VectorSet( ent->mins, -16, -16, 0 );
 	VectorSet( ent->maxs, 16, 16, 32 );
 
-	SetMiscModelDefaults( ent, useF_shield_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, NULL );
+	SetMiscModelDefaults( ent, useF_shield_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, qfalse );
 
 	ent->takedamage = qfalse;
 
@@ -2145,7 +2145,7 @@ USETARGET - when used it fires off target
 //------------------------------------------------------------
 void SP_misc_model_ammo_power_converter( gentity_t *ent )
 {
-	SetMiscModelDefaults( ent, useF_ammo_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, NULL );
+	SetMiscModelDefaults( ent, useF_ammo_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, qfalse );
 
 	ent->takedamage = qfalse;
 
@@ -2176,7 +2176,7 @@ void SP_misc_ammo_floor_unit( gentity_t *ent )
 	VectorSet( ent->mins, -16, -16, 0 );
 	VectorSet( ent->maxs, 16, 16, 32 );
 
-	SetMiscModelDefaults( ent, useF_ammo_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, NULL );
+	SetMiscModelDefaults( ent, useF_ammo_power_converter_use, "4", CONTENTS_SOLID, NULL, qfalse, qfalse );
 
 	ent->takedamage = qfalse;
 
@@ -2266,7 +2266,7 @@ void SP_misc_model_welder( gentity_t *ent )
 	VectorSet( ent->mins, 336, -16, 0 );
 	VectorSet( ent->maxs, 368, 16, 32 );
 
-	SetMiscModelDefaults( ent, useF_welder_use, "4", CONTENTS_SOLID, NULL, qfalse, NULL );
+	SetMiscModelDefaults( ent, useF_welder_use, "4", CONTENTS_SOLID, NULL, qfalse, qfalse );
 
 	ent->takedamage = qfalse;
 	ent->contents = 0;
@@ -2326,7 +2326,7 @@ void SP_misc_model_jabba_cam( gentity_t *ent )
 	VectorSet( ent->mins, -60.0f, -8.0f, 0.0f );
 	VectorSet( ent->maxs, 60.0f, 8.0f, 16.0f );
 		
-	SetMiscModelDefaults( ent, useF_jabba_cam_use, "4", 0, NULL, qfalse, NULL );
+	SetMiscModelDefaults( ent, useF_jabba_cam_use, "4", 0, NULL, qfalse, qfalse );
 	G_SetAngles( ent, ent->s.angles );
 
 	ent->s.modelindex = G_ModelIndex( "models/map_objects/nar_shaddar/jabacam/jabacam.glm" );

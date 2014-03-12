@@ -8,6 +8,9 @@
 #include "qcommon/game_version.h"
 #include "../server/NPCNav/navigator.h"
 
+#include "sys/sys_public.h"
+#include "window/window_public.h"
+
 #define	MAXPRINTMSG	4096
 
 FILE *debuglogfile;
@@ -241,7 +244,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	}
 
 	// if we are getting a solid stream of ERR_DROP, do an ERR_FATAL
-	currentTime = Sys_Milliseconds();
+	currentTime = Sys_Milliseconds( qfalse );
 	if ( currentTime - lastErrorTime < 100 ) {
 		if ( ++errorCount > 3 ) {
 			code = ERR_FATAL;
@@ -288,6 +291,9 @@ void Com_Quit_f( void ) {
 		CL_Shutdown ();
 		Com_Shutdown ();
 		FS_Shutdown(qtrue);
+#ifndef _DEDICATED
+		Window_Shutdown();
+#endif
 	}
 	Sys_Quit ();
 }
@@ -822,13 +828,13 @@ void Com_RunAndTimeServerPacket( netadr_t *evFrom, msg_t *buf ) {
 	t1 = 0;
 
 	if ( com_speeds->integer ) {
-		t1 = Sys_Milliseconds ();
+		t1 = Sys_Milliseconds( qfalse );
 	}
 
 	SV_PacketEvent( *evFrom, buf );
 
 	if ( com_speeds->integer ) {
-		t2 = Sys_Milliseconds ();
+		t2 = Sys_Milliseconds( qfalse );
 		msec = t2 - t1;
 		if ( com_speeds->integer == 3 ) {
 			Com_Printf( "SV_PacketEvent time: %i\n", msec );
@@ -1167,7 +1173,7 @@ void Com_Init( char *commandLine ) {
 		Cmd_Init ();
 
 		// Seed the random number generator
-		Rand_Init(Sys_Milliseconds(true));
+		Rand_Init(Sys_Milliseconds(qtrue));
 
 		// get the developer cvar set as early as possible
 		com_developer = Cvar_Get("developer", "0", CVAR_TEMP);
@@ -1289,6 +1295,10 @@ void Com_Init( char *commandLine ) {
 		SE_Init();
 
 		Sys_Init();
+
+#ifndef _DEDICATED
+		IN_Init();
+#endif
 
 		// Pick a random port value
 		Com_RandomBytes( (byte*)&qport, sizeof(int) );
@@ -1517,7 +1527,7 @@ void Com_Frame( void ) {
 		// main event loop
 		//
 		if ( com_speeds->integer ) {
-			timeBeforeFirstEvents = Sys_Milliseconds ();
+			timeBeforeFirstEvents = Sys_Milliseconds( qfalse );
 		}
 
 		// we may want to spin here if things are going too fast
@@ -1545,7 +1555,7 @@ void Com_Frame( void ) {
 		// server side
 		//
 		if ( com_speeds->integer ) {
-			timeBeforeServer = Sys_Milliseconds ();
+			timeBeforeServer = Sys_Milliseconds( qfalse );
 		}
 
 		SV_Frame( msec );
@@ -1577,7 +1587,7 @@ void Com_Frame( void ) {
 			// without a frame of latency
 			//
 			if ( com_speeds->integer ) {
-				timeBeforeEvents = Sys_Milliseconds ();
+				timeBeforeEvents = Sys_Milliseconds( qfalse );
 			}
 			Com_EventLoop();
 			Cbuf_Execute ();
@@ -1587,13 +1597,13 @@ void Com_Frame( void ) {
 			// client side
 			//
 			if ( com_speeds->integer ) {
-				timeBeforeClient = Sys_Milliseconds ();
+				timeBeforeClient = Sys_Milliseconds( qfalse );
 			}
 
 			CL_Frame( msec );
 
 			if ( com_speeds->integer ) {
-				timeAfter = Sys_Milliseconds ();
+				timeAfter = Sys_Milliseconds( qfalse );
 			}
 		}
 

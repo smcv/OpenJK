@@ -180,7 +180,7 @@ void Howler_Combat( void )
 		}
 		else
 		{
-			Howler_Move( 1 );
+			Howler_Move( qtrue );
 		}
 	}
 	else

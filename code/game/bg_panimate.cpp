@@ -1189,7 +1189,7 @@ qboolean PM_InAnimForSaberMove( int anim, int saberMove )
 	}
 	if ( anim >= BOTH_P1_S1_T_ && anim <= BOTH_H1_S1_BR )
 	{//parries, knockaways and broken parries
-		return (anim==saberMoveData[saberMove].animToUse);
+		return ToQBoolean( anim == saberMoveData[ saberMove ].animToUse );
 	}
 	return qfalse;
 }
@@ -4767,7 +4767,7 @@ void PM_SetAnimFinal(int *torsoAnim,int *legsAnim,
 		&& gent->client->NPC_class != CLASS_R5D2
 		&& gent->client->NPC_class != CLASS_SEEKER)
 	{
-		bool	Walking = !!PM_WalkingAnim(anim);
+		bool	Walking = PM_WalkingAnim(anim);
 		bool	HasDual = (gent->client->ps.saberAnimLevel==SS_DUAL);
 		bool	HasStaff = (gent->client->ps.saberAnimLevel==SS_STAFF);
 		float	moveSpeedOfAnim  = 150.0f;//g_noFootSlideRunScale->value;
@@ -4845,7 +4845,7 @@ void PM_SetAnimFinal(int *torsoAnim,int *legsAnim,
 	int		bodyBone	  = (gent->rootBone);
 	bool	bodyTimerOn	  = ((*legsAnimTimer>0) || (*legsAnimTimer)==-1);
 	bool	bodyPlay	  = ((setAnimParts&SETANIM_LEGS) && (bodyBone!=-1) && (animOverride || !bodyTimerOn));
-	bool	bodyAnimating = !!gi.G2API_GetBoneAnimIndex(&gent->ghoul2[gent->playerModel], bodyBone, actualTime, &bodyCurrent, &bodyStart, &bodyEnd, &bodyFlags, &bodySpeed, NULL);
+	bool	bodyAnimating = gi.G2API_GetBoneAnimIndex(&gent->ghoul2[gent->playerModel], bodyBone, actualTime, &bodyCurrent, &bodyStart, &bodyEnd, &bodyFlags, &bodySpeed, NULL);
 	bool	bodyOnAnimNow = (bodyAnimating && bodyAnim==anim && bodyStart==animStart && bodyEnd==animEnd);
 	bool	bodyMatchTorsFrame = false;
 
@@ -4861,7 +4861,7 @@ void PM_SetAnimFinal(int *torsoAnim,int *legsAnim,
 	int		torsBone	  = (gent->lowerLumbarBone);
 	bool	torsTimerOn	  = ((*torsoAnimTimer)>0 || (*torsoAnimTimer)==-1);
 	bool	torsPlay	  = (gent->client->NPC_class!=CLASS_RANCOR && (setAnimParts&SETANIM_TORSO) && (torsBone!=-1) && (animOverride || !torsTimerOn));
-	bool	torsAnimating = !!gi.G2API_GetBoneAnimIndex(&gent->ghoul2[gent->playerModel], torsBone, actualTime, &torsCurrent, &torsStart, &torsEnd, &torsFlags, &torsSpeed, NULL);
+	bool	torsAnimating = gi.G2API_GetBoneAnimIndex(&gent->ghoul2[gent->playerModel], torsBone, actualTime, &torsCurrent, &torsStart, &torsEnd, &torsFlags, &torsSpeed, NULL);
 	bool	torsOnAnimNow = (torsAnimating && torsAnim==anim && torsStart==animStart && torsEnd==animEnd);
 	bool	torsMatchBodyFrame = false;
 

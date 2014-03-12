@@ -490,10 +490,10 @@ qboolean G_TuskenAttackAnimDamage( gentity_t *self )
 			//gi.Printf("%f\n", percentComplete);
 			switch (self->client->ps.torsoAnim)
 			{
-			case BOTH_TUSKENATTACK1: return (percentComplete>0.3 && percentComplete<0.7);
-			case BOTH_TUSKENATTACK2: return (percentComplete>0.3 && percentComplete<0.7);
-			case BOTH_TUSKENATTACK3: return (percentComplete>0.1 && percentComplete<0.5);
-			case BOTH_TUSKENLUNGE1:  return (percentComplete>0.3 && percentComplete<0.5);
+			case BOTH_TUSKENATTACK1: return ToQBoolean( percentComplete>0.3 && percentComplete<0.7 );
+			case BOTH_TUSKENATTACK2: return ToQBoolean( percentComplete>0.3 && percentComplete<0.7 );
+			case BOTH_TUSKENATTACK3: return ToQBoolean( percentComplete>0.1 && percentComplete<0.5 );
+			case BOTH_TUSKENLUNGE1:  return ToQBoolean( percentComplete>0.3 && percentComplete<0.5 );
 			}
 		}
 	}

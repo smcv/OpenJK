@@ -1073,9 +1073,6 @@ typedef struct {
 	float					distanceCull;
 	srfTerrain_t			landScape;
 
-#ifdef _WIN32
-	WinVars_t *wv;
-#endif
 } trGlobals_t;
 
 int		 R_Images_StartIteration(void);

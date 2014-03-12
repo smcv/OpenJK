@@ -223,7 +223,7 @@ void MineMonster_Combat( void )
 		}
 		else
 		{
-			MineMonster_Move( 1 );
+			MineMonster_Move( qtrue );
 		}
 	}
 	else

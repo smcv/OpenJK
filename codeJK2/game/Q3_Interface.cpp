@@ -1011,7 +1011,7 @@ static int Q3_PlaySound( int taskID, int entID, const char *name, const char *ch
 	soundChannel_t	voice_chan = CHAN_VOICE; // set a default so the compiler doesn't bitch
 	qboolean		type_voice = qfalse;
 
-	Q_strncpyz( finalName, name, MAX_QPATH, 0 );
+	Q_strncpyz( finalName, name, MAX_QPATH, qfalse );
 	Q_strupr(finalName);
 	//G_AddSexToMunroString( finalName, qtrue );
 
@@ -6783,7 +6783,7 @@ static void Q3_Set( int taskID, int entID, const char *type_name, const char *da
 
 	case SET_ICARUS_FREEZE:
 	case SET_ICARUS_UNFREEZE:
-		Q3_SetICARUSFreeze( entID, (char *) data, (toSet==SET_ICARUS_FREEZE) );
+		Q3_SetICARUSFreeze( entID, ( char * )data, ToQBoolean( toSet == SET_ICARUS_FREEZE ) );
 		break;
 
 	case SET_WEAPON:

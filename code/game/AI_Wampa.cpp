@@ -352,7 +352,7 @@ void Wampa_Attack( float distance, qboolean doCharge )
 	if ( NPC->client->ps.legsAnim == BOTH_ATTACK1 && distance > (NPC->maxs[0]+MIN_DISTANCE) )
 	{//okay to keep moving
 		ucmd.buttons |= BUTTON_WALKING;
-		Wampa_Move( 1 );
+		Wampa_Move( qtrue );
 	}
 }
 
@@ -373,7 +373,7 @@ void Wampa_Combat( void )
 		NPCInfo->goalEntity = NPC->enemy;
 		NPCInfo->goalRadius = MIN_DISTANCE;//MAX_DISTANCE;	// just get us within combat range
 
-		Wampa_Move( 0 );
+		Wampa_Move( qfalse );
 		return;
 	}
 	/*
@@ -419,7 +419,7 @@ void Wampa_Combat( void )
 		}
 		else
 		{
-			Wampa_Move( 1 );
+			Wampa_Move( qtrue );
 		}
 	}
 	else
@@ -873,7 +873,7 @@ void NPC_BSWampa_Default( void )
 				{
 					gentity_t *sav_enemy = NPC->enemy;//FIXME: what about NPC->lastEnemy?
 					NPC->enemy = NULL;
-					gentity_t *newEnemy = NPC_CheckEnemy( NPCInfo->confusionTime < level.time, qfalse, qfalse );
+					gentity_t *newEnemy = NPC_CheckEnemy( ToQBoolean( NPCInfo->confusionTime < level.time ), qfalse, qfalse );
 					NPC->enemy = sav_enemy;
 					if ( newEnemy && newEnemy != sav_enemy )
 					{//picked up a new enemy!

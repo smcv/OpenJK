@@ -10,6 +10,8 @@ Ghoul2 Insert Start
 #include "qcommon/stringed_ingame.h"
 #include "sv_gameapi.h"
 
+#include "sys/sys_public.h"
+
 /*
 ===============
 SV_SendConfigstring
@@ -804,6 +806,12 @@ static IHeapAllocator *GetG2VertSpaceServer( void ) {
 }
 
 refexport_t	*re = NULL;
+
+
+static int Sys_Milliseconds2( void )
+{
+    return Sys_Milliseconds( qfalse );
+}
 
 static void SV_InitRef( void ) {
 	static refimport_t ri;

@@ -23,8 +23,17 @@ This file is part of Jedi Academy.
 #include "sstring.h"	// to get Gil's string class, because MS's doesn't compile properly in here
 #include "stv_version.h"
 
+#include "sys/sys_public.h"
+#include "window/window_public.h"
+
 // Because renderer.
 #include "../rd-common/tr_public.h"
+
+#if !defined(FINAL_BUILD) && defined(_WIN32)
+#	define OUTPUT_TO_BUILD_WINDOW
+#	include <Windows.h>
+#endif
+
 extern refexport_t re;
 
 #define	MAXPRINTMSG	4096
@@ -108,9 +117,6 @@ void Com_EndRedirect (void)
 	rd_buffersize = 0;
 	rd_flush = NULL;
 }
-#if !defined(FINAL_BUILD) && defined(_WIN32)
-#define OUTPUT_TO_BUILD_WINDOW
-#endif
 
 /*
 =============
@@ -257,7 +263,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	}
 
 	// if we are getting a solid stream of ERR_DROP, do an ERR_FATAL
-	currentTime = Sys_Milliseconds();
+	currentTime = Sys_Milliseconds( qfalse );
 	if ( currentTime - lastErrorTime < 100 ) {
 		if ( ++errorCount > 3 ) {
 			code = ERR_FATAL;
@@ -305,6 +311,9 @@ void Com_Quit_f( void ) {
 		CL_Shutdown ();
 		Com_Shutdown ();
 		FS_Shutdown();
+#ifndef _DEDICATED
+		Window_Shutdown();
+#endif
 	}
 	Sys_Quit ();
 }
@@ -794,13 +803,13 @@ void Com_RunAndTimeServerPacket( netadr_t *evFrom, msg_t *buf ) {
 	t1 = 0;
 
 	if ( com_speeds->integer ) {
-		t1 = Sys_Milliseconds ();
+		t1 = Sys_Milliseconds( qfalse );
 	}
 
 	SV_PacketEvent( *evFrom, buf );
 
 	if ( com_speeds->integer ) {
-		t2 = Sys_Milliseconds ();
+		t2 = Sys_Milliseconds( qfalse );
 		msec = t2 - t1;
 		if ( com_speeds->integer == 3 ) {
 			Com_Printf( "SV_PacketEvent time: %i\n", msec );
@@ -851,7 +860,7 @@ int Com_EventLoop( void ) {
         case SE_NONE:
             break;
 		case SE_KEY:
-			CL_KeyEvent( ev.evValue, ev.evValue2, ev.evTime );
+			CL_KeyEvent( ev.evValue, ToQBoolean( ev.evValue2 ), ev.evTime );
 			break;
 		case SE_CHAR:
 			CL_CharEvent( ev.evValue );
@@ -1143,6 +1152,10 @@ void Com_Init( char *commandLine ) {
 	
 		Sys_Init();	// this also detects CPU type, so I can now do this CPU check below...
 
+#ifndef _DEDICATED
+		IN_Init();
+#endif
+
 		Netchan_Init( Com_Milliseconds() & 0xffff );	// pick a port value that should be nice and random
 //	VM_Init();
 		SV_Init();
@@ -1349,7 +1362,7 @@ void Com_Frame( void ) {
 		// main event loop
 		//
 		if ( com_speeds->integer ) {
-			timeBeforeFirstEvents = Sys_Milliseconds ();
+			timeBeforeFirstEvents = Sys_Milliseconds( qfalse );
 		}
 
 		// we may want to spin here if things are going too fast
@@ -1378,7 +1391,7 @@ void Com_Frame( void ) {
 		// server side
 		//
 		if ( com_speeds->integer ) {
-			timeBeforeServer = Sys_Milliseconds ();
+			timeBeforeServer = Sys_Milliseconds( qfalse );
 		}
 
 		SV_Frame (msec, fractionMsec);
@@ -1396,7 +1409,7 @@ void Com_Frame( void ) {
 			// without a frame of latency
 			//
 			if ( com_speeds->integer ) {
-				timeBeforeEvents = Sys_Milliseconds ();
+				timeBeforeEvents = Sys_Milliseconds( qfalse );
 			}
 			Com_EventLoop();
 			Cbuf_Execute ();
@@ -1406,13 +1419,13 @@ void Com_Frame( void ) {
 			// client side
 			//
 			if ( com_speeds->integer ) {
-				timeBeforeClient = Sys_Milliseconds ();
+				timeBeforeClient = Sys_Milliseconds( qfalse );
 			}
 
 			CL_Frame (msec, fractionMsec);
 
 			if ( com_speeds->integer ) {
-				timeAfter = Sys_Milliseconds ();
+				timeAfter = Sys_Milliseconds( qfalse );
 			}
 		}
 

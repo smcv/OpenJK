@@ -519,7 +519,7 @@ void CL_InitCGame( void ) {
 	const char			*mapname;
 	int					t1, t2;
 
-	t1 = Sys_Milliseconds();
+	t1 = Sys_Milliseconds( qfalse );
 
 	// put away the console
 	Con_Close();
@@ -547,7 +547,7 @@ void CL_InitCGame( void ) {
 	// will cause the server to send us the first snapshot
 	cls.state = CA_PRIMED;
 
-	t2 = Sys_Milliseconds();
+	t2 = Sys_Milliseconds( qfalse );
 
 	Com_Printf( "CL_InitCGame: %5.2f seconds\n", (t2-t1)/1000.0 );
 
@@ -704,8 +704,6 @@ void CL_FirstSnapshot( void ) {
 		Cbuf_AddText( cl_activeAction->string );
 		Cvar_Set( "activeAction", "" );
 	}
-
-	Sys_BeginProfiling();
 }
 
 /*
@@ -817,7 +815,7 @@ void CL_SetCGameTime( void ) {
 	// each time it is played back
 	if ( cl_timedemo->integer ) {
 		if (!clc.timeDemoStart) {
-			clc.timeDemoStart = Sys_Milliseconds();
+			clc.timeDemoStart = Sys_Milliseconds( qfalse );
 		}
 		clc.timeDemoFrames++;
 		cl.serverTime = clc.timeDemoBaseTime + clc.timeDemoFrames * 50;

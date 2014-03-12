@@ -1934,7 +1934,7 @@ intptr_t SV_GameSystemCalls( intptr_t *args ) {
 		return 0;
 
 	case G_MILLISECONDS:
-		return Sys_Milliseconds();
+		return Sys_Milliseconds( qfalse );
 
 	case G_PRECISIONTIMER_START:
 		SV_PrecisionTimerStart( (void **)VMA(1) );

@@ -24,6 +24,7 @@
 #include "be_aas.h"
 #include "be_aas_funcs.h"
 #include "be_aas_def.h"
+#include "sys/sys_public.h"
 
 extern int Sys_MilliSeconds(void);
 
@@ -4351,7 +4352,7 @@ int AAS_ContinueInitReachability(float time)
 	} //end if
 	//number of areas to calculate reachability for this cycle
 	todo = aasworld.numreachabilityareas + (int) framereachability;
-	start_time = Sys_MilliSeconds();
+	start_time = Sys_Milliseconds( qfalse );
 	//loop over the areas
 	for (i = aasworld.numreachabilityareas; i < aasworld.numareas && i < todo; i++)
 	{
@@ -4403,7 +4404,7 @@ int AAS_ContinueInitReachability(float time)
 			AAS_Reachability_WeaponJump(i, j);
 		} //end for
 		//if the calculation took more time than the max reachability delay
-		if (Sys_MilliSeconds() - start_time > (int) reachability_delay) break;
+		if (Sys_Milliseconds( qfalse ) - start_time > (int) reachability_delay) break;
 		//
 		if (aasworld.numreachabilityareas * 1000 / aasworld.numareas > lastpercentage) break;
 	} //end for

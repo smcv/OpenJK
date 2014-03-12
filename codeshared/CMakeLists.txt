@@ -5,9 +5,18 @@ if(NOT InOpenJK)
 	message(FATAL_ERROR "Use the top-level cmake script!")
 endif(NOT InOpenJK)
 
+# Add CommonLib if requested
+
 if(BuildCommonLib)
 	set(CommonLibDefines ${SharedDefines})
 	set(CommonLibIncludeDirectories ${SharedDir})
+	
+	# Platform-specific libraries
+	if(WIN32)
+		set(CommonLibLibraries ${CommonLibLibraries} "winmm" "wsock32")
+	endif(WIN32)
+	
+	# Files
 	
 	set(CommonLibForwardFiles
 		"${SharedDir}/forward/cl_public.h"
@@ -15,17 +24,36 @@ if(BuildCommonLib)
 	source_group("Forward Definitions" FILES ${CommonLibForwardFiles})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibForwardFiles})
 	
+	
+	if(WIN32)
+		set(Platform "windows")
+	else(WIN32)
+		set(Platform "unix")
+	endif(WIN32)
+	
 	set(CommonLibSysFiles
 		"${SharedDir}/sys/sys_public.h"
+		"${SharedDir}/sys/${Platform}/sys_dynlib.c"
+		"${SharedDir}/sys/${Platform}/sys_filesystem.c"
 		)
 	source_group("System" FILES ${CommonLibSysFiles})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibSysFiles})
+	
+	set(CommonLibCommonFiles
+		"${SharedDir}/qcommon/q_platform.h"
+		"${SharedDir}/qcommon/q_sharedtypes.h"
+		)
+	source_group("Common" FILES ${CommonLibCommonFiles})
+	set(CommonLibFiles ${CommonLibFiles} ${CommonLibCommonFiles})
+	
 	
 	set(CommonLibGhoul2Files
 		"${SharedDir}/ghoul2/g2_public.h"
 		)
 	source_group("Ghoul 2" FILES ${CommonLibGhoul2Files})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibGhoul2Files})
+	
+	# Create library
 	
 	add_library(${CommonLib} STATIC ${CommonLibFiles})
 	# nothing to install, it's a static library
@@ -38,6 +66,8 @@ if(BuildCommonLib)
 	target_link_libraries(${CommonLib} ${CommonLibLibraries})
 
 endif(BuildCommonLib)
+
+# Add WindowLib if requested
 
 if(BuildWindowLib)
 	add_subdirectory("window")

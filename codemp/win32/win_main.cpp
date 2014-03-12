@@ -677,7 +677,7 @@ void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptr
 	eventHead++;
 
 	if ( time == 0 ) {
-		time = Sys_Milliseconds();
+		time = Sys_Milliseconds( qfalse );
 	}
 
 	ev->evTime = time;
@@ -954,7 +954,7 @@ int main( int argc, char **argv )
 	SetErrorMode( SEM_FAILCRITICALERRORS );
 
 	// Set the initial time base
-	Sys_Milliseconds();
+	Sys_Milliseconds( qfalse );
 
 	Sys_SetBinaryPath( Sys_Dirname( argv[ 0 ] ) );
 	Sys_SetDefaultInstallPath( DEFAULT_BASEDIR );

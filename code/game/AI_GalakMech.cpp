@@ -727,7 +727,7 @@ void	Pilot_Steer_Vehicle()
 						}
 					}*/
 				//}
-				WeaponThink(true);
+				WeaponThink(qtrue);
 			}
 			ucmd.rightmove = (EnemySide==Side_Left)?( 127):(-127);
 		}

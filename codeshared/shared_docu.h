@@ -13,6 +13,10 @@
 	Contains forward declarations of functions with client-specific implementation. They have to be provided by the clients linking SharedLib or WindowLib.
 	
 	
+	\dir codeshared/qcommon
+	Contains types & platform specific defines required by the shared code and everything else.
+	
+	
 	\dir codeshared/ghoul2
 	Contains the Ghoul 2 code for models & animations.
 	

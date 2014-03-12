@@ -262,7 +262,7 @@ int Export_BotLibStartFrame(float time)
 int Export_BotLibLoadMap(const char *mapname)
 {
 #ifdef DEBUG
-	int starttime = Sys_MilliSeconds();
+	int starttime = Sys_Milliseconds( qfalse );
 #endif
 	int errnum;
 
@@ -278,7 +278,7 @@ int Export_BotLibLoadMap(const char *mapname)
 	//
 	botimport.Print(PRT_MESSAGE, "-------------------------------------\n");
 #ifdef DEBUG
-	botimport.Print(PRT_MESSAGE, "map loaded in %d msec\n", Sys_MilliSeconds() - starttime);
+	botimport.Print(PRT_MESSAGE, "map loaded in %d msec\n", Sys_Milliseconds( qfalse ) - starttime);
 #endif
 	//
 	return BLERR_NOERROR;

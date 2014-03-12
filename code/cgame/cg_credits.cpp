@@ -236,12 +236,12 @@ void CG_Credits_Init( const char *psStripReference, vec4_t *pv4Color)
 	// Play the light side end credits music.
 	if ( g_entities[0].client->sess.mission_objectives[0].status != 2 )
 	{
-		cgi_S_StartBackgroundTrack( "music/endcredits.mp3", NULL, false );
+		cgi_S_StartBackgroundTrack( "music/endcredits.mp3", NULL, qfalse );
 	}
 	// Play the dark side end credits music.
 	else
 	{
-		cgi_S_StartBackgroundTrack( "music/vjun3/vjun3_explore.mp3", NULL, false );
+		cgi_S_StartBackgroundTrack( "music/vjun3/vjun3_explore.mp3", NULL, qfalse );
 	}
 
 	// could make these into parameters later, but for now...
@@ -504,7 +504,7 @@ void CG_Credits_Init( const char *psStripReference, vec4_t *pv4Color)
 
 qboolean CG_Credits_Running( void )
 {
-	return CreditData.Running();
+	return ToQBoolean( CreditData.Running( ) );
 }
 
 // returns qtrue if still drawing...

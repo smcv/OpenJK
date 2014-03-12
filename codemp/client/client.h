@@ -11,6 +11,8 @@
 #include "cgame/cg_public.h"
 #include "ui/ui_public.h"
 
+#include "sys/sys_public.h"
+
 #define	RETRANSMIT_TIMEOUT	3000	// time between connection packet retransmits
 
 // file full of random crap that gets used to create ja_guid

@@ -1,3 +1,39 @@
+#pragma once
+
+//Ignore __attribute__ on non-gcc platforms
+#if !defined(__GNUC__) && !defined(__attribute__)
+	#define __attribute__(x)
+#endif
+
+#if defined(__GNUC__)
+	#define UNUSED_VAR __attribute__((unused))
+#else
+	#define UNUSED_VAR
+#endif
+
+#if (defined _MSC_VER)
+	#define Q_EXPORT __declspec(dllexport)
+#elif (defined __SUNPRO_C)
+	#define Q_EXPORT __global
+#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
+	#define Q_EXPORT __attribute__((visibility("default")))
+#else
+	#define Q_EXPORT
+#endif
+
+// this is the define for determining if we have an asm version of a C function
+#if (defined(_M_IX86) || defined(__i386__)) && !defined(__sun__)
+	#define id386	1
+#else
+	#define id386	0
+#endif
+
+#if (defined(powerc) || defined(powerpc) || defined(ppc) || defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
+	#define idppc	1
+#else
+	#define idppc	0
+#endif
+
 // for windows fastcall option
 #define QDECL
 #define QCALL

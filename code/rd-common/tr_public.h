@@ -27,12 +27,8 @@ This file is part of Jedi Academy.
 
 // suck it
 #include "../qcommon/cm_landscape.h"
-#ifdef _WIN32
-// down
-#include "../win32/win_local.h"
-#endif
 
-#define	REF_API_VERSION		11
+#define	REF_API_VERSION		12
 
 typedef struct {
 	void				(QDECL *Printf)						( int printLevel, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
@@ -100,10 +96,6 @@ typedef struct {
 
 	void				(*SV_GetConfigstring)				( int index, char *buffer, int bufferSize );
 	void				(*SV_SetConfigstring)				( int index, const char *value );
-
-#ifdef _WIN32
-	WinVars_t *			(*GetWinVars)						( void ); //g_wv
-#endif
 
     // input event handling
 	void            (*IN_Init)                          ( void *windowData );
@@ -258,7 +250,7 @@ typedef struct {
 	int		(*SavePNG)( const char *filename, byte *buf, size_t width, size_t height, int byteDepth );
 	void	(*R_InitWorldEffects)(void);
 	void	(*R_CreateAutomapImage)( const char *name, const byte *pic, int width, int height,
-		qboolean mipmap, qboolean allowPicmip, qboolean allowTC, qboolean glWrapClampMode );
+		qboolean mipmap, qboolean allowPicmip, qboolean allowTC, int glWrapClampMode );
 	void	(*R_ClearStuffToStopGhoul2CrashingThings)(void);
 	qboolean (*R_inPVS)(vec3_t p1, vec3_t p2);
 
@@ -326,7 +318,7 @@ typedef struct {
 	int			(*G2API_GetSurfaceRenderStatus)(CGhoul2Info *ghlInfo, const char *surfaceName);
 	int			(*G2API_GetTime)(int argTime);
 	void		(*G2API_GiveMeVectorFromMatrix)(mdxaBone_t &boltMatrix, Eorientations flags, vec3_t &vec);
-	int			(*G2API_HaveWeGhoul2Models)(CGhoul2Info_v &ghoul2);
+	qboolean	(*G2API_HaveWeGhoul2Models)(CGhoul2Info_v &ghoul2);
 	qboolean	(*G2API_IKMove)(CGhoul2Info_v &ghoul2, int time, sharedIKMoveParams_t *params);
 	int			(*G2API_InitGhoul2Model)(CGhoul2Info_v &ghoul2, const char *fileName, int modelIndex, 
 					qhandle_t customSkin, qhandle_t customShader, int modelFlags, int lodBias);

@@ -76,7 +76,7 @@ typedef struct
 	// remaining dynamic fields...
 	//
 	int			iXFadeVolumeSeekTime;
-	int			iXFadeVolumeSeekTo;	// when changing this, set the above timer to Sys_Milliseconds(). 
+	int			iXFadeVolumeSeekTo;	// when changing this, set the above timer to Sys_Milliseconds( qfalse ). 
 									//	Note that this should be thought of more as an up/down bool rather than as a 
 									//	number now, in other words set it only to 0 or 255. I'll probably change this
 									//	to actually be a bool later.
@@ -3401,7 +3401,7 @@ void UpdateLoopingSounds()
 				loop->bRelative = false;
 			}
 			
-			ch->fixed_origin = loop->bRelative;
+			ch->fixed_origin = ToQBoolean( loop->bRelative );
 			pos[0] = ch->origin[0];
 			pos[1] = ch->origin[2];
 			pos[2] = -ch->origin[1];
@@ -3861,7 +3861,7 @@ void S_SoundList_f( void ) {
 	for (sfx=s_knownSfx, i=0 ; i<s_numSfx ; i++, sfx++) 
 	{
 		extern cvar_t *cv_MP3overhead;
-		qboolean bMP3DumpOverride = bShouldBeMP3 && cv_MP3overhead && !sfx->bDefaultSound && !sfx->pMP3StreamHeader && sfx->pSoundData && (Z_Size(sfx->pSoundData) > cv_MP3overhead->integer);
+		qboolean bMP3DumpOverride = ToQBoolean( bShouldBeMP3 && cv_MP3overhead && !sfx->bDefaultSound && !sfx->pMP3StreamHeader && sfx->pSoundData && ( Z_Size( sfx->pSoundData ) > cv_MP3overhead->integer ) );
 
 		if (bMP3DumpOverride || (!bShouldBeMP3 && (!bWavOnly || sfx->eSoundCompressionMethod == ct_16)))
 		{
@@ -4290,7 +4290,7 @@ static void S_SwitchDynamicTracks( MusicState_e eOldState, MusicState_e eNewStat
 	tMusic_Info[ eBGRNDTRACK_FADE ] = tMusic_Info[ eOldState ];
 //	tMusic_Info[ eBGRNDTRACK_FADE ].bActive = qtrue;	// inherent
 //	tMusic_Info[ eBGRNDTRACK_FADE ].bExists = qtrue;	// inherent
-	tMusic_Info[ eBGRNDTRACK_FADE ].iXFadeVolumeSeekTime= Sys_Milliseconds();
+	tMusic_Info[ eBGRNDTRACK_FADE ].iXFadeVolumeSeekTime= Sys_Milliseconds( qfalse );
 	tMusic_Info[ eBGRNDTRACK_FADE ].iXFadeVolumeSeekTo	= 0;
 	//
 	// ... and deactivate...
@@ -4300,7 +4300,7 @@ static void S_SwitchDynamicTracks( MusicState_e eOldState, MusicState_e eNewStat
 	// set new track to either full volume or fade up...
 	//
 	tMusic_Info[eNewState].bActive				= qtrue;
-	tMusic_Info[eNewState].iXFadeVolumeSeekTime	= Sys_Milliseconds();
+	tMusic_Info[eNewState].iXFadeVolumeSeekTime	= Sys_Milliseconds( qfalse );
 	tMusic_Info[eNewState].iXFadeVolumeSeekTo	= 255;
 	tMusic_Info[eNewState].iXFadeVolume			= bNewTrackStartsFullVolume ? 255 : 0;
 
@@ -4609,7 +4609,7 @@ void S_StartBackgroundTrack( const char *intro, const char *loop, qboolean bCall
 				MusicInfo_t *pMusicInfo = &tMusic_Info[ eMusic_StateActual ];
 
 				pMusicInfo->bActive				= qtrue;
-				pMusicInfo->iXFadeVolumeSeekTime= Sys_Milliseconds();
+				pMusicInfo->iXFadeVolumeSeekTime= Sys_Milliseconds( qfalse );
 				pMusicInfo->iXFadeVolumeSeekTo	= 255;
 				pMusicInfo->iXFadeVolume		= 0;			
 				
@@ -4669,7 +4669,7 @@ static qboolean S_UpdateBackgroundTrack_Actual( MusicInfo_t *pMusicInfo, qboolea
 		//
 		if ( pMusicInfo->iXFadeVolume != pMusicInfo->iXFadeVolumeSeekTo )
 		{
-			int iFadeMillisecondsElapsed = Sys_Milliseconds() - pMusicInfo->iXFadeVolumeSeekTime;
+			int iFadeMillisecondsElapsed = Sys_Milliseconds( qfalse ) - pMusicInfo->iXFadeVolumeSeekTime;
 
 			if (iFadeMillisecondsElapsed > (fDYNAMIC_XFADE_SECONDS * 1000))
 			{
@@ -4978,11 +4978,11 @@ static void S_UpdateBackgroundTrack( void )
 						// copy current track to fader...
 						//
 						*pMusicInfoFadeOut = *pMusicInfoCurrent;	// struct copy
-						pMusicInfoFadeOut->iXFadeVolumeSeekTime	= Sys_Milliseconds();
+						pMusicInfoFadeOut->iXFadeVolumeSeekTime	= Sys_Milliseconds( qfalse );
 						pMusicInfoFadeOut->iXFadeVolumeSeekTo	= 0;
 						//
 						pMusicInfoCurrent->Rewind();
-						pMusicInfoCurrent->iXFadeVolumeSeekTime	= Sys_Milliseconds();
+						pMusicInfoCurrent->iXFadeVolumeSeekTime	= Sys_Milliseconds( qfalse );
 						pMusicInfoCurrent->iXFadeVolumeSeekTo	= (eMusic_StateActual == eBGRNDTRACK_DEATH) ? 0: 255;
 						pMusicInfoCurrent->iXFadeVolume			= 0;
 					}
@@ -5009,7 +5009,7 @@ static void S_UpdateBackgroundTrack( void )
 		// standard / non-dynamic one-track music...
 		//
 		const char *psCommand = S_Music_GetRequestedState();	// special check just for "silence" case...
-		qboolean bShouldBeSilent = (psCommand && !Q_stricmp(psCommand,"silence"));
+		qboolean bShouldBeSilent = ToQBoolean( psCommand && !Q_stricmp(psCommand,"silence") );
 		float fDesiredVolume = bShouldBeSilent ? 0.0f : s_musicVolume->value;
 		//
 		// internal to this code is a volume-smoother...
@@ -5267,11 +5267,11 @@ qboolean SND_RegisterAudio_LevelLoadEnd(qboolean bDeleteEverythingNotUsedThisLev
 
 				if (bDeleteEverythingNotUsedThisLevel)
 				{
-					bDeleteThis = (sfx->iLastLevelUsedOn != re.RegisterMedia_GetLevel());
+					bDeleteThis = ToQBoolean(sfx->iLastLevelUsedOn != re.RegisterMedia_GetLevel());
 				}
 				else
 				{
-					bDeleteThis = (sfx->iLastLevelUsedOn < re.RegisterMedia_GetLevel());
+					bDeleteThis = ToQBoolean(sfx->iLastLevelUsedOn < re.RegisterMedia_GetLevel());
 				}
 
 				if (bDeleteThis)

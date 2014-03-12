@@ -1433,7 +1433,7 @@ void CFxScheduler::AddScheduledEffects( bool portal )
 							{
 								if (cent.gent->ghoul2[(*itr)->mModelNum].mModelindex>=0)
 								{
-									doesBoltExist = theFxHelper.GetOriginAxisFromBolt(cent, (*itr)->mModelNum, (*itr)->mBoltNum, origin, axis);
+									doesBoltExist = ToQBoolean( theFxHelper.GetOriginAxisFromBolt( cent, ( *itr )->mModelNum, ( *itr )->mBoltNum, origin, axis ) );
 								}
 							}
 						}

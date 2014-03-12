@@ -5,7 +5,7 @@ if(NOT InOpenJK)
 	message(FATAL_ERROR "Use the top-level cmake script!")
 endif(NOT InOpenJK)
 
-set(MPGameIncludeDirectories "${MPDir}")
+set(MPGameIncludeDirectories ${MPDir} ${SharedDir})
 if(WIN32)
 	set(MPGameLibraries "winmm")
 endif(WIN32)
@@ -129,7 +129,7 @@ set(MPGameCommonFiles
 	"${MPDir}/qcommon/q_shared.c"
 	"${MPDir}/qcommon/disablewarnings.h"
 	"${MPDir}/qcommon/q_shared.h"
-	"${MPDir}/qcommon/q_platform.h"
+	"${SharedDir}/qcommon/q_platform.h"
 	"${MPDir}/qcommon/tags.h"
 	)
 source_group("common" FILES ${MPGameCommonFiles})

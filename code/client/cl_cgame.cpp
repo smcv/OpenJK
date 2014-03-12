@@ -25,6 +25,8 @@ This file is part of Jedi Academy.
 
 #include "../RMG/RM_Headers.h"
 
+#include "sys/sys_public.h"
+
 #include "client.h"
 #include "vmachine.h"
 
@@ -798,7 +800,7 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		Com_Error( ERR_DROP, S_COLOR_RED"%s", VMA(1) );
 		return 0;
 	case CG_MILLISECONDS:
-		return Sys_Milliseconds();
+		return Sys_Milliseconds( qfalse );
 	case CG_CVAR_REGISTER:
 		Cvar_Register( (vmCvar_t *) VMA(1), (const char *) VMA(2), (const char *) VMA(3), args[4] );
 		return 0;
@@ -869,7 +871,7 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		return 0;
 
 	case CG_CM_LOADMAP:
-		CL_CM_LoadMap( (const char *) VMA(1), args[2] );
+		CL_CM_LoadMap( ( const char * )VMA( 1 ), ToQBoolean( args[ 2 ] ) );
 		return 0;
 	case CG_CM_NUMINLINEMODELS:
 		return CM_NumInlineModels();
@@ -945,12 +947,12 @@ intptr_t CL_CgameSystemCalls( intptr_t *args ) {
 		S_UpdateEntityPosition( args[1], (const float *) VMA(2) );
 		return 0;
 	case CG_S_RESPATIALIZE:
-		S_Respatialize( args[1], (const float *) VMA(2), (float(*)[3]) VMA(3), args[4] );
+		S_Respatialize( args[ 1 ], ( const float * )VMA( 2 ), ( float( *)[ 3 ] ) VMA( 3 ), ToQBoolean( args[ 4 ] ) );
 		return 0;
 	case CG_S_REGISTERSOUND:
 		return S_RegisterSound( (const char *) VMA(1) );
 	case CG_S_STARTBACKGROUNDTRACK:
-		S_StartBackgroundTrack( (const char *) VMA(1), (const char *) VMA(2), args[3]);
+		S_StartBackgroundTrack( ( const char * )VMA( 1 ), ( const char * )VMA( 2 ), ToQBoolean( args[ 3 ] ) );
 		return 0;
 	case CG_S_GETSAMPLELENGTH:
 		return S_GetSampleLengthInMilliSeconds(  args[1]);
@@ -1201,7 +1203,7 @@ Ghoul2 Insert End
 		return 0;
 
 	case CG_OPENJK_MENU_PAINT:
-		Menu_Paint( (menuDef_t *)VMA(1), (intptr_t)VMA(2) );
+		Menu_Paint( ( menuDef_t * )VMA( 1 ), ToQBoolean( VMA( 2 ) ) );
 		return 0;
 
 	case CG_OPENJK_GETMENU_BYNAME:
@@ -1402,7 +1404,7 @@ void CL_InitCGame( void ) {
 	const char			*mapname;
 	//int		t1, t2;
 
-	//t1 = Sys_Milliseconds();
+	//t1 = Sys_Milliseconds( qfalse );
 
 	// put away the console
 	Con_Close();
@@ -1425,7 +1427,7 @@ void CL_InitCGame( void ) {
 	// will cause the server to send us the first snapshot
 	cls.state = CA_PRIMED;
 
-	//t2 = Sys_Milliseconds();
+	//t2 = Sys_Milliseconds( qfalse );
 
 	//Com_Printf( "CL_InitCGame: %5.2f seconds\n", (t2-t1)/1000.0 );
 	// have the renderer touch all its images, so they are present
@@ -1455,7 +1457,7 @@ qboolean CL_GameCommand( void ) {
 		return qfalse;
 	}
 
-	return VM_Call( CG_CONSOLE_COMMAND );
+	return ToQBoolean( VM_Call( CG_CONSOLE_COMMAND ) );
 }
 
 
@@ -1601,8 +1603,6 @@ void CL_FirstSnapshot( void ) {
 		Cbuf_AddText( cl_activeAction->string );
 		Cvar_Set( "activeAction", "" );
 	}
-	
-	Sys_BeginProfiling();
 }
 
 /*

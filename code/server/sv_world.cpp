@@ -868,7 +868,7 @@ Ghoul2 Insert End
 	float		world_frac;
 
 	/*
-	startMS = Sys_Milliseconds ();
+	startMS = Sys_Milliseconds( qfalse );
 	numTraces++;
 	*/
 	if ( !mins ) {
@@ -958,7 +958,7 @@ Ghoul2 Insert End
 
 /*
 addtime:
-	endMS = Sys_Milliseconds ();
+	endMS = Sys_Milliseconds( qfalse );
 
 	timeInTrace += endMS - startMS;
 */
@@ -990,7 +990,7 @@ int SV_PointContents( const vec3_t p, int passEntityNum ) {
 #endif
 
 	/*
-	startMS = Sys_Milliseconds ();
+	startMS = Sys_Milliseconds( qfalse );
 	numTraces++;
 	*/
 
@@ -1018,7 +1018,7 @@ int SV_PointContents( const vec3_t p, int passEntityNum ) {
 	}
 
 	/*
-	endMS = Sys_Milliseconds ();
+	endMS = Sys_Milliseconds( qfalse );
 	timeInTrace += endMS - startMS;
 	*/
 	return contents;

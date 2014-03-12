@@ -160,7 +160,7 @@ bool BG_FighterUpdate(Vehicle_t *pVeh, const usercmd_t *pUcmd, vec3_t trMins, ve
 #ifdef _JK2MP
 	isDead = (qboolean)((parentPS->eFlags&EF_DEAD)!=0);
 #else
-	isDead = (parentPS->stats[STAT_HEALTH] <= 0 );
+	isDead = ToQBoolean( parentPS->stats[ STAT_HEALTH ] <= 0 );
 #endif
 
 	/*
@@ -1224,7 +1224,7 @@ static void ProcessOrientCommands( Vehicle_t *pVeh )
 #else
 	parentPS = &parent->client->ps;
 	riderPS = &rider->client->ps;
-	isDead = (parentPS->stats[STAT_HEALTH] <= 0 );
+	isDead = ToQBoolean( parentPS->stats[ STAT_HEALTH ] <= 0 );
 #endif
 
 #ifdef _JK2MP

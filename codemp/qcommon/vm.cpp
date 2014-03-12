@@ -1,6 +1,8 @@
 //Anything above this #include will be ignored by the compiler
 #include "qcommon/exe_headers.h"
 
+#include "sys/sys_public.h"
+
 vm_t *currentVM = NULL; // bk001212
 
 static const char *vmNames[MAX_VM] = {

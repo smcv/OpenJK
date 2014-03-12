@@ -801,7 +801,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 	case EV_PLAY_EFFECT:
 		DEBUGNAME("EV_PLAY_EFFECT");
 		{
-			const bool portalEnt = !!es->isPortalEnt; //the fxrunner spawning this effect is within a skyportal, so only render this effect within that portal.
+			const bool portalEnt = es->isPortalEnt; //the fxrunner spawning this effect is within a skyportal, so only render this effect within that portal.
 
 			s = CG_ConfigString( CS_EFFECTS + es->eventParm );
 	// Ghoul2 Insert Start

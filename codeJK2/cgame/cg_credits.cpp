@@ -482,7 +482,7 @@ void CG_Credits_Init( LPCSTR psStripReference, vec4_t *pv4Color)
 
 qboolean CG_Credits_Running( void )
 {
-	return CreditData.Running();
+	return ToQBoolean( CreditData.Running() );
 }
 
 // returns qtrue if still drawing...

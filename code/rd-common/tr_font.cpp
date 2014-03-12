@@ -720,7 +720,7 @@ unsigned int AnyLanguage_ReadCharFromString( char *psText, int *piAdvanceCount, 
 			//
 			if ( pbIsTrailingPunctuation)
 			{
-				*pbIsTrailingPunctuation = Taiwanese_IsTrailingPunctuation( uiLetter );
+				*pbIsTrailingPunctuation = ToQBoolean( Taiwanese_IsTrailingPunctuation( uiLetter ) );
 			}
 
 			return uiLetter;
@@ -739,7 +739,7 @@ unsigned int AnyLanguage_ReadCharFromString( char *psText, int *piAdvanceCount, 
 			//
 			if ( pbIsTrailingPunctuation)
 			{
-				*pbIsTrailingPunctuation = Japanese_IsTrailingPunctuation( uiLetter );
+				*pbIsTrailingPunctuation = ToQBoolean( Japanese_IsTrailingPunctuation( uiLetter ) );
 			}
 
 			return uiLetter;
@@ -754,13 +754,13 @@ unsigned int AnyLanguage_ReadCharFromString( char *psText, int *piAdvanceCount, 
 
 	if (pbIsTrailingPunctuation)
 	{
-		*pbIsTrailingPunctuation = (uiLetter == '!' || 
-									uiLetter == '?' || 
-									uiLetter == ',' || 
-									uiLetter == '.' || 
-									uiLetter == ';' || 
-									uiLetter == ':'
-									);
+		*pbIsTrailingPunctuation = ToQBoolean(  uiLetter == '!' ||
+												uiLetter == '?' || 
+												uiLetter == ',' || 
+												uiLetter == '.' || 
+												uiLetter == ';' || 
+												uiLetter == ':'
+												) );
 	}
 
 	return uiLetter;
@@ -1687,7 +1687,7 @@ void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, c
 		case 32:						// Space
 			pLetter = curfont->GetLetter(' ');			
 			x += Round(pLetter->horizAdvance * fScale);
-			bNextTextWouldOverflow = ( iMaxPixelWidth != -1 && ((x-ox)>iMaxPixelWidth) );
+			bNextTextWouldOverflow = ToQBoolean( iMaxPixelWidth != -1 && ( ( x - ox )>iMaxPixelWidth ) );
 			break;
 
 		default:
@@ -1699,7 +1699,7 @@ void RE_Font_DrawString(int ox, int oy, const char *psText, const float *rgba, c
 
 			float fThisScale = uiLetter > 255 ? fScaleA : fScale;
 			int iAdvancePixels = Round(pLetter->horizAdvance * fThisScale);
-			bNextTextWouldOverflow = ( iMaxPixelWidth != -1 && (((x+iAdvancePixels)-ox)>iMaxPixelWidth) );
+			bNextTextWouldOverflow = ToQBoolean( iMaxPixelWidth != -1 && ( ( ( x + iAdvancePixels ) - ox )>iMaxPixelWidth ) );
 			if (!bNextTextWouldOverflow)
 			{
 				// this 'mbRoundCalcs' stuff is crap, but the only way to make the font code work. Sigh...

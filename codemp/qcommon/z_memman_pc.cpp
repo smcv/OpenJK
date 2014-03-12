@@ -5,6 +5,10 @@
 
 #include "client/client.h" // hi i'm bad
 
+#ifdef _WIN32
+#	include <Windows.h>
+#endif
+
 ////////////////////////////////////////////////
 //
 #ifdef TAGDEF	// itu?
@@ -635,7 +639,7 @@ void Com_TouchMemory( void ) {
 	int		i, j;
 	int		sum;
 
-//	start = Sys_Milliseconds();
+//	start = Sys_Milliseconds( qfalse );
 	Z_Validate();
 
 	sum = 0;
@@ -652,7 +656,7 @@ void Com_TouchMemory( void ) {
 		pMemory = pMemory->pNext;
 	}
 
-//	end = Sys_Milliseconds();
+//	end = Sys_Milliseconds( qfalse );
 //	Com_Printf( "Com_TouchMemory: %i msec\n", end - start );
 }
 

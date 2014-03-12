@@ -777,9 +777,9 @@ qboolean Music_DynamicDataAvailable(const char *psDynamicMusicLabel)
 	{
 		if (Music_ParseLeveldata(sLevelName))
 		{
-			return !!(	Music_GetBaseMusicFile( eBGRNDTRACK_EXPLORE ) &&
-						Music_GetBaseMusicFile(	eBGRNDTRACK_ACTION	)
-						);
+			return ToQBoolean(	Music_GetBaseMusicFile( eBGRNDTRACK_EXPLORE ) &&
+								Music_GetBaseMusicFile(	eBGRNDTRACK_ACTION	)
+								);
 		}
 	}
 
@@ -850,9 +850,9 @@ const char *Music_GetFileNameForState( MusicState_e eMusicState)
 
 qboolean Music_StateIsTransition( MusicState_e eMusicState )
 {
-	return (eMusicState >= eBGRNDTRACK_FIRSTTRANSITION &&
-			eMusicState <= eBGRNDTRACK_LASTTRANSITION
-			);
+	return ToQBoolean(eMusicState >= eBGRNDTRACK_FIRSTTRANSITION &&
+		eMusicState <= eBGRNDTRACK_LASTTRANSITION
+		);
 }
 
 

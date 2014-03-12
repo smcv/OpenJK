@@ -22,6 +22,8 @@ This file is part of Jedi Academy.
 //
 #include "../server/exe_headers.h"
 
+#include "sys/sys_public.h"
+
 
 #include "client.h"
 #include "client_ui.h"
@@ -29,11 +31,6 @@ This file is part of Jedi Academy.
 #include "../ghoul2/G2.h"
 
 #include "../RMG/RM_Headers.h"
-
-#ifndef _WIN32
-#include "../sys/sys_loadlib.h"
-#include "../sys/sys_local.h"
-#endif
 
 #define	RETRANSMIT_TIMEOUT	3000	// time between connection packet retransmits
 
@@ -1043,15 +1040,6 @@ const char *String_GetStringValue( const char *reference )
 #endif
 }
 
-#ifdef _WIN32
-// DLL glue --eez
-WinVars_t *GetWindowsVariables( void )
-{
-	extern WinVars_t g_wv;
-	return &g_wv;
-}
-#endif
-
 extern qboolean gbAlreadyDoingLoad;
 extern void *gpvCachedMapDiskImage;
 extern char  gsCachedMapDiskImage[MAX_QPATH];
@@ -1105,6 +1093,11 @@ static CMiniHeap *GetG2VertSpaceServer( void ) {
 #else
 #define DEFAULT_RENDER_LIBRARY	"rdsp-vanilla"	
 #endif
+
+static int Sys_Milliseconds2()
+{
+	return Sys_Milliseconds( qfalse );
+}
 
 void CL_InitRef( void ) {
 	refexport_t	*ret;
@@ -1200,11 +1193,8 @@ void CL_InitRef( void ) {
 	rit.Error = Com_Error;
 	rit.FS_FileExists = S_FileExists;
 	rit.GetG2VertSpaceServer = GetG2VertSpaceServer;
-#ifdef _WIN32
-	rit.GetWinVars = GetWindowsVariables;
-#endif
 	rit.LowPhysicalMemory = Sys_LowPhysicalMemory;
-	rit.Milliseconds = Sys_Milliseconds;
+	rit.Milliseconds = Sys_Milliseconds2;
 	rit.Printf = CL_RefPrintf;
 	rit.SE_GetString = String_GetStringValue;
 

@@ -1156,7 +1156,7 @@ void NPC_BSST_Investigate( void )
 	if ( NPCInfo->localState == LSTATE_INVESTIGATE && (NPCInfo->goalEntity!=NULL) )
 	{
 		//See if we're there
-		if ( !STEER::Reached(NPC, NPCInfo->goalEntity, 32, !!FlyingCreature(NPC)) )
+		if ( !STEER::Reached(NPC, NPCInfo->goalEntity, 32, FlyingCreature(NPC)) )
 		{
 			ucmd.buttons |= BUTTON_WALKING;
 
@@ -1404,7 +1404,7 @@ static void ST_CheckMoveState( void )
 	if ( ( NPCInfo->goalEntity != NPC->enemy ) && ( NPCInfo->goalEntity != NULL ) )
 	{
 		//Did we make it?
-		if ( STEER::Reached(NPC, NPCInfo->goalEntity, 16, !!FlyingCreature(NPC)) || 
+		if ( STEER::Reached(NPC, NPCInfo->goalEntity, 16, FlyingCreature(NPC)) || 
 			(enemyLOS && (NPCInfo->aiFlags&NPCAI_STOP_AT_LOS) && !Q3_TaskIDPending(NPC, TID_MOVE_NAV))
 			)
 		{//either hit our navgoal or our navgoal was not a crucial (scripted) one (maybe a combat point) and we're scouting and found our enemy
@@ -1711,7 +1711,7 @@ void ST_TransferMoveGoal( gentity_t *self, gentity_t *other )
 	{//I must be going for a goal, give that to him instead
 		if ( self->NPC->goalEntity == self->NPC->tempGoal )
 		{
-			NPC_SetMoveGoal( other, self->NPC->tempGoal->currentOrigin, self->NPC->goalRadius, ((self->NPC->tempGoal->svFlags&SVF_NAVGOAL)?true:false) );
+			NPC_SetMoveGoal( other, self->NPC->tempGoal->currentOrigin, self->NPC->goalRadius, ToQBoolean( self->NPC->tempGoal->svFlags&SVF_NAVGOAL ) );
 		}
 		else
 		{

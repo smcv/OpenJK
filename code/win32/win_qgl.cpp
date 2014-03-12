@@ -3559,7 +3559,7 @@ qboolean QGL_Init( const char *dllname )
 	qglPointParameterivNV	= NULL;
 
 	// check logging
-	QGL_EnableLogging( r_logFile->integer );
+	QGL_EnableLogging( ToQBoolean( r_logFile->integer ) );
 
 	return qtrue;
 }

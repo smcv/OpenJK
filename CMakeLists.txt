@@ -41,6 +41,7 @@ endif(BuildMPEngine  OR BuildSPEngine OR BuildJK2SPEngine)
 if(WIN32)
 	option(UseInternalOpenAL "Whether to use the included OpenAL instead of a locally installed one" ON)
 	option(UseInternalZlib "Whether to use the included zlib instead of a locally installed one" ON)
+	option(UseInternalSDL "Whether to use the included SDL2 instead of a locally installed one" ON)
 endif()
 
 if(WIN32)

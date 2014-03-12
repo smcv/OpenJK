@@ -28,6 +28,7 @@ This file is part of Jedi Academy.
 #include "q_shared.h"
 #include "qcommon.h"
 #include "files.h"
+#include "sys/sys_public.h"
 
 /*
 =============================================================================
@@ -482,7 +483,7 @@ FS_FilenameCompare
 Ignore case and seprator char distinctions
 ===========
 */
-qboolean FS_FilenameCompare( const char *s1, const char *s2 ) {
+int FS_FilenameCompare( const char *s1, const char *s2 ) {
 	int		c1, c2;
 	
 	do {

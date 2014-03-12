@@ -721,7 +721,7 @@ void Cmd_SetObjective_f( gentity_t *ent )
 	displayStatus = atoi(gi.argv(2));
 	status = atoi(gi.argv(3));
 
-	ent->client->sess.mission_objectives[objectiveI].display = displayStatus;
+	ent->client->sess.mission_objectives[ objectiveI ].display = ToQBoolean( displayStatus );
 	ent->client->sess.mission_objectives[objectiveI].status = status;
 	G_CheckPlayerDarkSide();
 }

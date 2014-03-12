@@ -22,6 +22,10 @@ This file is part of Jedi Academy.
 #include "qcommon.h"
 #include "sstring.h"
 
+#ifdef _WIN32
+#	include <Windows.h>
+#endif
+
 #ifdef DEBUG_ZONE_ALLOCS
 int giZoneSnaphotNum=0;
 #define DEBUG_ZONE_ALLOC_OPTIONAL_LABEL_SIZE 256
@@ -482,7 +486,7 @@ qboolean Z_IsFromZone(const void *pvAddress, memtag_t eTag)
 		return qfalse;
 	}
 
-	return pMemory->iSize;
+	return ToQBoolean( pMemory->iSize );
 }
 
 // stats-query function to ask how big a malloc is...
@@ -956,7 +960,7 @@ void Com_TouchMemory( void ) {
 
 	Z_Validate();
 
-	//start = Sys_Milliseconds();
+	//start = Sys_Milliseconds( qfalse );
 
 	sum = 0;
 	totalTouched=0;
@@ -973,7 +977,7 @@ void Com_TouchMemory( void ) {
 		pMemory = pMemory->pNext;
 	}
 
-	//end = Sys_Milliseconds();
+	//end = Sys_Milliseconds( qfalse );
 
 	//Com_Printf( "Com_TouchMemory: %i bytes, %i msec\n", totalTouched, end - start );
 }

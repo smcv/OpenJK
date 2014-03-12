@@ -251,12 +251,12 @@ int cgi_R_Font_HeightPixels(const int iFontIndex, const float scale /*= 1.0f*/) 
 
 qboolean cgi_Language_IsAsian( void )
 {
-	return Q_syscall( CG_LANGUAGE_ISASIAN );
+	return ToQBoolean( Q_syscall( CG_LANGUAGE_ISASIAN ) );
 }
 
 qboolean cgi_Language_UsesSpaces(void)
 {
-	return Q_syscall( CG_LANGUAGE_USESSPACES );
+	return ToQBoolean( Q_syscall( CG_LANGUAGE_USESSPACES ) );
 }
 
 unsigned int cgi_AnyLanguage_ReadCharFromString( const char **ppText, qboolean *pbIsTrailingPunctuation /* = NULL */ )
@@ -355,11 +355,11 @@ void		cgi_GetCurrentSnapshotNumber( int *snapshotNumber, int *serverTime ) {
 }
 
 qboolean	cgi_GetSnapshot( int snapshotNumber, snapshot_t *snapshot ) {
-	return Q_syscall( CG_GETSNAPSHOT, snapshotNumber, snapshot );
+	return ToQBoolean( Q_syscall( CG_GETSNAPSHOT, snapshotNumber, snapshot ) );
 }
 
 qboolean	cgi_GetServerCommand( int serverCommandNumber ) {
-	return Q_syscall( CG_GETSERVERCOMMAND, serverCommandNumber );
+	return ToQBoolean( Q_syscall( CG_GETSERVERCOMMAND, serverCommandNumber ) );
 }
 
 int			cgi_GetCurrentCmdNumber( void ) {
@@ -367,7 +367,7 @@ int			cgi_GetCurrentCmdNumber( void ) {
 }
 
 qboolean	cgi_GetUserCmd( int cmdNumber, usercmd_t *ucmd ) {
-	return Q_syscall( CG_GETUSERCMD, cmdNumber, ucmd );
+	return ToQBoolean( Q_syscall( CG_GETUSERCMD, cmdNumber, ucmd ) );
 }
 
 void		cgi_SetUserCmdValue( int stateValue, float sensitivityScale, float mPitchOverride, float mYawOverride ) {

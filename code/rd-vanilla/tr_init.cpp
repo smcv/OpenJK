@@ -1389,10 +1389,6 @@ void R_Init( void ) {
 	memset( &backEnd, 0, sizeof( backEnd ) );
 	memset( &tess, 0, sizeof( tess ) );
 
-#ifdef _WIN32
-	tr.wv = ri.GetWinVars();
-#endif
-
 //	Swap_Init();
 
 #ifndef FINAL_BUILD
@@ -1469,11 +1465,6 @@ RE_Shutdown
 */
 extern void R_ShutdownWorldEffects(void);
 void RE_Shutdown( qboolean destroyWindow, qboolean restarting ) {	
-
-	// Need this temporarily.
-#ifdef _WIN32
-	tr.wv = ri.GetWinVars();
-#endif
 
 	ri.Cmd_RemoveCommand ("imagelist");
 	ri.Cmd_RemoveCommand ("shaderlist");

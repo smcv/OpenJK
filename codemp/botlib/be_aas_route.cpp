@@ -409,7 +409,7 @@ void AAS_CreateReversedReachability(void)
 #ifdef DEBUG
 	int starttime;
 
-	starttime = Sys_MilliSeconds();
+	starttime = Sys_Milliseconds( qfalse );
 #endif
 	//free reversed links that have already been created
 	if (aasworld.reversedreachability) FreeMemory(aasworld.reversedreachability);
@@ -445,7 +445,7 @@ void AAS_CreateReversedReachability(void)
 		} //end for
 	} //end for
 #ifdef DEBUG
-	botimport.Print(PRT_MESSAGE, "reversed reachability %d msec\n", Sys_MilliSeconds() - starttime);
+	botimport.Print(PRT_MESSAGE, "reversed reachability %d msec\n", Sys_Milliseconds( qfalse ) - starttime);
 #endif
 } //end of the function AAS_CreateReversedReachability
 //===========================================================================
@@ -492,7 +492,7 @@ void AAS_CalculateAreaTravelTimes(void)
 #ifdef DEBUG
 	int starttime;
 
-	starttime = Sys_MilliSeconds();
+	starttime = Sys_Milliseconds( qfalse );
 #endif
 	//if there are still area travel times, free the memory
 	if (aasworld.areatraveltimes) FreeMemory(aasworld.areatraveltimes);
@@ -540,7 +540,7 @@ void AAS_CalculateAreaTravelTimes(void)
 		} //end for
 	} //end for
 #ifdef DEBUG
-	botimport.Print(PRT_MESSAGE, "area travel times %d msec\n", Sys_MilliSeconds() - starttime);
+	botimport.Print(PRT_MESSAGE, "area travel times %d msec\n", Sys_Milliseconds( qfalse ) - starttime);
 #endif
 } //end of the function AAS_CalculateAreaTravelTimes
 //===========================================================================

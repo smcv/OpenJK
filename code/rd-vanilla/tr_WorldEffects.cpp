@@ -1036,7 +1036,7 @@ public:
 
 		// Create The Image
 		//------------------
-		mImage = R_FindImageFile(texturePath, false, false, false, GL_CLAMP);
+		mImage = R_FindImageFile(texturePath, qfalse, qfalse, qfalse, GL_CLAMP);
 		if (!mImage)
 		{
 			Com_Error(ERR_DROP, "CParticleCloud: Could not texture %s", texturePath);

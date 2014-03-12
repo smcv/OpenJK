@@ -185,8 +185,8 @@ extern qboolean	missionInfo_Updated;
 #define SET_OBJ_SUCCEEDED	3
 #define SET_OBJ_FAILED		4
 
-#define OBJECTIVE_HIDE 0
-#define OBJECTIVE_SHOW 1
+#define OBJECTIVE_HIDE qfalse
+#define OBJECTIVE_SHOW qtrue
 
 #define OBJECTIVE_STAT_PENDING		0
 #define OBJECTIVE_STAT_SUCCEEDED	1

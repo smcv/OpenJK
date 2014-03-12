@@ -35,7 +35,7 @@ void CGCam_FollowDisable( void );
 void CGCam_TrackDisable( void );
 void CGCam_Distance( float distance, qboolean initLerp );
 void CGCam_DistanceDisable( void );
-extern int CG_CalcFOVFromX( float fov_x );
+extern qboolean CG_CalcFOVFromX( float fov_x );
 extern void WP_SaberCatch( gentity_t *self, gentity_t *saber, qboolean switchToSaber );
 
 /*

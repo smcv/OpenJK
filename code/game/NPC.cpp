@@ -1122,8 +1122,8 @@ void NPC_HandleAIFlags (void)
 	//----------------------------
 	if (NPCInfo->scriptFlags & SCF_FLY_WITH_JET)
 	{
-		bool	ShouldFly  = !!(NPCInfo->aiFlags & NPCAI_FLY);
-		bool	IsFlying   = !!(JET_Flying(NPC));
+		bool	ShouldFly  = NPCInfo->aiFlags & NPCAI_FLY;
+		bool	IsFlying   = JET_Flying(NPC);
 		bool	IsInTheAir = (NPC->client->ps.groundEntityNum==ENTITYNUM_NONE);
 
 		if (IsFlying)

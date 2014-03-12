@@ -803,7 +803,7 @@ static qboolean S_LoadSound_Actual( sfx_t *sfx )
 				{
 					// Create space for lipsync data (4 lip sync values per streaming AL buffer)
 					if (strstr(sfx->sSoundName, "chars") )
-						sfx->lipSyncData = (char *)Z_Malloc(16, TAG_SND_RAWDATA, false);
+						sfx->lipSyncData = (char *)Z_Malloc(16, TAG_SND_RAWDATA, qfalse);
 					else
 						sfx->lipSyncData = NULL;
 				}
@@ -847,7 +847,7 @@ static qboolean S_LoadSound_Actual( sfx_t *sfx )
 						{
 							if (strstr(sfx->sSoundName, "chars"))
 							{
-								sfx->lipSyncData = (char *)Z_Malloc((sfx->iSoundLengthInSamples / 1000) + 1, TAG_SND_RAWDATA, false);
+								sfx->lipSyncData = (char *)Z_Malloc((sfx->iSoundLengthInSamples / 1000) + 1, TAG_SND_RAWDATA, qfalse);
 								S_PreProcessLipSync(sfx);
 							}
 							else
@@ -920,7 +920,7 @@ static qboolean S_LoadSound_Actual( sfx_t *sfx )
 		{
 			if ((strstr(sfx->sSoundName, "chars")) || (strstr(sfx->sSoundName, "CHARS")))
 			{
-				sfx->lipSyncData = (char *)Z_Malloc((sfx->iSoundLengthInSamples / 1000) + 1, TAG_SND_RAWDATA, false);
+				sfx->lipSyncData = (char *)Z_Malloc((sfx->iSoundLengthInSamples / 1000) + 1, TAG_SND_RAWDATA, qfalse);
 				S_PreProcessLipSync(sfx);
 			}
 			else

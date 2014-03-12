@@ -1886,7 +1886,7 @@ wasForceSpeed=isForceSpeed;
 	CG_PredictPlayerState();
 
 	// decide on third person view
-	cg.renderingThirdPerson = cg_thirdPerson.integer || (cg.snap->ps.stats[STAT_HEALTH] <= 0) || (g_entities[0].client&&g_entities[0].client->NPC_class==CLASS_ATST);
+	cg.renderingThirdPerson = ToQBoolean( cg_thirdPerson.integer || ( cg.snap->ps.stats[ STAT_HEALTH ] <= 0 ) || ( g_entities[ 0 ].client&&g_entities[ 0 ].client->NPC_class == CLASS_ATST ) );
 
 	if ( cg.zoomMode )
 	{

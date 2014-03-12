@@ -15,22 +15,15 @@ add_subdirectory("${SPDir}/rd-vanilla")
 
 #    Add Engine Project
 if(BuildSPEngine OR BuildJK2SPEngine)
-	# Libraries
-	if(WIN32)
-		set(SPEngineLibraries "winmm")
-	endif(WIN32)
 	# Defines
 	set(SPEngineDefines ${SharedDefines} "_JK2EXE") # it's called JK2EXE but it really just means Singleplayer Exe
 
-	set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${OpenJKLibDir})
+	set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${OpenJKLibDir} ${SharedDir})
 	
 	#    Dependencies
 	
-	# OpenGL
-	# (mrw) TODO Is this actually required on windows? It is loaded at runtime, should not be linked?
-	find_package(OpenGL REQUIRED)
-	set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${OPENGL_INCLUDE_DIR})
-	set(SPEngineLibraries ${SPEngineLibraries} ${OPENGL_LIBRARIES})
+	# CommonLib, WindowLib
+	set(SPEngineLibraries ${SPEngineLibraries} ${CommonLib} ${WindowLib})
 
 	# OpenAL (is optionally included for Windows)
 	if(UseInternalOpenAL)
@@ -46,6 +39,22 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 		set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${OPENAL_INCLUDE_DIR})
 		set(SPEngineLibraries ${SPEngineLibraries} ${OPENAL_LIBRARY})
 	endif(UseInternalOpenAL)
+
+	if(UseInternalZlib)
+		# zlib.lib is included for windows
+		find_library(ZlibLibrary NAMES zlib PATHS ${OpenJKLibDir})
+		if(NOT ZlibLibrary)
+			message(FATAL_ERROR "UseInternalZlib enabled, but lib/zlib.lib not found!")
+		endif(NOT ZlibLibrary)
+		set(SPEngineLibraries ${SPEngineLibraries} ${ZlibLibrary})
+	else(UseInternalZlib)
+		find_package(ZLIB REQUIRED)
+		set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${ZLIB_INCLUDE_DIR})
+		set(SPEngineLibraries ${SPEngineLibraries} ${ZLIB_LIBRARY})
+	endif(UseInternalZlib)
+
+	
+	#    Source Files
 	
 	# EAX is Windows-Only (right?)
 	if(WIN32)
@@ -56,15 +65,6 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 		source_group("eax" FILES ${SPEngineEAXFiles})
 		set(SPEngineFiles ${SPEngineFiles} ${SPEngineEAXFiles})
 	endif(WIN32)
-
-	if(NOT WIN32)
-		find_package(SDL2 REQUIRED)
-		set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${SDL2_INCLUDE_DIR})
-		set(SPEngineLibraries ${SPEngineLibraries} ${SDL2_LIBRARY})
-	endif(NOT WIN32)
-
-	
-	#    Source Files
 
 	# Client files
 	set(SPEngineClientFiles
@@ -137,7 +137,7 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 		"${SPDir}/qcommon/q_math.cpp"
 		"${SPDir}/qcommon/q_shared.cpp"
 		"${SPDir}/qcommon/q_shared.h"
-		"${SPDir}/qcommon/q_platform.h"
+		"${SharedDir}/qcommon/q_platform.h"
 
 		"${SPDir}/qcommon/sstring.h"
 		"${SPDir}/qcommon/stringed_ingame.cpp"
@@ -246,6 +246,7 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 	source_group("mp3" FILES ${SPEngineMP3Files})
 	set(SPEngineFiles ${SPEngineFiles} ${SPEngineMP3Files})
 
+	# Renderer API
 	set(SPEngineRendererFiles
 		"${SPDir}/rd-common/mdx_format.h"
 		"${SPDir}/rd-common/tr_public.h"
@@ -320,52 +321,16 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 	source_group("cgame" FILES ${SPEngineCGameFiles})
 	set(SPEngineFiles ${SPEngineFiles} ${SPEngineCGameFiles})
 
-
-	# 
+	# Windows Icon
 	if(WIN32)
 		set(SPEngineWin32Files
-			"${SPDir}/win32/afxres.h"
-			"${SPDir}/win32/win_input.cpp"
-			"${SPDir}/win32/win_main.cpp"
-			"${SPDir}/win32/win_shared.cpp"
-			"${SPDir}/win32/win_snd.cpp"
-			"${SPDir}/win32/win_syscon.cpp"
-			"${SPDir}/win32/win_wndproc.cpp"
-			"${SPDir}/win32/win_local.h"
 			"${SPDir}/win32/AutoVersion.h"
 			"${SPDir}/win32/resource.h"
-			"${SPDir}/win32/glw_win.h"
 			"${SPDir}/win32/winquake.rc"
 			)
 		source_group("win32" FILES ${SPEngineWin32Files})
 		set(SPEngineFiles ${SPEngineFiles} ${SPEngineWin32Files})
-	else(WIN32)
-		set(SPEngineSysFiles
-			"${SPDir}/sys/sys_main.cpp"
-			"${SPDir}/sys/sys_unix.cpp"
-			"${SPDir}/sys/sys_local.h"
-			"${SPDir}/sys/sys_loadlib.h"
-			"${SPDir}/sdl/sdl_qgl.h"
-			"${SPDir}/sdl/sdl_snd.cpp"
-			"${SPDir}/sdl/sdl_input.cpp"
-			)
-		source_group("sys" FILES ${SPEngineSysFiles})
-		set(SPEngineFiles ${SPEngineFiles} ${SPEngineSysFiles})
 	endif(WIN32)
-
-	if(UseInternalZlib)
-		# zlib.lib is included for windows
-		find_library(ZlibLibrary NAMES zlib PATHS ${OpenJKLibDir})
-		if(NOT ZlibLibrary)
-			message(FATAL_ERROR "UseInternalZlib enabled, but lib/zlib.lib not found!")
-		endif(NOT ZlibLibrary)
-		set(SPEngineLibraries ${SPEngineLibraries} ${ZlibLibrary})
-	else(UseInternalZlib)
-		find_package(ZLIB REQUIRED)
-		set(SPEngineIncludeDirectories ${SPEngineIncludeDirectories} ${ZLIB_INCLUDE_DIR})
-		set(SPEngineLibraries ${SPEngineLibraries} ${ZLIB_LIBRARY})
-	endif(UseInternalZlib)
-
 	if(MakeApplicationBundles)
 		set(MACOSX_BUNDLE_ICON_FILE OpenJK.icns)
 		set_source_files_properties(${SPDir}/macosx/OpenJK.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)

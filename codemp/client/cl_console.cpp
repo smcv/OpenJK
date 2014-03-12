@@ -47,8 +47,8 @@ Con_ToggleMenu_f
 ===================
 */
 void Con_ToggleMenu_f( void ) {
-	CL_KeyEvent( A_ESCAPE, qtrue, Sys_Milliseconds() );
-	CL_KeyEvent( A_ESCAPE, qfalse, Sys_Milliseconds() );
+	CL_KeyEvent( A_ESCAPE, qtrue, Sys_Milliseconds( qfalse ) );
+	CL_KeyEvent( A_ESCAPE, qfalse, Sys_Milliseconds( qfalse ) );
 }
 
 /*

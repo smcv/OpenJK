@@ -1,59 +1,61 @@
 //Anything above this #include will be ignored by the compiler
 #include "qcommon/exe_headers.h"
 
+#include "sys/sys_public.h"
+
 #ifdef _WIN32
-	#include <winsock.h>
+#	include <winsock.h>
 
 	typedef int socklen_t;
 
-	#undef EAGAIN
-	#undef EADDRNOTAVAIL
-	#undef EAFNOSUPPORT
-	#undef ECONNRESET
+#	undef EAGAIN
+#	undef EADDRNOTAVAIL
+#	undef EAFNOSUPPORT
+#	undef ECONNRESET
 
-	#define EAGAIN WSAEWOULDBLOCK
-	#define EADDRNOTAVAIL WSAEADDRNOTAVAIL
-	#define EAFNOSUPPORT WSAEAFNOSUPPORT
-	#define ECONNRESET WSAECONNRESET
+#	define EAGAIN WSAEWOULDBLOCK
+#	define EADDRNOTAVAIL WSAEADDRNOTAVAIL
+#	define EAFNOSUPPORT WSAEAFNOSUPPORT
+#	define ECONNRESET WSAECONNRESET
 
-	#define socketError WSAGetLastError( )
+#	define socketError WSAGetLastError( )
 
 	static WSADATA	winsockdata;
 	static qboolean	winsockInitialized = qfalse;
 #else
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED == 1020
+#	if MAC_OS_X_VERSION_MIN_REQUIRED == 1020
         // needed for socklen_t on OSX 10.2
-#        define _BSD_SOCKLEN_T_
-#endif
+#		define _BSD_SOCKLEN_T_
+#	endif
 
-#include <arpa/inet.h>
-#include <errno.h>
-#include <netdb.h>
-#include <netinet/in.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <unistd.h>
+#	include <arpa/inet.h>
+#	include <errno.h>
+#	include <netdb.h>
+#	include <netinet/in.h>
+#	include <sys/ioctl.h>
+#	include <sys/socket.h>
+#	include <sys/types.h>
+#	include <sys/time.h>
+#	include <unistd.h>
 
-#ifdef MACOS_X
-#include <sys/sockio.h>
-#include <net/if.h>
-#include <net/if_types.h>
-#include <net/if_dl.h>         // for 'struct sockaddr_dl'
-#endif
+#	ifdef MACOS_X
+#		include <sys/sockio.h>
+#		include <net/if.h>
+#		include <net/if_types.h>
+#		include <net/if_dl.h>         // for 'struct sockaddr_dl'
+#	endif
 
-#ifdef __sun
-#include <sys/filio.h>
-#endif
+#	ifdef __sun
+#		include <sys/filio.h>
+#	endif
 
-typedef int SOCKET;
-#define INVALID_SOCKET                -1
-#define SOCKET_ERROR                        -1
-#define closesocket                                close
-#define ioctlsocket                                ioctl
-#define socketError                                errno
+	typedef int SOCKET;
+#	define INVALID_SOCKET                -1
+#	define SOCKET_ERROR                        -1
+#	define closesocket                                close
+#	define ioctlsocket                                ioctl
+#	define socketError                                errno
 
 #endif
 
@@ -223,7 +225,7 @@ Never called by the game logic, just the system event queing
 int	recvfromCount;
 #endif
 
-qboolean Sys_GetPacket( netadr_t *net_from, msg_t *net_message ) {
+static qboolean Sys_GetPacket( netadr_t *net_from, msg_t *net_message ) {
 	int ret, err;
 	socklen_t fromlen;
 	struct sockaddr from;
@@ -903,24 +905,12 @@ void NET_Config( qboolean enableNetworking ) {
 		return;
 
 	if ( enableNetworking == networkingEnabled ) {
-		if ( enableNetworking ) {
-			stop = qtrue;
-			start = qtrue;
-		}
-		else {
-			stop = qfalse;
-			start = qfalse;
-		}
+		stop = enableNetworking;
+		start = enableNetworking;
 	}
 	else {
-		if ( enableNetworking ) {
-			stop = qfalse;
-			start = qtrue;
-		}
-		else {
-			stop = qtrue;
-			start = qfalse;
-		}
+		stop = !enableNetworking;
+		start = enableNetworking;
 		networkingEnabled = enableNetworking;
 	}
 
@@ -942,6 +932,27 @@ void NET_Config( qboolean enableNetworking ) {
 	}
 }
 
+static void NET_GenerateEvent()
+{
+	static byte sys_packetReceived[MAX_MSGLEN];
+	msg_t		netmsg;
+	netadr_t	adr;
+	// check for network packets
+	MSG_Init( &netmsg, sys_packetReceived, sizeof( sys_packetReceived ) );
+	if ( Sys_GetPacket ( &adr, &netmsg ) ) {
+		netadr_t		*buf;
+		int				len;
+
+		// copy out to a seperate buffer for qeueing
+		// the readcount stepahead is for SOCKS support
+		len = sizeof( netadr_t ) + netmsg.cursize - netmsg.readcount;
+		buf = (netadr_t *)Z_Malloc( len, TAG_EVENT, qtrue );
+		*buf = adr;
+		memcpy( buf+1, &netmsg.data[netmsg.readcount], netmsg.cursize - netmsg.readcount );
+		Sys_QueEvent( 0, SE_PACKET, 0, 0, len, buf );
+	}
+}
+
 /*
 ====================
 NET_Init
@@ -960,6 +971,9 @@ void NET_Init( void ) {
 #endif
 
 	NET_Config( qtrue );
+	
+	// Make Sys_GetEvent() retrieve Network events
+	Sys_RegisterEventSource( NET_GenerateEvent );
 
 	Cmd_AddCommand ("net_restart", NET_Restart_f );
 }
@@ -970,14 +984,16 @@ NET_Shutdown
 ====================
 */
 void NET_Shutdown( void ) {
-	if ( !networkingEnabled ) {
-		return;
+	// Stop Sys_GetEvent() from retrieving Network events
+	Sys_UnregisterEventSource( NET_GenerateEvent );
+	if ( networkingEnabled ) {
+		NET_Config( qfalse );
 	}
-
-	NET_Config( qfalse );
 #ifdef _WIN32
-	WSACleanup();
-	winsockInitialized = qfalse;
+	if( winsockInitialized ) {
+		WSACleanup();
+		winsockInitialized = qfalse;
+	}
 #endif
 }
 
@@ -989,6 +1005,7 @@ sleeps msec or until net socket is ready
 ====================
 */
 void NET_Sleep( int msec ) {
+	// TODO implement properly, see #507
 #ifndef _WIN32
 	struct timeval timeout;
 	fd_set	fdset;

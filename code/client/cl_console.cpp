@@ -25,6 +25,7 @@ This file is part of Jedi Academy.
 
 #include "client.h"
 #include "../qcommon/stv_version.h"
+#include "sys/sys_public.h"
 
 int g_console_field_width = 78;
 
@@ -65,8 +66,8 @@ Con_ToggleMenu_f
 ===================
 */
 void Con_ToggleMenu_f( void ) {
-	CL_KeyEvent( A_ESCAPE, qtrue, Sys_Milliseconds() );
-	CL_KeyEvent( A_ESCAPE, qfalse, Sys_Milliseconds() );
+	CL_KeyEvent( A_ESCAPE, qtrue, Sys_Milliseconds( qfalse ) );
+	CL_KeyEvent( A_ESCAPE, qfalse, Sys_Milliseconds( qfalse) );
 }
 
 /*

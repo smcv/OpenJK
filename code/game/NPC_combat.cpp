@@ -1235,7 +1235,7 @@ HaveWeapon
 
 qboolean HaveWeapon( int weapon ) 
 {
-	return ( client->ps.stats[STAT_WEAPONS] & ( 1 << weapon ) );
+	return ToQBoolean( client->ps.stats[ STAT_WEAPONS ] & ( 1 << weapon ) );
 }
 
 qboolean EntIsGlass (gentity_t *check)

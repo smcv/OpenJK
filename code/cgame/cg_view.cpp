@@ -2110,11 +2110,11 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView ) {
 		cg.zoomMode = 0;
 	}
 	// decide on third person view
-	cg.renderingThirdPerson = cg_thirdPerson.integer 
+	cg.renderingThirdPerson = ToQBoolean( cg_thirdPerson.integer 
 								|| (cg.snap->ps.stats[STAT_HEALTH] <= 0) 
 								|| (cg.snap->ps.eFlags&EF_HELD_BY_SAND_CREATURE)
 								|| ((g_entities[0].client&&g_entities[0].client->NPC_class==CLASS_ATST)
-								|| (cg.snap->ps.weapon == WP_SABER || cg.snap->ps.weapon == WP_MELEE) );
+								|| (cg.snap->ps.weapon == WP_SABER || cg.snap->ps.weapon == WP_MELEE) ) );
 
 	if ( cg.zoomMode )
 	{

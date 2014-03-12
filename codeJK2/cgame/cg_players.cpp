@@ -1166,7 +1166,7 @@ void CG_PlayerAnimSounds( int animFileIndex, qboolean torso, int oldFrame, int f
 		{//still in same anim, check for looping anim
 			inSameAnim = qtrue;
 			animation_t *animation = &level.knownAnimFileSets[animFileIndex].animations[anim];
-			animBackward = (animation->frameLerp<0);
+			animBackward = ToQBoolean( animation->frameLerp<0 );
 			if ( animation->loopFrames != -1 )
 			{//a looping anim!
 				loopAnim = qtrue;
@@ -1813,7 +1813,7 @@ void CG_ATSTLegsYaw( centity_t *cent, vec3_t trailingLegsAngles )
 
 	float legAngleDiff = AngleNormalize180(ATSTLegsYaw) - AngleNormalize180(cent->pe.legs.yawAngle);
 	int legsAnim = cent->currentState.legsAnim;
-	qboolean moving = (!VectorCompare(cent->gent->client->ps.velocity, vec3_origin));
+	qboolean moving = ToQBoolean( !VectorCompare( cent->gent->client->ps.velocity, vec3_origin ) );
 	if ( moving || legsAnim == BOTH_TURN_LEFT1 || legsAnim == BOTH_TURN_RIGHT1 || fabs(legAngleDiff) > 45 )
 	{//moving or turning or beyond the turn allowance
 		if ( legsAnim == BOTH_STAND1 && !moving )

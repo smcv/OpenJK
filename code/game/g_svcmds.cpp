@@ -252,11 +252,11 @@ static void Svcmd_SaberBlade_f()
 	qboolean turnOn;
 	if ( gi.argc() > 2 )
 	{//explicit
-		turnOn = (atoi(gi.argv(3))!=0);
+		turnOn = ToQBoolean( atoi( gi.argv( 3 ) ) != 0 );
 	}
 	else
 	{//toggle
-		turnOn = (g_entities[0].client->ps.saber[sabernum].blade[bladenum].active==qfalse);
+		turnOn = ToQBoolean( g_entities[ 0 ].client->ps.saber[ sabernum ].blade[ bladenum ].active == qfalse );
 	}
 
 	g_entities[0].client->ps.SaberBladeActivate( sabernum, bladenum, turnOn );

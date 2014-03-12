@@ -357,7 +357,7 @@ IsRunning
 
 qboolean CTaskManager::IsRunning( void )
 {
-	return ( m_tasks.empty() == false );
+	return ToQBoolean( !m_tasks.empty( ) );
 }
 /*
 -------------------------

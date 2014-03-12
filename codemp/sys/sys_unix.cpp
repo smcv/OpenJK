@@ -66,14 +66,6 @@ int Sys_Milliseconds2( void )
     return Sys_Milliseconds(false);
 }
 
-void Sys_SetEnv(const char *name, const char *value)
-{
-	if(value && *value)
-		setenv(name, value, 1);
-	else
-		unsetenv(name);
-}
-
 /*
 ==================
 Sys_RandomBytes

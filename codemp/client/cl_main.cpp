@@ -20,11 +20,6 @@
 #include "qcommon/INetProfile.h"
 #endif
 
-#ifndef _WIN32
-#include "sys/sys_loadlib.h"
-#include "sys/sys_local.h"
-#endif
-
 cvar_t	*cl_renderer;
 
 cvar_t	*cl_nodelta;
@@ -415,7 +410,7 @@ void CL_DemoCompleted( void ) {
 	if (cl_timedemo && cl_timedemo->integer) {
 		int	time;
 
-		time = Sys_Milliseconds() - clc.timeDemoStart;
+		time = Sys_Milliseconds( qfalse ) - clc.timeDemoStart;
 		if ( time > 0 ) {
 			Com_Printf ("%i frames, %3.1f seconds: %3.1f fps\n", clc.timeDemoFrames,
 			time/1000.0, clc.timeDemoFrames*1000.0 / time);
@@ -2314,11 +2309,6 @@ CL_InitRef
 */
 qboolean Com_TheHunkMarkHasBeenMade(void);
 
-#ifdef _WIN32
-	//win32/win_main.cpp
-	#include "win32/win_local.h"
-	extern WinVars_t g_wv;
-#endif
 //qcommon/cm_load.cpp
 extern void *gpvCachedMapDiskImage;
 extern qboolean gbUsingCachedMapDataRightNow;
@@ -2326,9 +2316,6 @@ extern qboolean gbUsingCachedMapDataRightNow;
 static char *GetSharedMemory( void ) { return cl.mSharedMemory; }
 static vm_t *GetCurrentVM( void ) { return currentVM; }
 static qboolean CGVMLoaded( void ) { return (qboolean)cls.cgameStarted; }
-#ifdef _WIN32
-	static void *GetWinVars( void ) { return (void *)&g_wv; }
-#endif
 static void *CM_GetCachedMapDiskImage( void ) { return gpvCachedMapDiskImage; }
 static void CM_SetCachedMapDiskImage( void *ptr ) { gpvCachedMapDiskImage = ptr; }
 static void CM_SetUsingCache( qboolean usingCache ) { gbUsingCachedMapDataRightNow = usingCache; }
@@ -2346,6 +2333,11 @@ static IHeapAllocator *GetG2VertSpaceServer( void ) {
 }
 
 #define DEFAULT_RENDER_LIBRARY "rd-vanilla"
+
+static int Sys_Milliseconds2()
+{
+	return Sys_Milliseconds( qfalse );
+}
 
 void CL_InitRef( void ) {
 	static refimport_t ri;
@@ -2944,7 +2936,7 @@ void CL_ServerInfoPacket( netadr_t from, msg_t *msg ) {
 		if ( cl_pinglist[i].adr.port && !cl_pinglist[i].time && NET_CompareAdr( from, cl_pinglist[i].adr ) )
 		{
 			// calc ping time
-			cl_pinglist[i].time = Sys_Milliseconds() - cl_pinglist[i].start;
+			cl_pinglist[i].time = Sys_Milliseconds( qfalse ) - cl_pinglist[i].start;
 			Com_DPrintf( "ping time %dms from %s\n", cl_pinglist[i].time, NET_AdrToString( from ) );
 
 			// save of info
@@ -3310,7 +3302,7 @@ void CL_GetPing( int n, char *buf, int buflen, int *pingtime )
 	if (!time)
 	{
 		// check for timeout
-		time = Sys_Milliseconds() - cl_pinglist[n].start;
+		time = Sys_Milliseconds( qfalse ) - cl_pinglist[n].start;
 		maxPing = Cvar_VariableIntegerValue( "cl_maxPing" );
 		if( maxPing < 100 ) {
 			maxPing = 100;
@@ -3402,7 +3394,7 @@ ping_t* CL_GetFreePing( void )
 		{
 			if (!pingptr->time)
 			{
-				if (Sys_Milliseconds() - pingptr->start < 500)
+				if (Sys_Milliseconds( qfalse ) - pingptr->start < 500)
 				{
 					// still waiting for response
 					continue;
@@ -3427,7 +3419,7 @@ ping_t* CL_GetFreePing( void )
 	for (i=0; i<MAX_PINGREQUESTS; i++, pingptr++ )
 	{
 		// scan for oldest
-		time = Sys_Milliseconds() - pingptr->start;
+		time = Sys_Milliseconds( qfalse ) - pingptr->start;
 		if (time > oldest)
 		{
 			oldest = time;
@@ -3464,7 +3456,7 @@ void CL_Ping_f( void ) {
 	pingptr = CL_GetFreePing();
 
 	memcpy( &pingptr->adr, &to, sizeof (netadr_t) );
-	pingptr->start = Sys_Milliseconds();
+	pingptr->start = Sys_Milliseconds( qfalse );
 	pingptr->time  = 0;
 
 	CL_SetServerInfoByAddress(pingptr->adr, NULL, 0);
@@ -3535,7 +3527,7 @@ qboolean CL_UpdateVisiblePings_f(int source) {
 							}
 						}
 						memcpy(&cl_pinglist[j].adr, &server[i].adr, sizeof(netadr_t));
-						cl_pinglist[j].start = Sys_Milliseconds();
+						cl_pinglist[j].start = Sys_Milliseconds( qfalse );
 						cl_pinglist[j].time = 0;
 						NET_OutOfBandPrint( NS_CLIENT, cl_pinglist[j].adr, "getinfo xxx" );
 						slots++;

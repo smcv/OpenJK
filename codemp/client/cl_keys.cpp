@@ -5,6 +5,8 @@
 #include "cl_cgameapi.h"
 #include "cl_uiapi.h"
 #include "qcommon/stringed_ingame.h"
+
+#include "window/window_public.h"
 /*
 
 key up events are sent even if in console mode
@@ -470,7 +472,7 @@ void Field_Paste( field_t *edit ) {
 	char	*cbd;
 	int		pasteLen, i;
 
-	cbd = Sys_GetClipboardData();
+	cbd = Window_GetClipboardData();
 
 	if ( !cbd ) {
 		return;

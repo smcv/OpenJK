@@ -414,7 +414,7 @@ static void RegisterSharedMemory( char *memory ) {
 }
 
 static int CL_Milliseconds( void ) {
-	return Sys_Milliseconds();
+	return Sys_Milliseconds( qfalse );
 }
 
 static void CL_AddReliableCommand2( const char *cmd ) {

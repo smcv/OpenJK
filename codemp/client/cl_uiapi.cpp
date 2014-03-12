@@ -11,6 +11,7 @@
 #include "snd_ambient.h"
 #include "FXExport.h"
 #include "FxUtil.h"
+#include "window/window_public.h"
 
 extern IHeapAllocator *G2VertSpaceClient;
 extern botlib_export_t *botlib_export;
@@ -155,7 +156,7 @@ static int FloatAsInt( float f ) {
 // wrappers and such
 
 static int CL_Milliseconds( void ) {
-	return Sys_Milliseconds();
+	return Sys_Milliseconds( qfalse );
 }
 
 static void CL_Cvar_Get( const char *var_name, const char *value, uint32_t flags ) {
@@ -178,7 +179,7 @@ static void CL_GetGlconfig( glconfig_t *config ) {
 static void GetClipboardData( char *buf, int buflen ) {
 	char	*cbd;
 
-	cbd = Sys_GetClipboardData();
+	cbd = Window_GetClipboardData();
 
 	if ( !cbd ) {
 		*buf = 0;
@@ -539,7 +540,7 @@ intptr_t CL_UISystemCalls( intptr_t *args ) {
 		return 0;
 
 	case UI_MILLISECONDS:
-		return Sys_Milliseconds();
+		return Sys_Milliseconds( qfalse );
 
 	case UI_CVAR_REGISTER:
 		Cvar_Register( (vmCvar_t *)VMA(1), (const char *)VMA(2), (const char *)VMA(3), args[4] );

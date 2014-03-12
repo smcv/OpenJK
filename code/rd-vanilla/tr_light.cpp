@@ -93,7 +93,7 @@ void R_DlightBmodel( bmodel_t *bmodel, qboolean NoLight ) {
 		}
 	}
 
-	tr.currentEntity->needDlights = (mask != 0);
+	tr.currentEntity->needDlights = ToQBoolean(mask != 0);
 	tr.currentEntity->dlightBits = mask;
 
 

@@ -2667,7 +2667,7 @@ void R_AddGhoulSurfaces( trRefEntity_t *ent ) {
 				}
 			}
 
-			CRenderSurface RS(ghoul2[i].mSurfaceRoot, ghoul2[i].mSlist, cust_shader, fogNum, personalModel, ghoul2[i].mBoneCache, ent->e.renderfx, skin,ghoul2[i].currentModel, whichLod, ghoul2[i].mBltlist, gore_shader, gore);
+			CRenderSurface RS( ghoul2[ i ].mSurfaceRoot, ghoul2[ i ].mSlist, cust_shader, fogNum, ToQBoolean( personalModel ), ghoul2[ i ].mBoneCache, ent->e.renderfx, skin, ghoul2[ i ].currentModel, whichLod, ghoul2[ i ].mBltlist, gore_shader, gore );
 #else
 			CRenderSurface RS(ghoul2[i].mSurfaceRoot, ghoul2[i].mSlist, cust_shader, fogNum, personalModel, ghoul2[i].mBoneCache, ent->e.renderfx, skin,ghoul2[i].currentModel, whichLod, ghoul2[i].mBltlist);
 #endif

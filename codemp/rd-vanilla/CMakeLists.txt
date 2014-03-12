@@ -5,7 +5,7 @@ if(NOT InOpenJK)
 	message(FATAL_ERROR "Use the top-level cmake script!")
 endif(NOT InOpenJK)
 
-set(MPVanillaRendererIncludeDirectories ${MPDir})
+set(MPVanillaRendererIncludeDirectories ${MPDir} ${SharedDir})
 set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} "${MPDir}/rd-vanilla")
 
 set(MPVanillaRendererFiles
@@ -139,19 +139,10 @@ if(NOT WIN32)
 endif(NOT WIN32)
 
 
-if(WIN32)
-	set(MPVanillaRendererWin32Files
-		"${MPDir}/win32/win_gamma.cpp"
-		"${MPDir}/win32/win_glimp.cpp"
-		"${MPDir}/win32/win_qgl.cpp")
-	source_group("win32" FILES ${MPVanillaRendererWin32Files})
-	set(MPVanillaRendererFiles ${MPVanillaRendererFiles} ${MPVanillaRendererWin32Files})
-else(WIN32)
-	set(MPVanillaRendererSysFiles
-		"${MPDir}/sdl/sdl_glimp.cpp")
-	source_group("sys" FILES ${MPVanillaRendererSysFiles})
-	set(MPVanillaRendererFiles ${MPVanillaRendererFiles} ${MPVanillaRendererSysFiles})
-endif(WIN32)
+set(MPVanillaRendererSysFiles
+	"${MPDir}/sdl/sdl_glimp.cpp")
+source_group("sys" FILES ${MPVanillaRendererSysFiles})
+set(MPVanillaRendererFiles ${MPVanillaRendererFiles} ${MPVanillaRendererSysFiles})
 
 set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${OpenJKLibDir})
 add_library(${MPVanillaRenderer} SHARED ${MPVanillaRendererFiles})

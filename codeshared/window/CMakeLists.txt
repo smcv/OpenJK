@@ -8,6 +8,37 @@ endif(NOT InOpenJK)
 set(WindowLibDefines ${SharedDefines})
 set(WindowLibIncludeDirectories ${SharedDir})
 
+# Add SDL
+
+if(UseInternalSDL)
+	set(WindowLibIncludeDirectories ${WindowLibIncludeDirectories} "${MPDir}/client/OpenAL")
+	# There's a libs/OpenAL32.lib
+	# (mrw) TODO Is this actually required on windows? It is loaded at runtime, should not be linked?
+	find_library(SDLLibrary NAMES SDL2 PATHS ${OpenJKLibDir})
+	if(NOT SDLLibrary)
+		message(FATAL_ERROR "UseInternalSDL enabled, but lib/SDL2.lib not found!")
+	endif(NOT SDLLibrary)
+	set(WindowLibLibraries ${WindowLibLibraries} ${SDLLibrary})
+else(UseInternalSDL)
+	find_package(SDL2 REQUIRED)
+	set(WindowLibIncludeDirectories ${WindowLibIncludeDirectories} ${SDL2_INCLUDE_DIR})
+	set(WindowLibLibraries ${WindowLibLibraries} ${SDL2_LIBRARY})
+endif(UseInternalSDL)
+
+# set(SPEngineSysFiles
+	# "${SPDir}/sys/sys_main.cpp"
+	# "${SPDir}/sys/sys_unix.cpp"
+	# "${SPDir}/sys/sys_local.h"
+	# "${SPDir}/sys/sys_loadlib.h"
+	# "${SPDir}/sdl/sdl_qgl.h"
+	# "${SPDir}/sdl/sdl_snd.cpp"
+	# "${SPDir}/sdl/sdl_input.cpp"
+	# )
+# source_group("sys" FILES ${SPEngineSysFiles})
+# set(SPEngineFiles ${SPEngineFiles} ${SPEngineSysFiles})
+
+# Add Files
+
 set(WindowLibForwardFiles
 	"${SharedDir}/forward/cl_public.h"
 	)
@@ -16,9 +47,12 @@ set(WindowLibFiles ${WindowLibFiles} ${WindowLibForwardFiles})
 
 set(WindowLibWindowFiles
 	"${SharedDir}/window/window_public.h"
+	"${SharedDir}/window/window_main.c"
 	)
 source_group("Window" FILES ${WindowLibWindowFiles})
 set(WindowLibFiles ${WindowLibFiles} ${WindowLibWindowFiles})
+
+# Create project
 
 add_library(${WindowLib} STATIC ${WindowLibFiles})
 # nothing to install, it's a static library

@@ -263,7 +263,7 @@ qboolean	PM_SlideMove( float gravMod ) {
 		VectorCopy( primal_velocity, pm->ps->velocity );
 	}
 
-	return ( bumpcount != 0 );
+	return ToQBoolean( bumpcount != 0 );
 }
 
 /*

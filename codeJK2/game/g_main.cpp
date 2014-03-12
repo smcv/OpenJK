@@ -74,7 +74,7 @@ qboolean PInUse(unsigned int entNum)
 {
 	assert(entNum>=0);
 	assert(entNum<MAX_GENTITIES);
-	return((g_entityInUseBits[entNum/32]&(((unsigned int)1)<<(entNum&0x1f)))!=0);
+	return ToQBoolean( ( g_entityInUseBits[ entNum / 32 ] & ( ( ( unsigned int )1 ) << ( entNum & 0x1f ) ) ) != 0 );
 }
 
 qboolean PInUse2(gentity_t *ent)
@@ -82,7 +82,7 @@ qboolean PInUse2(gentity_t *ent)
 	assert(((uintptr_t)ent)>=(uintptr_t)g_entities);
 	assert(((uintptr_t)ent)<=(uintptr_t)(g_entities+MAX_GENTITIES-1));
 	unsigned int entNum=ent-g_entities;
-	return((g_entityInUseBits[entNum/32]&(((unsigned int)1)<<(entNum&0x1f)))!=0);
+	return ToQBoolean( ( g_entityInUseBits[ entNum / 32 ] & ( ( ( unsigned int )1 ) << ( entNum & 0x1f ) ) ) != 0 );
 }
 
 void WriteInUseBits(void)

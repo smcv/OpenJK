@@ -409,7 +409,7 @@ qboolean OnSameTeam( gentity_t *ent1, gentity_t *ent2 )
 //		return qtrue;
 //	}
 
-	return ( ent1->client->playerTeam == ent2->client->playerTeam );
+	return ToQBoolean( ent1->client->playerTeam == ent2->client->playerTeam );
 }
 
 
@@ -1829,7 +1829,7 @@ qboolean G_LimbLost( gentity_t *ent, int hitLoc )
 		return qfalse;
 		break;
 	default:
-		return (ent->locationDamage[hitLoc]>=Q3_INFINITE);
+		return ToQBoolean( ent->locationDamage[ hitLoc ] >= Q3_INFINITE );
 		break;
 	}
 }
@@ -3443,7 +3443,7 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 		NPC_FreeCombatPoint( self->NPC->combatPoint );
 		if ( self->NPC->group )
 		{
-			lastInGroup = (self->NPC->group->numGroup < 2);
+			lastInGroup = ToQBoolean( self->NPC->group->numGroup < 2 );
 			AI_GroupMemberKilled( self );
 			AI_DeleteSelfFromGroup( self );
 		}

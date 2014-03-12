@@ -608,7 +608,7 @@ void		Boba_DoSniper( gentity_t *self)
 	}
 
 
-	bool	IsOnAPath = !!NPC_MoveToGoal(qtrue);
+	bool	IsOnAPath = NPC_MoveToGoal(qtrue);
 
 	// Resolve Blocked Problems
 	//--------------------------
@@ -1240,7 +1240,7 @@ bool	Boba_Flee()
 		return true;
 	}
 
-	bool	IsOnAPath = !!NPC_MoveToGoal(qtrue);
+	bool	IsOnAPath = NPC_MoveToGoal(qtrue);
 	if (!ReachedEscapePoint &&
 		NPCInfo->aiFlags&NPCAI_BLOCKED && 
 		NPC->client->moveType!=MT_FLYSWIM && 

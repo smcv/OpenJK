@@ -610,7 +610,7 @@ qboolean NPC_JumpBackingUp()
 		NPCInfo->jumpBackupTime = 0;
 		return NPC_TryJump();
 	}
-	return false;
+	return qfalse;
 }
 
 
@@ -819,7 +819,7 @@ qboolean NPC_MoveToGoal( qboolean tryStraight ) //FIXME: tryStraight not even us
 	#if	AI_TIMERS
 		navTime += GetTime( startTime );
 	#endif//	AI_TIMERS
-	return moveSuccess;
+	return ToQBoolean( moveSuccess );
 }
 
 /*

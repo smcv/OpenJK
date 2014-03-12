@@ -231,7 +231,7 @@ qboolean SV_inPVS (const vec3_t p1, const vec3_t p2)
 	int		start=0;
 
 	if ( com_speeds->integer ) {
-		start = Sys_Milliseconds ();
+		start = Sys_Milliseconds( qfalse );
 	}
 	leafnum = CM_PointLeafnum (p1);
 	cluster = CM_LeafCluster (leafnum);
@@ -244,19 +244,19 @@ qboolean SV_inPVS (const vec3_t p1, const vec3_t p2)
 	if ( mask && (!(mask[cluster>>3] & (1<<(cluster&7)) ) ) )
 	{
 		if ( com_speeds->integer ) {
-			timeInPVSCheck += Sys_Milliseconds () - start;
+			timeInPVSCheck += Sys_Milliseconds( qfalse ) - start;
 		}
 		return qfalse;
 	}
 	
 	if (!CM_AreasConnected (area1, area2))
 	{
-		timeInPVSCheck += Sys_Milliseconds() - start;
+		timeInPVSCheck += Sys_Milliseconds( qfalse ) - start;
 		return qfalse;		// a door blocks sight
 	}
 	
 	if ( com_speeds->integer ) {
-		timeInPVSCheck += Sys_Milliseconds() - start;
+		timeInPVSCheck += Sys_Milliseconds( qfalse ) - start;
 	}
 	return qtrue;
 }
@@ -277,7 +277,7 @@ qboolean SV_inPVSIgnorePortals( const vec3_t p1, const vec3_t p2)
 	int		start=0;
 
 	if ( com_speeds->integer ) {
-		start = Sys_Milliseconds ();
+		start = Sys_Milliseconds( qfalse );
 	}
 	
 	leafnum = CM_PointLeafnum (p1);
@@ -290,13 +290,13 @@ qboolean SV_inPVSIgnorePortals( const vec3_t p1, const vec3_t p2)
 	if ( mask && (!(mask[cluster>>3] & (1<<(cluster&7)) ) ) )
 	{
 		if ( com_speeds->integer ) {
-			timeInPVSCheck += Sys_Milliseconds() - start;
+			timeInPVSCheck += Sys_Milliseconds( qfalse ) - start;
 		}
 		return qfalse;
 	}
 
 	if ( com_speeds->integer ) {
-		timeInPVSCheck += Sys_Milliseconds() - start;
+		timeInPVSCheck += Sys_Milliseconds( qfalse ) - start;
 	}
 	return qtrue;
 }
@@ -464,6 +464,11 @@ int InterfaceCM_RegisterTerrain (const char *info)
 	return CM_RegisterTerrain(info, false)->GetTerrainId();
 }
 
+static int Sys_Milliseconds2()
+{
+	return Sys_Milliseconds( qfalse );
+}
+
 /*
 ===============
 SV_InitGameProgs
@@ -486,7 +491,7 @@ void SV_InitGameProgs (void) {
 	import.FlushCamFile = Com_FlushCamFile;
 	import.Error = Com_Error;
 
-	import.Milliseconds = Sys_Milliseconds;
+	import.Milliseconds = Sys_Milliseconds2;
 
 	import.DropClient = SV_GameDropClient;
 

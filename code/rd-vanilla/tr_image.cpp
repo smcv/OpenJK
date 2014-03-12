@@ -951,10 +951,10 @@ static image_t *R_FindImageFile_NoLoad(const char *name, qboolean mipmap, qboole
 		// the white image can be used with any set of parms, but other mismatches are errors...
 		//
 		if ( strcmp( pName, "*white" ) ) {
-			if ( pImage->mipmap != !!mipmap ) {
+			if ( pImage->mipmap != (bool)mipmap ) {
 				ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed mipmap parm\n", pName );
 			}
-			if ( pImage->allowPicmip != !!allowPicmip ) {
+			if ( pImage->allowPicmip != (bool)allowPicmip ) {
 				ri.Printf( PRINT_WARNING, "WARNING: reused image %s with mixed allowPicmip parm\n", pName );
 			}
 			if ( pImage->wrapClampMode != glWrapClampMode ) {
@@ -1017,8 +1017,8 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 	//
 	image->iLastLevelUsedOn = RE_RegisterMedia_GetLevel();
 
-	image->mipmap = !!mipmap;
-	image->allowPicmip = !!allowPicmip;
+	image->mipmap = mipmap;
+	image->allowPicmip = allowPicmip;
 
 	Q_strncpyz(image->imgName, name, sizeof(image->imgName));
 
@@ -1033,7 +1033,7 @@ image_t *R_CreateImage( const char *name, const byte *pic, int width, int height
 	GL_Bind(image);
 
 	Upload32( (unsigned *)pic,	format,
-								image->mipmap,
+								ToQBoolean(image->mipmap),
 								allowPicmip, 
 								isLightmap, 
 								allowTC,
@@ -1649,7 +1649,7 @@ int RE_GetAnimationCFG(const char *psCFGFilename, char *psDest, int iDestSize)
 		// not found, so load it...
 		//
 		fileHandle_t f;
-		int iLen = ri.FS_FOpenFileRead( psCFGFilename, &f, FS_READ );
+		int iLen = ri.FS_FOpenFileRead( psCFGFilename, &f, qfalse );
 		if (iLen <= 0)
 		{
 			return 0;

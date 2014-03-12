@@ -53,14 +53,6 @@ int Sys_Milliseconds ()
 	return curtime;
 }
 
-void Sys_SetEnv(const char *name, const char *value)
-{
-	if(value && *value)
-		setenv(name, value, 1);
-	else
-		unsetenv(name);
-}
-
 
 /*
 ==================

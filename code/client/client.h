@@ -27,6 +27,7 @@ This file is part of Jedi Academy.
 #include "keys.h"
 #include "snd_public.h"
 #include "../cgame/cg_public.h"
+#include "sys/sys_public.h"
 
 // snapshots are a view of the server at a given time
 typedef struct {

@@ -100,62 +100,20 @@ This file is part of Jedi Academy.
 #include <errno.h>
 #include <stddef.h>
 
-//Ignore __attribute__ on non-gcc platforms
-#if !defined(__GNUC__) && !defined(__attribute__)
-	#define __attribute__(x)
-#endif
-
-#if defined(__GNUC__)
-	#define UNUSED_VAR __attribute__((unused))
-#else
-	#define UNUSED_VAR
-#endif
-
-#if (defined _MSC_VER)
-	#define Q_EXPORT __declspec(dllexport)
-#elif (defined __SUNPRO_C)
-	#define Q_EXPORT __global
-#elif ((__GNUC__ >= 3) && (!__EMX__) && (!sun))
-	#define Q_EXPORT __attribute__((visibility("default")))
-#else
-	#define Q_EXPORT
-#endif
-
-// this is the define for determining if we have an asm version of a C function
-#if (defined(_M_IX86) || defined(__i386__)) && !defined(__sun__)
-	#define id386	1
-#else
-	#define id386	0
-#endif
-
-#if (defined(powerc) || defined(powerpc) || defined(ppc) || defined(__ppc) || defined(__ppc__)) && !defined(C_ONLY)
-	#define idppc	1
-#else
-	#define idppc	0
-#endif
-
 short ShortSwap( short l );
 int LongSwap( int l );
 float FloatSwap( const float *f );
 
 
-#include "../qcommon/q_platform.h"
+#include "qcommon/q_platform.h"
+#include "qcommon/q_sharedtypes.h" // qboolean, cvar, intX_t
 
 // ================================================================
 // TYPE DEFINITIONS
 // ================================================================
 
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef unsigned long ulong;
-
-typedef enum { qfalse=0, qtrue } qboolean;
-#define	qboolean	int		//don't want strict type checking on the qboolean
-
 
 #if defined (_MSC_VER) && (_MSC_VER >= 1600)
-
-	#include <stdint.h>
 
 	// vsnprintf is ISO/IEC 9899:1999
 	// abstracting this to make it portable
@@ -163,23 +121,10 @@ typedef enum { qfalse=0, qtrue } qboolean;
 
 #elif defined (_MSC_VER)
 
-	#include <io.h>
-
-	typedef signed __int64 int64_t;
-	typedef signed __int32 int32_t;
-	typedef signed __int16 int16_t;
-	typedef signed __int8  int8_t;
-	typedef unsigned __int64 uint64_t;
-	typedef unsigned __int32 uint32_t;
-	typedef unsigned __int16 uint16_t;
-	typedef unsigned __int8  uint8_t;
-
 	// vsnprintf is ISO/IEC 9899:1999
 	// abstracting this to make it portable
 	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
 #else // not using MSVC
-
-	#include <stdint.h>
 
 	#define Q_vsnprintf vsnprintf
 
@@ -771,9 +716,9 @@ int Q_log2(int val);
 
 inline qboolean Q_isnan ( float f ) {
 #ifdef _WIN32
-	return _isnan (f);
+	return ToQBoolean( _isnan (f) );
 #else
-	return isnan (f);
+	return ToQBoolean( isnan (f) );
 #endif
 }
 
@@ -1123,54 +1068,18 @@ default values.
 ==========================================================
 */
 
-#define	CVAR_TEMP			0	// can be set even when cheats are disabled, but is not archived
-#define	CVAR_ARCHIVE		1	// set to cause it to be saved to vars.rc
-								// used for system variables, not for player
-								// specific configurations
-#define	CVAR_USERINFO		2	// sent to server on connect or change
-#define	CVAR_SERVERINFO		4	// sent in response to front end requests
-#define	CVAR_SYSTEMINFO		8	// these cvars will be duplicated on all clients
-#define	CVAR_INIT			16	// don't allow change from console at all,
-								// but can be set from the command line
-#define	CVAR_LATCH			32	// will only change when C code next does
-								// a Cvar_Get(), so it can't be changed
-								// without proper initialization.  modified
-								// will be set, even though the value hasn't
-								// changed yet
-#define	CVAR_ROM			64	// display only, cannot be set by user at all
-#define	CVAR_USER_CREATED	128	// created by a set command
-#define	CVAR_SAVEGAME		256	// store this in the savegame
-#define CVAR_CHEAT			512	// can not be changed if cheats are disabled
-#define CVAR_NORESTART		1024	// do not clear when a cvar_restart is issued
+// these are only the cvar flags that differ between MP and SP.
+// The others and cvar_t are defined in codeshared/qcommon/q_sharedtypes.h
 
-#define CVAR_SERVER_CREATED	2048	// cvar was created by a server the client connected to.
-#define CVAR_VM_CREATED		4096	// cvar was created exclusively in one of the VMs.
-#define CVAR_PROTECTED		8192	// prevent modifying this var from VMs or the server
+#define	CVAR_TEMP			(0x00000000u)	// can be set even when cheats are disabled, but is not archived
+#define	CVAR_SAVEGAME		(0x00000100u)	// store this in the savegame
+#define CVAR_SERVER_CREATED	(0x00000800u)	// cvar was created by a server the client connected to.
+#define CVAR_VM_CREATED		(0x00001000u)	// cvar was created exclusively in one of the VMs.
+#define CVAR_PROTECTED		(0x00002000u)	// prevent modifying this var from VMs or the server
 // These flags are only returned by the Cvar_Flags() function
-#define CVAR_MODIFIED		0x40000000		// Cvar was modified
-#define CVAR_NONEXISTENT	0x80000000		// Cvar doesn't exist.
+#define CVAR_MODIFIED		(0x40000000u)	// Cvar was modified
+#define CVAR_NONEXISTENT	(0x80000000u)	// Cvar doesn't exist.
 
-// nothing outside the Cvar_*() functions should modify these fields!
-typedef struct cvar_s {
-	char		*name;
-	char		*string;
-	char		*resetString;		// cvar_restart will reset to this value
-	char		*latchedString;		// for CVAR_LATCH vars
-	int			flags;
-	qboolean	modified;			// set each time the cvar is changed
-	int			modificationCount;	// incremented each time the cvar is changed
-	float		value;				// atof( string )
-	int			integer;			// atoi( string )
-	qboolean	validate;
-	qboolean	integral;
-	float		min;
-	float		max;
-	struct cvar_s *next;
-	struct cvar_s *prev;
-	struct cvar_s *hashNext;
-	struct cvar_s *hashPrev;
-	int			hashIndex;
-} cvar_t;
 
 #define	MAX_CVAR_VALUE_STRING	256
 
@@ -2021,8 +1930,8 @@ typedef struct playerState_s {
 	//			or descend them as classes - so not every client has all this info
 	saberInfo_t	saber[MAX_SABERS];
 	qboolean	dualSabers;
-	qboolean	SaberStaff( void ) { return ( saber[0].type == SABER_STAFF || (dualSabers && saber[1].type == SABER_STAFF) ); };
-	qboolean	SaberActive() { return ( saber[0].Active() || (dualSabers&&saber[1].Active()) ); };
+	qboolean	SaberStaff( void ) { return ToQBoolean( saber[0].type == SABER_STAFF || (dualSabers && saber[1].type == SABER_STAFF) ); };
+	qboolean	SaberActive() { return ToQBoolean( saber[0].Active() || (dualSabers&&saber[1].Active()) ); };
 	void		SetSaberLength( float length )
 				{
 					saber[0].SetLength( length );

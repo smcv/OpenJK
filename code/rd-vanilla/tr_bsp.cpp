@@ -245,7 +245,7 @@ static	void R_LoadLightmaps( lump_t *l, const char *psMapName, world_t &worldDat
 			}
 		}
 		tr.lightmaps[worldData.startLightMapIndex+i] = R_CreateImage( va("$%s/lightmap%d",sMapName,worldData.startLightMapIndex+i), image, 
-			LIGHTMAP_SIZE, LIGHTMAP_SIZE, GL_RGBA, qfalse, qfalse, r_ext_compressed_lightmaps->integer, GL_CLAMP );
+			LIGHTMAP_SIZE, LIGHTMAP_SIZE, GL_RGBA, qfalse, qfalse, ToQBoolean(r_ext_compressed_lightmaps->integer), GL_CLAMP );
 	}
 
 	if ( r_lightmap->integer == 2 )	{
@@ -1139,7 +1139,7 @@ static	void R_LoadFogs( lump_t *l, lump_t *brushesLump, lump_t *sidesLump, world
 		out->parms.depthForOpaque = 0.0f;
 		out->colorInt = 0x00000000;
 		out->tcScale = 0.0f;
-		out->hasSurface = false;
+		out->hasSurface = qfalse;
 	}
 }
 

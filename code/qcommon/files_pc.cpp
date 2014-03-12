@@ -20,6 +20,8 @@ This file is part of Jedi Academy.
 #include "qcommon.h"
 #include "files.h"
 
+#include "sys/sys_public.h"
+
 /*
 ================
 return a hash value for the filename
@@ -278,7 +280,7 @@ qboolean FS_MoveUserGenFile( const char *filename_src, const char *filename_dst 
 */
 	{
 	remove(ospath_dst);
-	return (0 == rename (ospath_src, ospath_dst ));
+	return ToQBoolean(0 == rename (ospath_src, ospath_dst ));
 	}
 }
 

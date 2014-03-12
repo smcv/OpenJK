@@ -930,7 +930,7 @@ qboolean AI_RefreshGroup( AIGroupInfo_t *group )
 	//mark this group as not having been run this frame
 	group->processed = qfalse;
 
-	return (group->numGroup>0);
+	return ToQBoolean( group->numGroup>0 );
 }
 
 void AI_UpdateGroups( void )

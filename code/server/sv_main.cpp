@@ -561,7 +561,7 @@ void SV_Frame( int msec,float fractionMsec ) {
 	}
 
 	if ( com_speeds->integer ) {
-		startTime = Sys_Milliseconds ();
+		startTime = Sys_Milliseconds( qfalse );
 	}
 
 //	SV_BotFrame( sv.time );
@@ -577,7 +577,7 @@ void SV_Frame( int msec,float fractionMsec ) {
 	}
 
 	if ( com_speeds->integer ) {
-		time_game = Sys_Milliseconds () - startTime;
+		time_game = Sys_Milliseconds( qfalse ) - startTime;
 	}
 
 	SG_TestSave();	// returns immediately if not active, used for fake-save-every-cycle to test (mainly) Icarus disk code
