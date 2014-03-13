@@ -3352,7 +3352,6 @@ FS_Startup
 ================
 */
 void FS_Startup( const char *gameName ) {
-	const char *homePath;
 
 	Com_Printf( "----- FS_Startup -----\n" );
 
@@ -3363,7 +3362,17 @@ void FS_Startup( const char *gameName ) {
 	fs_cdpath = Cvar_Get ("fs_cdpath", "", CVAR_INIT|CVAR_PROTECTED );
 	fs_basepath = Cvar_Get ("fs_basepath", Sys_DefaultInstallPath(), CVAR_INIT|CVAR_PROTECTED );
 	fs_basegame = Cvar_Get ("fs_basegame", "", CVAR_INIT );
-	homePath = Sys_DefaultHomePath( HOMEPATH_NAME );
+
+	const char *homePath = NULL;
+	// homepath directory can be overruled via com_homepath
+	if( com_homepath && com_homepath->string[0] )
+	{
+		homePath = Sys_DefaultHomePath( com_homepath->string );
+	}
+	else
+	{
+		homePath = Sys_DefaultHomePath( HOMEPATH_NAME );
+	}
 	if (!homePath || !homePath[0]) {
 		homePath = fs_basepath->string;
 	}

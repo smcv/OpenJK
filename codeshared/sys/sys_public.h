@@ -198,7 +198,7 @@ qboolean Sys_PathCmp( const char *path1, const char *path2 );
 	\param wantsubs Whether to include subdirectories in the results.
 	\return Null-terminated dynamically allocated array of files, to be freed via Sys_FreeFileList().
 **/
-char **Sys_ListFiles( const char *directory, const char *extension, char *filter, int *numfiles, qboolean wantsubs );
+char **Sys_ListFiles( const char *directory, const char *extension, const char *filter, int *numfiles, qboolean wantsubs );
 /**
 	\brief Frees a file list received from Sys_ListFiles().
 **/

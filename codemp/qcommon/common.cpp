@@ -2146,6 +2146,8 @@ static void *Com_LoadMachOBundle( const char *name )
 
 /**
 	Unpacks and Loads a DLL.
+
+	Common code from Com_LoadLegacyGameDll() and Com_LoadGameDll(), not to be mistaken for Sys_LoadDLL().
 **/
 static void* Com_LoadDLL( const char *name )
 {

@@ -18,7 +18,7 @@ void Sys_Error( const char *error, ... )
 	
 	Con_ShowError( string );
 	
-	Sys_Quit( 1 );
+	Sys_Quit( EXIT_FAILURE );
 }
 
 void Sys_Quit( int returnCode )

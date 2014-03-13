@@ -114,6 +114,25 @@ const char *Sys_Basename( char *path )
 	return base;
 }
 
+const char *Sys_Dirname( const char *path )
+{
+	static char dir[ MAX_OSPATH ] = { 0 };
+	int length;
+
+	Q_strncpyz( dir, path, sizeof( dir ) );
+	length = strlen( dir ) - 1;
+
+	while( length > 0 && dir[ length ] != '\\' )
+		length--;
+
+	if( length == 0 )
+		return ".";
+
+	dir[ length ] = '\0';
+
+	return dir;
+}
+
 qboolean Sys_PathCmp( const char *path1, const char *path2 ) {
 	char *r1, *r2;
 
@@ -134,7 +153,7 @@ qboolean Sys_PathCmp( const char *path1, const char *path2 ) {
 
 #define	MAX_FOUND_FILES	0x1000
 
-static void Sys_ListFilteredFiles( const char *basedir, char *subdirs, char *filter, char **psList, int *numfiles ) {
+static void Sys_ListFilteredFiles( const char *basedir, const char *subdirs, const char *filter, char **psList, int *numfiles ) {
 	char		search[ MAX_OSPATH ], newsubdirs[ MAX_OSPATH ];
 	char		filename[ MAX_OSPATH ];
 	intptr_t	findhandle;
@@ -191,7 +210,7 @@ static qboolean strgtr( const char *s0, const char *s1 ) {
 		l0 = l1;
 	}
 
-	for( i = 0; i<l0; i++ ) {
+	for( i = 0; i < l0; i++ ) {
 		if( s1[ i ] > s0[ i ] ) {
 			return qtrue;
 		}
@@ -202,7 +221,23 @@ static qboolean strgtr( const char *s0, const char *s1 ) {
 	return qfalse;
 }
 
-char **Sys_ListFiles( const char *directory, const char *extension, char *filter, int *numfiles, qboolean wantsubs ) {
+static void SortFileList( char **listCopy, int nfiles )
+{
+	int flag;
+	do {
+		flag = 0;
+		for( int i = 1; i < nfiles; i++ ) {
+			if( strgtr( listCopy[ i - 1 ], listCopy[ i ] ) ) {
+				char *temp = listCopy[ i ];
+				listCopy[ i ] = listCopy[ i - 1 ];
+				listCopy[ i - 1 ] = temp;
+				flag = 1;
+			}
+		}
+	} while( flag );
+}
+
+char **Sys_ListFiles( const char *directory, const char *extension, const char *filter, int *numfiles, qboolean wantsubs ) {
 	char		search[ MAX_OSPATH ];
 	int			nfiles;
 	char		**listCopy;
@@ -283,17 +318,7 @@ char **Sys_ListFiles( const char *directory, const char *extension, char *filter
 	}
 	listCopy[ i ] = NULL;
 
-	do {
-		flag = 0;
-		for( i = 1; i<nfiles; i++ ) {
-			if( strgtr( listCopy[ i - 1 ], listCopy[ i ] ) ) {
-				char *temp = listCopy[ i ];
-				listCopy[ i ] = listCopy[ i - 1 ];
-				listCopy[ i - 1 ] = temp;
-				flag = 1;
-			}
-		}
-	} while( flag );
+	SortFileList( listCopy, nfiles );
 
 	return listCopy;
 }
@@ -310,23 +335,4 @@ void Sys_FreeFileList( char **psList ) {
 	}
 
 	Z_Free( psList );
-}
-
-const char *Sys_Dirname( const char *path )
-{
-	static char dir[ MAX_OSPATH ] = { 0 };
-	int length;
-
-	Q_strncpyz( dir, path, sizeof( dir ) );
-	length = strlen( dir ) - 1;
-
-	while( length > 0 && dir[ length ] != '\\' )
-		length--;
-
-	if( length == 0 )
-		return ".";
-
-	dir[ length ] = '\0';
-
-	return dir;
 }
