@@ -444,7 +444,7 @@ static int Zone_FreeBlock(zoneHeader_t *pMemory)
 		}
 		
 		//debugging double frees
-		pMemory->iMagic = INT_ID('F','R','E','E');
+		pMemory->iMagic = INT_ID( 'F', 'R', 'E', 'E' );
 		free (pMemory);
 
 		

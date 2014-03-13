@@ -1147,7 +1147,7 @@ qboolean FS_IsDemoExt(const char *filename, int namelen)
 
 #ifdef _WIN32
 
-bool Sys_GetFileTime(LPCSTR psFileName, FILETIME &ft)
+static bool FS_GetFileTime(LPCSTR psFileName, FILETIME &ft)
 {
 	bool bSuccess = false;
 	HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -1179,11 +1179,11 @@ bool Sys_GetFileTime(LPCSTR psFileName, FILETIME &ft)
 	return bSuccess;
 }
 
-qboolean Sys_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFileName /* src */ )
+static qboolean FS_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFileName /* src */ )
 {
 	FILETIME ftFinalFile, ftDataFile;
 
-	if (Sys_GetFileTime(psFinalFileName, ftFinalFile) && Sys_GetFileTime(psDataFileName, ftDataFile))
+	if (FS_GetFileTime(psFinalFileName, ftFinalFile) && FS_GetFileTime(psDataFileName, ftDataFile))
 	{
 		// timer res only accurate to within 2 seconds on FAT, so can't do exact compare...
 		//
@@ -1202,9 +1202,9 @@ qboolean Sys_FileOutOfDate( LPCSTR psFinalFileName /* dest */, LPCSTR psDataFile
 	//
 	if (com_developer->integer)
 	{
-		if (!Sys_GetFileTime(psDataFileName, ftDataFile))
+		if (!FS_GetFileTime(psDataFileName, ftDataFile))
 		{
-			Com_Printf( "Sys_FileOutOfDate: reading %s but it's not on the net!\n", psFinalFileName);
+			Com_Printf( "FS_FileOutOfDate: reading %s but it's not on the net!\n", psFinalFileName);
 		}
 	}
 
@@ -1494,7 +1494,7 @@ long FS_FOpenFileRead( const char *filename, fileHandle_t *file, qboolean unique
 				if ( fs_copyfiles->integer == 2 && fs_cdpath->string[0] && !Q_stricmp( dir->path, fs_basepath->string )
 					&& FS_FileCacheable(filename) )
 				{
-					if ( Sys_FileOutOfDate( netpath, FS_BuildOSPath( fs_cdpath->string, dir->gamedir, filename ) ))
+					if ( FS_FileOutOfDate( netpath, FS_BuildOSPath( fs_cdpath->string, dir->gamedir, filename ) ))
 					{
 						fclose(fsh[*file].handleFiles.file.o);
 						fsh[*file].handleFiles.file.o = 0;

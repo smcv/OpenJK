@@ -728,7 +728,7 @@ unsigned	Com_BlockChecksum( const void *buffer, int length );
 char		*Com_MD5File(const char *filename, int length, const char *prefix, int prefix_len);
 int      Com_HashKey(char *string, int maxlen);
 int			Com_Filter(char *filter, char *name, int casesensitive);
-int			Com_FilterPath(char *filter, char *name, int casesensitive);
+int			Com_FilterPath(const char *filter, const char *name, int casesensitive);
 int			Com_RealTime(qtime_t *qtime);
 qboolean	Com_SafeMode( void );
 
@@ -833,7 +833,7 @@ temp file loading
 	void *Z_Malloc( int size );			// returns 0 filled memory
 	void *S_Malloc( int size );			// NOT 0 filled memory only for small allocations
 #endif
-void Z_Free( void *ptr );
+int Z_Free( void *ptr );
 void Z_FreeTags( int tag );
 int Z_AvailableMemory( void );
 void Z_LogHeap( void );
@@ -852,7 +852,7 @@ void  Z_MorphMallocTag( void *pvBuffer, memtag_t eDesiredTag );
 void  Z_Validate( void );
 int   Z_MemSize	( memtag_t eTag );
 void  Z_TagFree	( memtag_t eTag );
-void  Z_Free	( void *ptr );
+int   Z_Free	( void *ptr );
 int	  Z_Size	( void *pvAddress);
 void Com_InitZoneMemory(void);
 void Com_InitZoneMemoryVars(void);

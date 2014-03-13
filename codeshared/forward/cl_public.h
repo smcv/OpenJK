@@ -35,6 +35,7 @@ int	QDECL Com_sprintf( char *dest, int size, const char *fmt, ... );
 
 void Q_strcat( char *dest, int size, const char *src );
 void Q_strncpyz( char *dest, const char *src, int destsize );
+int Q_stricmp( const char *s1, const char *s2 );
 
 qboolean FS_FilenameCompare( const char *s1, const char *s2 );
 char *FS_BuildOSPath( const char *base, const char *game, const char *qpath );
@@ -43,6 +44,8 @@ void Com_Init( char *commandLine );
 void Com_Frame( void );
 void Com_GenerateEvent( void );
 void Com_Shutdown( void );
+int Com_FilterPath( const char *filter, const char *name, int casesensitive );
+char *CopyString( const char *in ); // Z_Malloc's a string
 
 int Z_Free( void *pvAddress );
 void *Z_Malloc( int iSize, int eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );

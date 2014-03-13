@@ -170,13 +170,39 @@ const char *Sys_DefaultAppPath( void );
 	\param homepathName name 
 **/
 const char *Sys_DefaultHomePath( const char *subDir );
+
+/**
+	\brief Retrieves the name of the directory/file in the given path
+
+	/foo/bar/ will yield bar, /foo/bar/blub.txt yields blub.txt
+
+	\note Returns a static variable that /will/ change on subsequent calls!
+**/
 const char *Sys_Basename( char *path );
 
+
+/**
+	\brief Resolves path names and determines if they are the same
+
+	For use with full OS paths not quake paths
+
+	\return qtrue if resulting paths are valid and the same, otherwise qfalse
+**/
 qboolean Sys_PathCmp( const char *path1, const char *path2 );
+/**
+	\brief Lists the files in a given directory.
+	\param directory Directory to enumerate.
+	\param extension Only list files with the given extension. "/" lists directories.
+	\param filter Only results matching this filter will be returned. Overrules wantsubs.
+	\param numFiles Number of files returned is written here.
+	\param wantsubs Whether to include subdirectories in the results.
+	\return Null-terminated dynamically allocated array of files, to be freed via Sys_FreeFileList().
+**/
 char **Sys_ListFiles( const char *directory, const char *extension, char *filter, int *numfiles, qboolean wantsubs );
+/**
+	\brief Frees a file list received from Sys_ListFiles().
+**/
 void Sys_FreeFileList( char **filelist );
-qboolean Sys_FileOutOfDate( const char *psFinalFileName /* dest */, const char *psDataFileName /* src */ );
-qboolean Sys_CopyFile(const char *lpExistingFileName, const char *lpNewFileName, qboolean bOverwrite);
 
 
 //    Shared Library handling

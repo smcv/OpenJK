@@ -13,7 +13,7 @@ sysEvent_t g_eventQue[MAX_QUED_EVENTS];
 int g_eventHead = 0;
 int g_eventTail = 0;
 
-static void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr )
+void Sys_QueEvent( int time, sysEventType_t type, int value, int value2, int ptrLength, void *ptr )
 {
 	sysEvent_t	*ev;
 

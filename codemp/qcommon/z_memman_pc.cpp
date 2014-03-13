@@ -339,8 +339,9 @@ void Z_MorphMallocTag( void *pvAddress, memtag_t eDesiredTag )
 	TheZone.Stats.iCountsPerTag	[pMemory->eTag]++;
 }
 
-static void Zone_FreeBlock(zoneHeader_t *pMemory)
+static int Zone_FreeBlock(zoneHeader_t *pMemory)
 {
+	const int iSize = pMemory->iSize;
 	if (pMemory->eTag != TAG_STATIC)	// belt and braces, should never hit this though
 	{
 		// Update stats...
@@ -362,6 +363,9 @@ static void Zone_FreeBlock(zoneHeader_t *pMemory)
 		{
 			pMemory->pNext->pPrev = pMemory->pPrev;
 		}
+
+		//debugging double frees
+		pMemory->iMagic = INT_ID( 'F', 'R', 'E', 'E' );
 		free (pMemory);
 
 
@@ -371,11 +375,12 @@ static void Zone_FreeBlock(zoneHeader_t *pMemory)
 		if (iAllocCount == 0)
 		{
 			Com_Error(ERR_FATAL, "Zone_FreeBlock(): Double-freeing block!");
-			return;
+			return -1;
 		}
 		iAllocCount--;
 		#endif
 	}
+	return iSize;
 }
 
 // stats-query function to ask how big a malloc is...
@@ -401,19 +406,19 @@ int Z_Size(void *pvAddress)
 
 // Frees a block of memory...
 //
-void Z_Free(void *pvAddress)
+int Z_Free(void *pvAddress)
 {
 	if (pvAddress == NULL)	// I've put this in as a safety measure because of some bits of #ifdef BSPC stuff	-Ste.
 	{
 		//Com_Error(ERR_FATAL, "Z_Free(): NULL arg");
-		return;
+		return -1;
 	}
 
 	zoneHeader_t *pMemory = ((zoneHeader_t *)pvAddress) - 1;
 
 	if (pMemory->eTag == TAG_STATIC)
 	{
-		return;
+		return 0;
 	}
 
 	#ifdef DETAILED_ZONE_DEBUG_CODE
@@ -424,22 +429,22 @@ void Z_Free(void *pvAddress)
 	if (iAllocCount <= 0)
 	{
 		Com_Error(ERR_FATAL, "Z_Free(): Block already-freed, or not allocated through Z_Malloc!");
-		return;
+		return -1;
 	}
 	#endif
 
 	if (pMemory->iMagic != ZONE_MAGIC)
 	{
 		Com_Error(ERR_FATAL, "Z_Free(): Corrupt zone header!");
-		return;
+		return -1;
 	}
 	if (ZoneTailFromHeader(pMemory)->iMagic != ZONE_MAGIC)
 	{
 		Com_Error(ERR_FATAL, "Z_Free(): Corrupt zone tail!");
-		return;
+		return -1;
 	}
 
-	Zone_FreeBlock(pMemory);
+	return Zone_FreeBlock(pMemory);
 }
 
 
