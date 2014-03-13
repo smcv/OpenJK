@@ -31,7 +31,7 @@ void OS_Init( void );
 /**
 \brief Cleanly shut down on Sys_Quit()
 **/
-void OS_Shutdown( void );
+void OS_Shutdown( int returnCode );
 
 /**
 \brief Loading a library

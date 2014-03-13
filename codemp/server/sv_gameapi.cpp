@@ -17,7 +17,7 @@ botlib_export_t	*botlib_export;
 
 // game interface
 static gameExport_t *ge; // game export table
-static vm_t *gvm; // game vm, valid for legacy and new api
+static vm_t *gvm = NULL; // game vm, valid for legacy and new api
 
 //
 // game vmMain calls

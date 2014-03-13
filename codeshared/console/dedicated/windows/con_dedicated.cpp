@@ -60,10 +60,11 @@ void Con_Frame( void )
 			_putch( '\r' );
 			_putch( '\n' );
 			
-			str[ len + 1 ] = '\0';
+			++len;
+			str[ len ] = '\0';
 			char *buf = ( char* )Z_Malloc( len, TAG_EVENT, qfalse );
-			strcpy( buf, str );
-			Sys_QueEvent( 0, SE_CONSOLE, 0, 0, len + 1, buf );
+			Q_strncpyz( buf, str, len );
+			Sys_QueEvent( 0, SE_CONSOLE, 0, 0, len, buf );
 			len = 0;
 		}
 		else if( isprint( ch ) && len < MAX_STRING_CHARS - 1 )

@@ -24,7 +24,7 @@ void Sys_Error( const char *error, ... )
 void Sys_Quit( int returnCode )
 {
 	Com_Shutdown();
-	OS_Shutdown();
+	OS_Shutdown( returnCode );
 	exit( returnCode );
 }
 
@@ -103,7 +103,7 @@ void *Sys_FindDLL( const char *game, const char *name )
 			}
 			else
 			{
-				Com_Printf( "Com_LoadDLL(%s) failed: \"%s\"\n", filename, Sys_LibraryError( ) );
+				Com_Printf( "Sys_FindDLL(%s) failed: \"%s\"\n", filename, Sys_LibraryError( ) );
 			}
 		}
 	}

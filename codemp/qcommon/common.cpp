@@ -2174,15 +2174,12 @@ static void* Com_LoadDLL( const char *name )
 
 	if( !dllHandle )
 	{
-		dllHandle = Sys_FindDLL( name, gamedir );
+		dllHandle = Sys_FindDLL( gamedir, filename );
 	}
-	// Windows does not need to look at base - if it was there, it was unpacked to fs_game by Com_UnpackDLL().
-#	ifndef _WIN32
-		if( !dllHandle )
-		{
-			dllHandle = Sys_FindDLL( name, BASEGAME );
-		}
-#	endif
+	if( !dllHandle )
+	{
+		dllHandle = Sys_FindDLL( BASEGAME, filename );
+	}
 	return dllHandle;
 }
 
@@ -2197,7 +2194,7 @@ void* QDECL Com_LoadLegacyGameDll( const char *name, vmMain_t *vmMain, systemcal
 	typedef void ( QDECL *dllEntry_t )( systemcalls_t );
 	dllEntry_t dllEntry = dllEntry_t( Sys_LoadFunction( libHandle, "dllEntry" ) );
 	*vmMain = vmMain_t( Sys_LoadFunction( libHandle, "vmMain" ) );
-	if( !dllEntry || !vmMain )
+	if( !dllEntry || !*vmMain )
 	{
 		Com_Printf ( "Com_LoadLegacyGameDll(%s) failed to find vmMain or dllEntry function:\n\"%s\" !\n", name, Sys_LibraryError() );
 		Sys_UnloadLibrary( libHandle );
@@ -2221,7 +2218,7 @@ void *Com_LoadGameDll( const char *name, gameAPI_t *moduleAPI )
 	typedef void ( QDECL *dllEntry_t )( systemcalls_t );
 	dllEntry_t dllEntry = dllEntry_t( Sys_LoadFunction( libHandle, "dllEntry" ) );
 	*moduleAPI = gameAPI_t( Sys_LoadFunction( libHandle, "GetModuleAPI" ) );
-	if( !moduleAPI )
+	if( !*moduleAPI )
 	{
 		Com_Printf ( "Sys_LoadGameDll(%s) failed to find GetModuleAPI function:\n\"%s\" !\n", name, Sys_LibraryError() );
 		Sys_UnloadLibrary( libHandle );

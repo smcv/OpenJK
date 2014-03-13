@@ -154,7 +154,7 @@ vm_t *VM_CreateLegacy( vmSlots_t vmSlot, intptr_t (*systemCalls)(intptr_t *) ) {
 
 	// find the legacy syscall api
 	FS_FindPureDLL( vm->name );
-	Com_Printf( "VM_CreateLegacy: %s"ARCH_STRING DLL_EXT, vm->name );
+	Com_Printf( "VM_CreateLegacy: %s"ARCH_STRING DLL_EXT "\n", vm->name );
 	vm->dllHandle = Com_LoadLegacyGameDll( vm->name, &vm->legacy.main, VM_DllSyscall );
 
 	if ( vm->dllHandle ) {

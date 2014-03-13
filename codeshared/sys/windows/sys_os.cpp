@@ -36,9 +36,15 @@ void OS_Init( void )
 	timeBeginPeriod( 1 );
 }
 
-void OS_Shutdown( void )
+void OS_Shutdown( int returnCode )
 {
 	timeEndPeriod( 1 );
+	if( returnCode != 0 )
+	{
+#ifdef _DEBUG
+		DebugBreak(); // Allow debugging in case of error
+#endif
+	}
 }
 
 qboolean Sys_LowPhysicalMemory( )

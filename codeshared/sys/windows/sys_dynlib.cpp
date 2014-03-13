@@ -12,7 +12,6 @@ void* Sys_LoadLibrary( const char *name )
 
 void Sys_UnloadLibrary( void *handle )
 {
-	FreeLibrary( ( HMODULE )handle );
 	if( !handle ) {
 		return;
 	}
@@ -39,5 +38,9 @@ const char* Sys_LibraryError()
 		sizeof( error ) - 1,						// Number of bytes to store the message
 		NULL );
 	error[ size ] = '\0'; // is this necessary?
+
+	// Remove trailing space (esp. newline)
+	while( size > 0 && isspace( error[ size - 1 ] ) )
+		error[ --size ] = '\0';
 	return error;
 }

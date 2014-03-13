@@ -323,6 +323,9 @@ const char *Sys_Dirname( const char *path )
 	while( length > 0 && dir[ length ] != '\\' )
 		length--;
 
+	if( length == 0 )
+		return ".";
+
 	dir[ length ] = '\0';
 
 	return dir;
