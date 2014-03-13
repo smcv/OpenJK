@@ -932,14 +932,14 @@ void NET_Config( qboolean enableNetworking ) {
 	}
 }
 
-void NET_Frame( void )
+void NET_GenerateEvent( void )
 {
 	static byte sys_packetReceived[MAX_MSGLEN];
 	msg_t		netmsg;
 	netadr_t	adr;
 	// check for network packets
 	MSG_Init( &netmsg, sys_packetReceived, sizeof( sys_packetReceived ) );
-	while( Sys_GetPacket ( &adr, &netmsg ) )
+	if( Sys_GetPacket ( &adr, &netmsg ) )
 	{
 		netadr_t		*buf;
 		int				len;

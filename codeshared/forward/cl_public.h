@@ -39,6 +39,8 @@ void Com_Init( char *commandLine );
 
 void Com_Frame( void );
 
+void Com_GenerateEvent( void );
+
 int Z_Free( void *pvAddress );
 
 void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );

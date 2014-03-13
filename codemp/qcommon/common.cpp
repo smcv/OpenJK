@@ -1498,12 +1498,19 @@ extern int G2Time_PreciseFrame;
 Com_Frame
 =================
 */
+
+/// Called by Sys_GetEvent() when no events are left.
+void Com_GenerateEvent( void )
+{
+	NET_GenerateEvent();
+}
+
 void Com_Frame( void ) {
 #	ifndef DEDICATED
 		Window_Frame();
 #	endif
 
-	NET_Frame();
+	Con_Frame();
 
 	try
 	{

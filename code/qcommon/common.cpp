@@ -1349,11 +1349,17 @@ void G2Time_ResetTimers(void);
 void G2Time_ReportTimers(void);
 #endif
 
+/// Called by Sys_GetEvent() when no events are left.
+void Com_GenerateEvent( void )
+{
+}
+
 #ifdef _MSC_VER
 #pragma warning (disable: 4701)	//local may have been used without init (timing info vars)
 #endif
 void Com_Frame( void ) {
 	Window_Frame();
+	Con_Frame();
 
 	try 
 	{

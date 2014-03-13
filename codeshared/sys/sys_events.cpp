@@ -53,6 +53,10 @@ sysEvent_t Sys_GetEvent( void )
 	{
 		return g_eventQue[ ( g_eventTail++ ) & MASK_QUED_EVENTS ];
 	}
+
+	// No events left? Try generating another. (This is for potential high-traffic events that we don't want flooding the queue)
+	Com_GenerateEvent();
+
 	// return if we have data now
 	if( g_eventHead > g_eventTail )
 	{
