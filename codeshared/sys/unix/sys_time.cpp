@@ -11,7 +11,7 @@ static int Sys_Milliseconds2()
 	return tp.tv_usec/1000 + tp.tv_sec * 1000;
 }
 
-int Sys_Milliseconds (bool baseTime)
+int Sys_Milliseconds( qboolean baseTime )
 {
 	static int timeBase = Sys_Milliseconds2();
 	if (baseTime)

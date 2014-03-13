@@ -111,6 +111,25 @@ const char *Sys_Dirname( const char *path )
 	return dirname( ( char* )path );
 }
 
+qboolean Sys_PathCmp( const char *path1, const char *path2 )
+{
+	char *r1, *r2;
+
+	r1 = realpath(path1, NULL);
+	r2 = realpath(path2, NULL);
+
+	if(r1 && r2 && !Q_stricmp(r1, r2))
+	{
+		free(r1);
+		free(r2);
+		return qtrue;
+	}
+
+	free(r1);
+	free(r2);
+	return qfalse;
+}
+
 #define MAX_FOUND_FILES 0x1000
 
 static void Sys_ListFilteredFiles( const char *basedir, const char *subdirs, const char *filter, char **psList, int *numfiles )

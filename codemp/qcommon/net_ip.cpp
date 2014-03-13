@@ -1005,7 +1005,6 @@ void NET_Sleep( int msec ) {
 #ifndef _WIN32
 	struct timeval timeout;
 	fd_set	fdset;
-	extern qboolean stdin_active;
 
 	if ( !com_dedicated->integer )
 		return; // we're not a server, just run full speed
@@ -1014,7 +1013,7 @@ void NET_Sleep( int msec ) {
 		return;
 
 	FD_ZERO(&fdset);
-	if (stdin_active)
+	if (!feof(stdin))
 		FD_SET(0, &fdset); // stdin is processed too
 	FD_SET(ip_socket, &fdset); // network socket
 	timeout.tv_sec = msec/1000;
