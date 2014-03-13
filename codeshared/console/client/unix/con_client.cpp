@@ -30,7 +30,7 @@ void Con_Frame( void )
 	// Nothing to do here
 }
 
-void Con_Shutdown( void )
+void Con_DestroyConsole( void )
 {
 	// Nothing to do here
 }

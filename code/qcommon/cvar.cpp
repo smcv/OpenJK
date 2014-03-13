@@ -320,7 +320,7 @@ If the variable already exists, the value will not be set unless CVAR_ROM
 The flags will be or'ed in if the variable exists.
 ============
 */
-cvar_t *Cvar_Get( const char *var_name, const char *var_value, int flags ) {
+cvar_t *Cvar_Get( const char *var_name, const char *var_value, uint32_t flags ) {
 	cvar_t	*var;
 	long	hash;
 	int		index;
@@ -627,8 +627,8 @@ cvar_t *Cvar_Set2( const char *var_name, const char *value, qboolean force ) {
 Cvar_Set
 ============
 */
-void Cvar_Set( const char *var_name, const char *value) {
-	Cvar_Set2 (var_name, value, qtrue);
+cvar_t *Cvar_Set( const char *var_name, const char *value) {
+	return Cvar_Set2( var_name, value, qtrue );
 }
 
 /*

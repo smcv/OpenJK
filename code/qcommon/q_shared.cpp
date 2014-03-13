@@ -762,7 +762,7 @@ Q_strncpyz
 Safe strncpy that ensures a trailing zero
 =============
 */
-void Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong/* = qfalse */ )
+void Q_strncpyz( char *dest, const char *src, int destsize )
 {
 	if ( !dest ) {
 		Com_Error( ERR_FATAL, "Q_strncpyz: NULL dest" );
@@ -774,12 +774,23 @@ void Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooL
 		Com_Error(ERR_FATAL,"Q_strncpyz: destsize < 1" ); 
 	}
 
-	if (bBarfIfTooLong)
+	strncpy( dest, src, destsize-1 );
+    dest[destsize-1] = 0;
+}
+void Q_strncpyzChecked( char *dest, const char *src, int destsize )
+{
+	if ( !dest ) {
+		Com_Error( ERR_FATAL, "Q_strncpyzChecked: NULL dest" );
+	}
+	if ( !src ) {
+		Com_Error( ERR_FATAL, "Q_strncpyzChecked: NULL src" );
+	}
+	if ( destsize < 1 ) {
+		Com_Error(ERR_FATAL, "Q_strncpyzChecked: destsize < 1" ); 
+	}
+	if ( strlen(src)+1 > (size_t)destsize)
 	{
-		if ( strlen(src)+1 > (size_t)destsize)
-		{
-			Com_Error(ERR_FATAL,"String dest buffer too small to hold string \"%s\" %d > %d\n(source addr = %x, dest addr = %x",src, strlen(src)+1, destsize, src, dest);
-		}
+		Com_Error(ERR_FATAL,"String dest buffer too small to hold string \"%s\" %d > %d\n(source addr = %x, dest addr = %x",src, strlen(src)+1, destsize, src, dest);
 	}
 	strncpy( dest, src, destsize-1 );
     dest[destsize-1] = 0;

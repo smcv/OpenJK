@@ -51,7 +51,7 @@ void Con_Frame( void );
 /**
 	\brief Shuts the console down.
 **/
-void Con_Shutdown( void );
+void Con_DestroyConsole( void );
 
 // end of Doxygen Group
 /// \}

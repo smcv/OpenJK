@@ -842,10 +842,10 @@ void Z_LogHeap( void );
 // later on I'll re-implement __FILE__, __LINE__ etc, but for now...
 //
 #ifdef DEBUG_ZONE_ALLOCS
-void *Z_Malloc  ( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iAlign = 4);	// return memory NOT zero-filled by default
+void *Z_Malloc  ( int iSize, int eTag, qboolean bZeroit = qfalse, int iAlign = 4);	// return memory NOT zero-filled by default
 void *S_Malloc	( int iSize );					// NOT 0 filled memory only for small allocations
 #else
-void *Z_Malloc  ( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iAlign = 4);	// return memory NOT zero-filled by default
+void *Z_Malloc  ( int iSize, int eTag, qboolean bZeroit = qfalse, int iAlign = 4);	// return memory NOT zero-filled by default
 void *S_Malloc	( int iSize );					// NOT 0 filled memory only for small allocations
 #endif
 void  Z_MorphMallocTag( void *pvBuffer, memtag_t eDesiredTag );

@@ -986,11 +986,8 @@ inline const char	*Q_strrchr( const char* str, int c ) { return strrchr(str, c);
 
 
 // buffer size safe library replacements
-#ifdef __cplusplus
-void	Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong = qfalse );
-#else
-void	Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong );
-#endif
+void	Q_strncpyzChecked( char *dest, const char *src, int destsize ); // Like strncpyz, but Com_Error()s if dest is too small.
+void	Q_strncpyz( char *dest, const char *src, int destsize );
 void	Q_strcat( char *dest, int size, const char *src );
 
 const char *Q_stristr( const char *s, const char *find );

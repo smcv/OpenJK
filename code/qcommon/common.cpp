@@ -309,17 +309,50 @@ void Com_Quit_f( void ) {
 	Sys_Quit ( 0 );
 }
 
+extern void CM_FreeShaderText( void );
 void Com_Shutdown( void ) {
 	// don't try to shutdown if we are in a recursive error
 	if( !com_errorEntered ) {
 		SV_Shutdown( "Server quit\n" );
 		CL_Shutdown();
-		Com_Shutdown();
-		FS_Shutdown();
-#ifndef _DEDICATED
-		Window_Shutdown();
+
+		CM_ClearMap( );
+
+		CM_FreeShaderText( );
+
+		if( logfile ) {
+			FS_FCloseFile( logfile );
+			logfile = 0;
+		}
+
+		if( speedslog ) {
+			FS_Write( "\n};", strlen( "\n};" ), speedslog );
+			FS_FCloseFile( speedslog );
+			speedslog = 0;
+		}
+
+		if( camerafile ) {
+			FS_FCloseFile( camerafile );
+			camerafile = 0;
+		}
+
+		if( com_journalFile ) {
+			FS_FCloseFile( com_journalFile );
+			com_journalFile = 0;
+		}
+
+#ifdef JK2_MODE
+		JK2SP_Shutdown( );
+#else
+		SE_ShutDown( );//close the string packages
 #endif
-		Con_Shutdown();
+
+		extern void Netchan_Shutdown( );
+		Netchan_Shutdown( );
+
+		FS_Shutdown();
+		Window_Shutdown();
+		Con_DestroyConsole( );
 	}
 }
 
@@ -1542,48 +1575,6 @@ void Com_Frame( void ) {
 #ifdef _MSC_VER
 #pragma warning (default: 4701)	//local may have been used without init
 #endif
-
-/*
-=================
-Com_Shutdown
-=================
-*/
-extern void CM_FreeShaderText(void);
-void Com_Shutdown (void) {
-	CM_ClearMap();
-
-	CM_FreeShaderText();
-
-	if (logfile) {
-		FS_FCloseFile (logfile);
-		logfile = 0;
-	}
-
-	if (speedslog) {
-		FS_Write("\n};", strlen("\n};"), speedslog);
-		FS_FCloseFile (speedslog);
-		speedslog = 0;
-	}
-
-	if (camerafile) {
-		FS_FCloseFile (camerafile);
-		camerafile = 0;
-	}
-
-	if ( com_journalFile ) {
-		FS_FCloseFile( com_journalFile );
-		com_journalFile = 0;
-	}
-
-#ifdef JK2_MODE
-	JK2SP_Shutdown();
-#else
-	SE_ShutDown();//close the string packages
-#endif
-
-	extern void Netchan_Shutdown();
-	Netchan_Shutdown();
-}
 
 /*
 ==================

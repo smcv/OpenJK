@@ -32,7 +32,7 @@ void Con_Frame( void )
 	// TODO
 }
 
-void Con_Shutdown( void )
+void Con_DestroyConsole( void )
 {
 	// TODO
 }

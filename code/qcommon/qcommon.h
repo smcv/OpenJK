@@ -350,7 +350,7 @@ modules of the program.
 
 */
 
-cvar_t *Cvar_Get( const char *var_name, const char *value, int flags );
+cvar_t *Cvar_Get( const char *var_name, const char *value, uint32_t flags );
 // creates the variable if it doesn't exist, or returns the existing one
 // if it exists, the value will not be changed, but flags will be ORed in
 // that allows variables to be unarchived without needing bitflags
@@ -362,7 +362,7 @@ void	Cvar_Register( vmCvar_t *vmCvar, const char *varName, const char *defaultVa
 void	Cvar_Update( vmCvar_t *vmCvar );
 // updates an interpreted modules' version of a cvar
 
-void 	Cvar_Set( const char *var_name, const char *value );
+cvar_t	*Cvar_Set( const char *var_name, const char *value );
 // will create the variable with no flags if it doesn't exist
 
 cvar_t	*Cvar_Set2(const char *var_name, const char *value, qboolean force);
@@ -637,7 +637,7 @@ qboolean Z_IsFromZone(const void *pvAddress, memtag_t eTag);	//returns size if t
 
 #ifdef DEBUG_ZONE_ALLOCS
 
-	void *_D_Z_Malloc ( int iSize, memtag_t eTag, qboolean bZeroit, const char *psFile, int iLine );
+	void *_D_Z_Malloc ( int iSize, int eTag, qboolean bZeroit, const char *psFile, int iLine );
 	void *_D_S_Malloc ( int iSize, const char *psFile, int iLine );	
 	void  _D_Z_Label  ( const void *pvAddress, const char *pslabel );
 
@@ -648,7 +648,7 @@ qboolean Z_IsFromZone(const void *pvAddress, memtag_t eTag);	//returns size if t
 
 #else
 
-	void *Z_Malloc  ( int iSize, memtag_t eTag, qboolean bZeroit, int iAlign = 4);	// return memory NOT zero-filled by default
+	void *Z_Malloc  ( int iSize, int eTag, qboolean bZeroit, int iAlign = 4);	// return memory NOT zero-filled by default
 	void *S_Malloc	( int iSize );									// NOT 0 filled memory only for small allocations
 
 	#define Z_Label(_ptr, _label)	/* */

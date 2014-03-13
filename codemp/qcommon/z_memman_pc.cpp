@@ -156,7 +156,7 @@ StaticMem_t gNumberString[] = {
 };
 
 qboolean gbMemFreeupOccured = qfalse;
-void *Z_Malloc(int iSize, memtag_t eTag, qboolean bZeroit /* = qfalse */, int iUnusedAlign /* = 4 */)
+void *Z_Malloc(int iSize, int eTag, qboolean bZeroit /* = qfalse */, int iUnusedAlign /* = 4 */)
 {
 	gbMemFreeupOccured = qfalse;
 

@@ -4051,7 +4051,7 @@ Ghoul2 Insert Start
 						{
 							gi.Printf(S_COLOR_RED"WARNING: Unable to use skin (%s)", NPC->soundSet);
 						}
-						Q_strncpyz( customSkin, *skinarray[Q_irand(0, skinarray.size()-1)], sizeof(customSkin), qtrue);			
+						Q_strncpyzChecked( customSkin, *skinarray[Q_irand(0, skinarray.size()-1)], sizeof(customSkin));
 					}
 					if (NPC->soundSet && gi.bIsFromZone(NPC->soundSet, TAG_G_ALLOC)) {
 						gi.Free(NPC->soundSet);	

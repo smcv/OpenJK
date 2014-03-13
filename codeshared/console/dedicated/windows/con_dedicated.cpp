@@ -76,7 +76,7 @@ void Con_Frame( void )
 	}
 }
 
-void Con_Shutdown( void )
+void Con_DestroyConsole( void )
 {
 	// Nothing to do here
 }

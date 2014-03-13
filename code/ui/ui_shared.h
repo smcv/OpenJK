@@ -207,7 +207,7 @@ typedef struct {
 	qboolean	(*deferScript)(const char **p);
 	void		(*setBinding)( int keynum, const char *binding );
 	void		(*setColor) (const vec4_t v);
-	void		(*setCVar)(const char *cvar, const char *value);
+	cvar_t *	(*setCVar)(const char *cvar, const char *value);
 	void		(*setOverstrikeMode)(qboolean b);
 	void		(*startLocalSound)( sfxHandle_t sfx, int channelNum );
 	void		(*stopCinematic)(int handle);

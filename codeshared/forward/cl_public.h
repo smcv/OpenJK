@@ -18,7 +18,7 @@ typedef enum
 	TAG_FILESYS = 3,
 	TAG_EVENT,
 	TAG_CLIPBOARD
-} memtag_t;
+} memtag_shared_t;
 
 // dito for Error Codes
 typedef enum {
@@ -34,11 +34,7 @@ void QDECL Com_Error( int level, const char *error, ... );
 int	QDECL Com_sprintf( char *dest, int size, const char *fmt, ... );
 
 void Q_strcat( char *dest, int size, const char *src );
-#ifdef __cplusplus
-void	Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong = qfalse );
-#else
-void	Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong );
-#endif
+void Q_strncpyz( char *dest, const char *src, int destsize );
 
 qboolean FS_FilenameCompare( const char *s1, const char *s2 );
 
@@ -48,7 +44,7 @@ void Com_GenerateEvent( void );
 void Com_Shutdown( void );
 
 int Z_Free( void *pvAddress );
-void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );
+void *Z_Malloc( int iSize, int eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );
 
 //void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit, int unusedAlign );
 
@@ -64,6 +60,6 @@ char	*Cmd_Argv( int arg );
 
 //    CVar
 
-cvar_t *Cvar_Get( const char *var_name, const char *value, int flags );
-void 	Cvar_Set( const char *var_name, const char *value );
+cvar_t *Cvar_Get( const char *var_name, const char *value, uint32_t flags );
+cvar_t *Cvar_Set( const char *var_name, const char *value );
 char	*Cvar_VariableString( const char *var_name );

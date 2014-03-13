@@ -321,7 +321,7 @@ void Com_Shutdown( void ) {
 #ifndef DEDICATED
 		Window_Shutdown();
 #endif
-		Con_Shutdown();
+		Con_DestroyConsole( );
 	}
 }
 
