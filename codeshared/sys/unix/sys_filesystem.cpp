@@ -6,11 +6,15 @@
 #include "sys/sys_local.h"
 #include "sys/sys_public.h"
 #include "sys/unix/unix_local.h"
+#include "forward/cl_public.h"
 
 #include <sys/stat.h> // mkdir
 #include <unistd.h> // getcwd
 #include <libgen.h> // basename, dirname
 #include <dirent.h> // opendir, readdir, closedir
+#include <errno.h> // errno etc.
+#include <cstring> // strcmp etc.
+#include <cstdlib> // getenv
 
 qboolean Sys_Mkdir( const char *path )
 {
@@ -32,6 +36,7 @@ const char *Sys_Cwd( void )
 	return cwd;
 }
 
+#	ifdef MACOS_X
 /**
 	 Discovers if passed dir is suffixed with the directory structure of a Mac OS X
 	.app bundle. If it is, the .app directory structure is stripped off the end and
@@ -53,6 +58,7 @@ static const char *Sys_StripAppBundle( const char *dir )
 	Q_strncpyz(cwd, Sys_Dirname(cwd), sizeof(cwd));
 	return cwd;
 }
+#endif
 
 const char *Sys_DefaultInstallPath( void )
 {
@@ -85,7 +91,7 @@ const char *Sys_DefaultHomePath( const char *subDir )
 	
 	if( path )
 	{
-		Com_sprintf(homePath, sizeof(homePath), "%s%c%s", path, PATH_SEP, );
+		Com_sprintf(homePath, sizeof(homePath), "%s%c%s", path, PATH_SEP, subDir );
 		return homePath;
 	}
 	else
@@ -97,12 +103,12 @@ const char *Sys_DefaultHomePath( const char *subDir )
 
 const char *Sys_Basename( const char *path )
 {
-	return basename( path );
+	return basename( ( char* )path );
 }
 
 const char *Sys_Dirname( const char *path )
 {
-	return dirname( path );
+	return dirname( ( char* )path );
 }
 
 #define MAX_FOUND_FILES 0x1000
@@ -143,7 +149,7 @@ static void Sys_ListFilteredFiles( const char *basedir, const char *subdirs, con
 				else {
 					Com_sprintf( newsubdirs, sizeof(newsubdirs), "%s", d->d_name);
 				}
-				Sys_ListFilteredFiles( basedir, newsubdirs, filter, list, numfiles );
+				Sys_ListFilteredFiles( basedir, newsubdirs, filter, psList, numfiles );
 			}
 		}
 		if ( *numfiles >= MAX_FOUND_FILES - 1 ) {
@@ -235,7 +241,7 @@ char **Sys_ListFiles( const char *directory, const char *extension, const char *
 	for( int i = 0; i < nfiles; i++ ) {
 		listCopy[ i ] = list[ i ];
 	}
-	listCopy[ i ] = NULL;
+	listCopy[ nfiles ] = NULL;
 
 	return listCopy;
 }

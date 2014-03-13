@@ -50,6 +50,5 @@ if(BuildClientConsoleLib)
 	set_target_properties(${ClientConsoleLib} PROPERTIES COMPILE_DEFINITIONS_DEBUG "${ClientConsoleLibDefines};${DebugDefines}")
 	set_target_properties(${ClientConsoleLib} PROPERTIES INCLUDE_DIRECTORIES "${ClientConsoleLibIncludeDirectories}")
 	set_target_properties(${ClientConsoleLib} PROPERTIES PROJECT_LABEL "Client Console Library")
-	target_link_libraries(${ClientConsoleLib} ${ClientConsoleLibLibraries})
 
 endif(BuildClientConsoleLib)

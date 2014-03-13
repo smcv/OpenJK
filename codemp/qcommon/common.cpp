@@ -2217,8 +2217,6 @@ void *Com_LoadGameDll( const char *name, gameAPI_t *moduleAPI )
 		return NULL;
 	}
 	
-	typedef void ( QDECL *dllEntry_t )( systemcalls_t );
-	dllEntry_t dllEntry = dllEntry_t( Sys_LoadFunction( libHandle, "dllEntry" ) );
 	*moduleAPI = gameAPI_t( Sys_LoadFunction( libHandle, "GetModuleAPI" ) );
 	if( !*moduleAPI )
 	{

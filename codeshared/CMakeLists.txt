@@ -11,11 +11,6 @@ if(BuildCommonLib)
 	set(CommonLibDefines ${SharedDefines})
 	set(CommonLibIncludeDirectories ${SharedDir})
 	
-	# Platform-specific libraries
-	if(WIN32)
-		set(CommonLibLibraries ${CommonLibLibraries} "winmm")
-	endif(WIN32)
-	
 	# Files
 	
 	set(CommonLibForwardFiles
@@ -72,7 +67,6 @@ if(BuildCommonLib)
 	set_target_properties(${CommonLib} PROPERTIES COMPILE_DEFINITIONS_DEBUG "${CommonLibDefines};${DebugDefines}")
 	set_target_properties(${CommonLib} PROPERTIES INCLUDE_DIRECTORIES "${CommonLibIncludeDirectories}")
 	set_target_properties(${CommonLib} PROPERTIES PROJECT_LABEL "Common Code Library")
-	target_link_libraries(${CommonLib} ${CommonLibLibraries})
 
 endif(BuildCommonLib)
 

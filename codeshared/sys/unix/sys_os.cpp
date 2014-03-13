@@ -1,7 +1,9 @@
 #include "sys/sys_local.h"
 #include "sys/sys_public.h"
+#include "forward/cl_public.h"
 
-#include <pwd.h>
+#include <pwd.h> // getpwuid, passwd
+#include <unistd.h> // getuid
 #include <cstdio>
 
 void OS_Init( void )

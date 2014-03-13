@@ -211,6 +211,26 @@ endif()
 
 set(ReleaseDefines "FINAL_BUILD")
 
+#  Libraries all Executables (MP & SP Engine, Dedicated) need
+set(ExecutableSharedLibraries ${CommonLib})
+# Platform-specific libraries that CommonLib depends upon
+if(WIN32)
+	set(ExecutableSharedLibraries ${ExecutableSharedLibraries} "winmm")
+else(WIN32)
+	set(ExecutableSharedLibraries ${ExecutableSharedLibraries} "dl")
+endif(WIN32)
+if(BuildWindowLib)
+	if(UseInternalSDL)
+		find_library(SDL2_LIBRARY NAMES SDL2 PATHS ${OpenJKLibDir})
+		if(NOT SDL2_LIBRARY)
+			message(FATAL_ERROR "UseInternalSDL enabled, but lib/SDL2.lib not found!")
+		endif(NOT SDL2_LIBRARY)
+	else(UseInternalSDL)
+		find_package(SDL2 REQUIRED)
+		set(SDLLibrary ${WindowLibLibraries} ${SDL2_LIBRARY})
+	endif(UseInternalSDL)
+endif(BuildWindowLib)
+
 # Add projects
 add_subdirectory(${SPDir})
 if(BuildJK2SPGame)

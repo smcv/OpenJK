@@ -11,18 +11,10 @@ set(WindowLibIncludeDirectories ${SharedDir})
 # Add SDL
 
 if(UseInternalSDL)
-	set(WindowLibIncludeDirectories ${WindowLibIncludeDirectories} "${MPDir}/client/OpenAL")
-	# There's a libs/OpenAL32.lib
-	# (mrw) TODO Is this actually required on windows? It is loaded at runtime, should not be linked?
-	find_library(SDLLibrary NAMES SDL2 PATHS ${OpenJKLibDir})
-	if(NOT SDLLibrary)
-		message(FATAL_ERROR "UseInternalSDL enabled, but lib/SDL2.lib not found!")
-	endif(NOT SDLLibrary)
-	set(WindowLibLibraries ${WindowLibLibraries} ${SDLLibrary})
+	set(WindowLibIncludeDirectories ${WindowLibIncludeDirectories} "${OpenJKLibDir}/sdl2")
 else(UseInternalSDL)
 	find_package(SDL2 REQUIRED)
 	set(WindowLibIncludeDirectories ${WindowLibIncludeDirectories} ${SDL2_INCLUDE_DIR})
-	set(WindowLibLibraries ${WindowLibLibraries} ${SDL2_LIBRARY})
 endif(UseInternalSDL)
 
 # set(SPEngineSysFiles
@@ -62,4 +54,3 @@ set_target_properties(${WindowLib} PROPERTIES COMPILE_DEFINITIONS_RELEASE "${Win
 set_target_properties(${WindowLib} PROPERTIES COMPILE_DEFINITIONS_DEBUG "${WindowLibDefines};${DebugDefines}")
 set_target_properties(${WindowLib} PROPERTIES INCLUDE_DIRECTORIES "${WindowLibIncludeDirectories}")
 set_target_properties(${WindowLib} PROPERTIES PROJECT_LABEL "Window Code Library")
-target_link_libraries(${WindowLib} ${WindowLibLibraries})

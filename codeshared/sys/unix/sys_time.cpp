@@ -1,5 +1,7 @@
 #include "sys/sys_public.h"
 
+#include <sys/time.h>
+
 static int Sys_Milliseconds2()
 {
 	struct timeval tp;

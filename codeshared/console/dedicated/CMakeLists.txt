@@ -50,6 +50,5 @@ if(BuildDedicatedConsoleLib)
 	set_target_properties(${DedicatedConsoleLib} PROPERTIES COMPILE_DEFINITIONS_DEBUG "${DedicatedConsoleLibDefines};${DebugDefines}")
 	set_target_properties(${DedicatedConsoleLib} PROPERTIES INCLUDE_DIRECTORIES "${DedicatedConsoleLibIncludeDirectories}")
 	set_target_properties(${DedicatedConsoleLib} PROPERTIES PROJECT_LABEL "Dedicated Server Console Library")
-	target_link_libraries(${DedicatedConsoleLib} ${DedicatedConsoleLibLibraries})
 
 endif(BuildDedicatedConsoleLib)

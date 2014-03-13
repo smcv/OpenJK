@@ -121,7 +121,7 @@ if(BuildMPEngine OR BuildMPDed)
 	#    Common files/libraries/defines of both Engine and Dedicated Server
 
 	# libraries: Botlib, CommonLib
-	set(MPEngineAndDedLibraries ${MPBotLib} ${CommonLib})
+	set(MPEngineAndDedLibraries ${MPBotLib} ${ExecutableSharedLibraries})
 	
 	# Platform-specific libraries
 	if(WIN32)
@@ -132,7 +132,7 @@ if(BuildMPEngine OR BuildMPDed)
 	set(MPEngineAndDedIncludeDirectories ${MPDir} ${OpenJKLibDir} ${SharedDir}) # MPDir = codemp folder: since includes are not always relative in the files
 
 	if(UseInternalZlib)
-		# OpenAL32.lib is included for windows
+		# Zlib is included for windows
 		find_library(ZlibLibrary NAMES zlib PATHS ${OpenJKLibDir})
 		if(NOT ZlibLibrary)
 			message(FATAL_ERROR "UseInternalZlib enabled, but lib/zlib.lib not found!")
@@ -344,7 +344,7 @@ if(BuildMPEngine)
 	#    Dependencies
 	
 	# WindowLib, ClientConsoleLib
-	set(MPEngineLibraries ${MPEngineLibraries} ${WindowLib} ${ClientConsoleLib})
+	set(MPEngineLibraries ${MPEngineLibraries} ${WindowLib} ${SDL2_LIBRARY} ${ClientConsoleLib})
 
 	# OpenAL (is optionally included for Windows)
 	if(UseInternalOpenAL)
