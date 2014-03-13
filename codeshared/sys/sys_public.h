@@ -182,23 +182,23 @@ qboolean Sys_CopyFile(const char *lpExistingFileName, const char *lpNewFileName,
 //    Shared Library handling
 
 /**
-	\brief General development dll loading for virtual machine testing
+	\brief General development dll loading for virtual machine testing.
+
+	Used mainly for loading the renderer.
 **/
 void* QDECL Sys_LoadDll( const char *name, qboolean useSystemLib );
 
 /**
-	\brief Loads a dll/so with the new OpenJK API
+Searches for a DLL at the various places it could be.
+
+\return Opened handle if found, NULL otherwise.
 **/
+void *Sys_FindDLL( const char *game, const char *name );
 
 /**
 	\brief Closes a loaded dll/so.
 **/
 void Sys_UnloadDll( void *dllHandle );
-
-/**
-	\brief Loading a library
-**/
-void* Sys_LoadLibrary( const char *name );
 
 /**
 	\brief Unloading a library
@@ -214,6 +214,11 @@ void* Sys_LoadFunction( void *handle, const char *name );
 	\brief Retrieves the reason for the last dll/so-related failure.
 **/
 const char* Sys_LibraryError();
+
+/**
+	\brief Main function.
+**/
+int ojk_main( int argc, char **argv );
 
 // end of Doxygen Group
 /// \}

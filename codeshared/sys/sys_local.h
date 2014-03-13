@@ -33,5 +33,10 @@ void OS_Init( void );
 **/
 void OS_Shutdown( void );
 
+/**
+\brief Loading a library
+**/
+void* Sys_LoadLibrary( const char *name );
+
 // end of Doxygen Group
 /// \}

@@ -9,7 +9,7 @@
 
 #include <cstring>
 
-int main( int argc, char **argv )
+int ojk_main( int argc, char **argv )
 {
 	char	commandLine[ MAX_STRING_CHARS ] = { 0 };
 

@@ -37,6 +37,7 @@ void Q_strcat( char *dest, int size, const char *src );
 void Q_strncpyz( char *dest, const char *src, int destsize );
 
 qboolean FS_FilenameCompare( const char *s1, const char *s2 );
+char *FS_BuildOSPath( const char *base, const char *game, const char *qpath );
 
 void Com_Init( char *commandLine );
 void Com_Frame( void );

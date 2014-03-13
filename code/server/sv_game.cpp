@@ -43,8 +43,6 @@ Ghoul2 Insert End
 */
 
 //prototypes
-extern void	Sys_UnloadGame( void );
-extern void	*Sys_GetGameAPI( void *parms);
 extern void Com_WriteCam ( const char *text );
 extern void Com_FlushCamFile();
 
@@ -402,6 +400,7 @@ Called when either the entire server is being killed, or
 it is changing to a different game directory.
 ===============
 */
+static void *gameLibHandle;
 void SV_ShutdownGameProgs (qboolean shutdownCin) {
 	if (!ge) {
 		return;
@@ -410,11 +409,16 @@ void SV_ShutdownGameProgs (qboolean shutdownCin) {
 	
 	SCR_StopCinematic();
 	CL_ShutdownCGame();	//we have cgame burried in here.
-	
-	Sys_UnloadGame ();	//this kills cgame as well.
+
+	Com_Printf( "------ Unloading Game ------\n" );
+	if( gameLibHandle )
+	{
+		Sys_UnloadDll( gameLibHandle );
+		gameLibHandle = NULL;
+	}
 
 	ge = NULL;
-	cgvm.entryPoint = 0;
+	cgvm.entryPoint = NULL;
 }
 
 // this is a compile-helper function since Z_Malloc can now become a macro with __LINE__ etc
@@ -650,22 +654,49 @@ Ghoul2 Insert Start
 	import.WE_SetTempGlobalFogColor = re.SetTempGlobalFogColor;
 
 
-/*
-Ghoul2 Insert End
-*/
+	/*
+		Ghoul2 Insert End
+	*/
+	{
+		if( gameLibHandle )
+		{
+			Com_Error( ERR_FATAL, "SV_InitGameProgs() called a second time without calling SV_ShutdownGameProgs() first!" );
+		}
+		const char *gamedir = Cvar_VariableString( "fs_game" );
+		gameLibHandle = Sys_FindDLL( gamedir, LIBRARY_NAME ARCH_STRING DLL_EXT );
+		if( !gameLibHandle )
+		{
+			gameLibHandle = Sys_FindDLL( BASEGAME, LIBRARY_NAME ARCH_STRING DLL_EXT );
+		}
+		if( !gameLibHandle )
+		{
+			Com_Error( ERR_FATAL, "Couldn't load game" );
+		}
 
-	ge = (game_export_t *)Sys_GetGameAPI (&import);
+		typedef game_export_t *( *GetGameAPI_t ) ( game_import_t* );
+		typedef void( *dllEntry_t )( intptr_t( *syscallptr )( intptr_t, ... ) );
+		typedef intptr_t( *vmMain_t )( int, ... );
 
-	if (!ge)
-		Com_Error (ERR_DROP, "failed to load game DLL");
+		GetGameAPI_t GetGameAPI = GetGameAPI_t( Sys_LoadFunction( gameLibHandle, "GetGameAPI" ) );
+		dllEntry_t dllEntry = dllEntry_t( Sys_LoadFunction( gameLibHandle, "dllEntry" ) );
+		cgvm.entryPoint = vmMain_t( Sys_LoadFunction( gameLibHandle, "vmMain" ) );
+		if( !GetGameAPI || !dllEntry || !cgvm.entryPoint )
+		{
+			Sys_UnloadDll( gameLibHandle );
+			gameLibHandle = NULL;
+			cgvm.entryPoint = NULL;
+			Com_Error( ERR_FATAL, "Could not find GetGameAPI(), dllEntry() or vmMain() in " LIBRARY_NAME ARCH_STRING DLL_EXT "!" );
+		}
+		dllEntry( VM_DllSyscall );
+		ge = GetGameAPI( &import );
 
-	//hook up the client while we're here
-	if (!VM_Create("cl"))
-		Com_Error (ERR_DROP, "failed to attach to the client DLL");
+		if( !ge )
+			Com_Error( ERR_DROP, "GetGameAPI() returned NULL!" );
 
-	if (ge->apiversion != GAME_API_VERSION)
-		Com_Error (ERR_DROP, "game is version %i, not %i", ge->apiversion,
-		GAME_API_VERSION);
+		if( ge->apiversion != GAME_API_VERSION )
+			Com_Error( ERR_DROP, LIBRARY_NAME ARCH_STRING DLL_EXT " has version %i, must be version %i", ge->apiversion,
+			GAME_API_VERSION );
+	}
 
 	sv.entityParsePoint = CM_EntityString();
 

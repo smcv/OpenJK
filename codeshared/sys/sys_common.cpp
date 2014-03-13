@@ -76,3 +76,36 @@ void Sys_UnloadDll( void *dllHandle )
 {
 	Sys_UnloadLibrary( dllHandle );
 }
+
+void *Sys_FindDLL( const char *game, const char *name )
+{
+	static const char end = '\0';
+	const char* paths[ ] =
+	{
+		Cvar_VariableString( "fs_basepath" ),
+		Cvar_VariableString( "fs_homepath" ),
+#ifdef MACOS_X
+		Cvar_VariableString( "fs_apppath" ),
+#endif
+		Cvar_VariableString( "fs_cdpath" ),
+		&end
+	};
+	for( const char** pathIt = paths; *pathIt != &end; ++pathIt )
+	{
+		const char *path = *pathIt;
+		if( path && path[ 0 ] )
+		{
+			const char *filename = FS_BuildOSPath( *pathIt, game, name );
+			void *libHandle = Sys_LoadLibrary( filename );
+			if( libHandle )
+			{
+				return libHandle;
+			}
+			else
+			{
+				Com_Printf( "Com_LoadDLL(%s) failed: \"%s\"\n", filename, Sys_LibraryError( ) );
+			}
+		}
+	}
+	return NULL;
+}

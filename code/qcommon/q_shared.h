@@ -60,6 +60,8 @@ This file is part of Jedi Academy.
 #	define HOMEPATH_NAME_UNIX "openjo"
 #	define HOMEPATH_NAME_WIN "OpenJO"
 #	define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
+#	define LIBRARY_NAME "jk2game"
+
 #else
 #	define PRODUCT_NAME			"openjk_sp"
 
@@ -68,6 +70,7 @@ This file is part of Jedi Academy.
 #	define HOMEPATH_NAME_UNIX "openjk"
 #	define HOMEPATH_NAME_WIN "OpenJK"
 #	define HOMEPATH_NAME_MACOSX HOMEPATH_NAME_WIN
+#	define LIBRARY_NAME "jagame"
 #endif
 
 #ifdef _WIN32

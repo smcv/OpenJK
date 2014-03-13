@@ -2145,44 +2145,6 @@ static void *Com_LoadMachOBundle( const char *name )
 #endif
 
 /**
-	Searches for a DLL at the various places it could be.
-	
-	\return Opened handle if found, NULL otherwise.
-**/
-static void *Com_FindDLL( const char *game, const char *name )
-{
-	static const char end = '\0';
-	const char* paths[] =
-	{
-		Cvar_VariableString( "fs_basepath" ),
-		Cvar_VariableString( "fs_homepath" ),
-#ifdef MACOS_X
-		Cvar_VariableString( "fs_apppath" ),
-#endif
-		Cvar_VariableString( "fs_cdpath" ),
-		&end
-	};
-	for( const char** pathIt = paths; *pathIt != &end; ++pathIt )
-	{
-		const char *path = *pathIt;
-		if( path && path[ 0 ] )
-		{
-			const char *filename = FS_BuildOSPath( *pathIt, game, name );
-			void *libHandle = Sys_LoadLibrary( filename );
-			if( libHandle )
-			{
-				return libHandle;
-			}
-			else
-			{
-				Com_Printf( "Com_LoadDLL(%s) failed: \"%s\"\n", filename, Sys_LibraryError() );
-			}
-		}
-	}
-	return NULL;
-}
-
-/**
 	Unpacks and Loads a DLL.
 **/
 static void* Com_LoadDLL( const char *name )
@@ -2212,13 +2174,13 @@ static void* Com_LoadDLL( const char *name )
 
 	if( !dllHandle )
 	{
-		dllHandle = Com_FindDLL( name, gamedir );
+		dllHandle = Sys_FindDLL( name, gamedir );
 	}
 	// Windows does not need to look at base - if it was there, it was unpacked to fs_game by Com_UnpackDLL().
 #	ifndef _WIN32
 		if( !dllHandle )
 		{
-			dllHandle = Com_FindDLL( name, BASEGAME );
+			dllHandle = Sys_FindDLL( name, BASEGAME );
 		}
 #	endif
 	return dllHandle;
