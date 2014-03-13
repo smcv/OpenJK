@@ -20,12 +20,17 @@ void Con_Print( const char *message )
 	// TODO
 }
 
+void Con_ShowError( const char *message )
+{
+	// TODO
+}
+
 void Con_Frame( void )
 {
 	// TODO
 }
 
-void Con_ShutdownConsole( void )
+void Con_Shutdown( void )
 {
 	// TODO
 }

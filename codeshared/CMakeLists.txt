@@ -13,7 +13,7 @@ if(BuildCommonLib)
 	
 	# Platform-specific libraries
 	if(WIN32)
-		set(CommonLibLibraries ${CommonLibLibraries} "winmm" "wsock32")
+		set(CommonLibLibraries ${CommonLibLibraries} "winmm")
 	endif(WIN32)
 	
 	# Files
@@ -37,9 +37,13 @@ if(BuildCommonLib)
 		"${SharedDir}/sys/sys_main.cpp"
 		"${SharedDir}/sys/sys_paths.cpp"
 		"${SharedDir}/sys/sys_events.cpp"
+		"${SharedDir}/sys/sys_snapvector.cpp"
+		"${SharedDir}/sys/sys_common.cpp"
 		"${SharedDir}/sys/${Platform}/${Platform}_local.h"
 		"${SharedDir}/sys/${Platform}/sys_dynlib.cpp"
 		"${SharedDir}/sys/${Platform}/sys_filesystem.cpp"
+		"${SharedDir}/sys/${Platform}/sys_time.cpp"
+		"${SharedDir}/sys/${Platform}/sys_os.cpp"
 		)
 	source_group("System" FILES ${CommonLibSysFiles})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibSysFiles})

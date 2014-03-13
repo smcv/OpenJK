@@ -622,7 +622,7 @@ Initializes a window structure ( windowDef_t ) with defaults
 
 ==================
 */
-void Window_Init(windowDef_t *w) {
+static void Window_Init(windowDef_t *w) {
 	memset(w, 0, sizeof(windowDef_t));
 	w->borderSize = 1;
 	w->foreColor[0] = w->foreColor[1] = w->foreColor[2] = w->foreColor[3] = 1.0;

@@ -306,17 +306,21 @@ do the apropriate things.
 =============
 */
 void Com_Quit_f( void ) {
+	Sys_Quit ( 0 );
+}
+
+void Com_Shutdown( void ) {
 	// don't try to shutdown if we are in a recursive error
-	if ( !com_errorEntered ) {
-		SV_Shutdown ("Server quit\n");
-		CL_Shutdown ();
-		Com_Shutdown ();
+	if( !com_errorEntered ) {
+		SV_Shutdown( "Server quit\n" );
+		CL_Shutdown();
+		Com_Shutdown();
 		FS_Shutdown();
 #ifndef _DEDICATED
 		Window_Shutdown();
 #endif
+		Con_Shutdown();
 	}
-	Sys_Quit ();
 }
 
 
@@ -1156,9 +1160,7 @@ void Com_Init( char *commandLine ) {
 	
 		Sys_Init();	// this also detects CPU type, so I can now do this CPU check below...
 
-#ifndef _DEDICATED
-		Window_Init();
-#endif
+		Window_Create( );
 
 		Netchan_Init( Com_Milliseconds() & 0xffff );	// pick a port value that should be nice and random
 //	VM_Init();
@@ -1199,12 +1201,6 @@ void Com_Init( char *commandLine ) {
 	{
 		Com_CatchError (code);
 		Sys_Error ("Error during initialization %s", Com_ErrorString (code));
-	}
-
-	// hide the early console since we've reached the point where we
-	// have a working graphics subsystems
-	if( !com_viewlog->integer ) {
-		Con_ShowConsole( 0, qfalse );
 	}
 }
 

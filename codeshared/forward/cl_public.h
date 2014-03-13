@@ -20,29 +20,34 @@ typedef enum
 	TAG_CLIPBOARD
 } memtag_t;
 
+// dito for Error Codes
+typedef enum {
+	ERR_FATAL,					// exit the entire game with a popup window
+	ERR_DROP,					// print to console and disconnect from game
+} errorParm_shared_t;
+
 /**
 	\brief Print a formatted string to the console. Format like printf.
 **/
-void	QDECL Com_Printf( const char *format, ... );
-
+void QDECL Com_Printf( const char *format, ... );
+void QDECL Com_Error( int level, const char *error, ... );
 int	QDECL Com_sprintf( char *dest, int size, const char *fmt, ... );
 
 void Q_strcat( char *dest, int size, const char *src );
-
 #ifdef __cplusplus
 void	Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong = qfalse );
 #else
 void	Q_strncpyz( char *dest, const char *src, int destsize, qboolean bBarfIfTooLong );
 #endif
 
+qboolean FS_FilenameCompare( const char *s1, const char *s2 );
+
 void Com_Init( char *commandLine );
-
 void Com_Frame( void );
-
 void Com_GenerateEvent( void );
+void Com_Shutdown( void );
 
 int Z_Free( void *pvAddress );
-
 void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );
 
 //void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit, int unusedAlign );
@@ -51,18 +56,14 @@ void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit = qfalse, int iUnused
 //    Console Commands
 
 typedef void( *xcommand_t ) ( void );
-
 void	Cmd_AddCommand( const char *cmd_name, xcommand_t function );
-
 void	Cmd_RemoveCommand( const char *cmd_name );
-
 int		Cmd_Argc( void );
-
 char	*Cmd_Argv( int arg );
 
 
 //    CVar
 
 cvar_t *Cvar_Get( const char *var_name, const char *value, int flags );
-
 void 	Cvar_Set( const char *var_name, const char *value );
+char	*Cvar_VariableString( const char *var_name );

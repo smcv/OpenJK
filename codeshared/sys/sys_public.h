@@ -17,22 +17,57 @@
 
 //    General System functionality
 
+
+/**
+	\brief System initialization to be done once vvars are available
+
+	Unlike OS_Init(), which is done before any game code is called, this is called after the common systems (cvars, files, etc) are initialized
+**/
 void Sys_Init( void );
 
-void Sys_Quit( void );
+/**
+	\brief Exits the programs.
+	
+	This is the sole exit point, don't call exit() anywhere else!
 
-char *Sys_GetCurrentUser( void );
+	Calls Com_Shutdown() for clean shutdown.
+**/
+void Sys_Quit( int returnCode ) __attribute__( ( noreturn ) );
 
-void QDECL Sys_Error( const char *error, ...) __attribute__((noreturn));
+/**
+	\brief Displays a formatted error and quits.
 
+	Format as in printf.
+
+	May display an error window and wait for the user to accept depending on the implementation. Should thus not be called before Con_CreateConsole().
+**/
+void QDECL Sys_Error( const char *error, ... ) __attribute__( ( noreturn ) );
+
+/**
+\brief Returns the current user's name.
+**/
+const char *Sys_GetCurrentUser( void );
+
+/**
+	\brief Snaps the components of a vector to the nearest whole number.
+**/
 #ifdef __cplusplus
 extern "C"
 #endif
 void Sys_SnapVector( float *v );
 
+/**
+	\brief Generates random bytes
+	\return Success
+**/
 qboolean Sys_RandomBytes( byte *string, int len );
 
-qboolean Sys_LowPhysicalMemory( );
+/**
+	\brief Whether the system has little memory.
+
+	On Windows, low is 128MB and below. On Unix, there is no such thing as little memory as far as we're concerned.
+**/
+qboolean Sys_LowPhysicalMemory();
 
 /**
 	\param baseTime When qtrue, returns milliseconds since some system-specific point in time.
@@ -41,6 +76,8 @@ qboolean Sys_LowPhysicalMemory( );
 	      any game related timing information should come from event timestamps
 **/
 int		Sys_Milliseconds( qboolean baseTime );
+
+
 
 //    Events
 
@@ -144,15 +181,38 @@ qboolean Sys_CopyFile(const char *lpExistingFileName, const char *lpNewFileName,
 
 //    Shared Library handling
 
-// general development dll loading for virtual machine testing
-void* QDECL Sys_LoadDll(const char *name, qboolean useSystemLib);
-void* QDECL Sys_LoadLegacyGameDll( const char *name, intptr_t (QDECL **vmMain)(int, ...), intptr_t (QDECL *systemcalls)(intptr_t, ...) );
-void* QDECL Sys_LoadGameDll( const char *name, void *(QDECL **moduleAPI)(int, ...) );
+/**
+	\brief General development dll loading for virtual machine testing
+**/
+void* QDECL Sys_LoadDll( const char *name, qboolean useSystemLib );
+
+/**
+	\brief Loads a dll/so with the new OpenJK API
+**/
+
+/**
+	\brief Closes a loaded dll/so.
+**/
 void Sys_UnloadDll( void *dllHandle );
 
+/**
+	\brief Loading a library
+**/
 void* Sys_LoadLibrary( const char *name );
+
+/**
+	\brief Unloading a library
+**/
 void Sys_UnloadLibrary( void *handle );
+
+/**
+	\brief Retrieves a function from a loaded dll/so.
+**/
 void* Sys_LoadFunction( void *handle, const char *name );
+
+/**
+	\brief Retrieves the reason for the last dll/so-related failure.
+**/
 const char* Sys_LibraryError();
 
 // end of Doxygen Group

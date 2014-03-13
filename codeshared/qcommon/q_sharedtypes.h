@@ -6,6 +6,10 @@
 
 #	include <stdint.h>
 
+	// vsnprintf is ISO/IEC 9899:1999
+	// abstracting this to make it portable
+	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
+
 #elif defined (_MSC_VER)
 
 #	include <io.h>
@@ -18,9 +22,17 @@
 	typedef unsigned __int32 uint32_t;
 	typedef unsigned __int16 uint16_t;
 	typedef unsigned __int8  uint8_t;
+
+	// vsnprintf is ISO/IEC 9899:1999
+	// abstracting this to make it portable
+	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
+	
 #else // not using MSVC
 
 #	include <stdint.h>
+
+#	include <stdio.h>
+#	define Q_vsnprintf vsnprintf
 
 #endif
 
@@ -28,6 +40,8 @@
 typedef unsigned char byte;
 typedef unsigned short word;
 typedef unsigned long ulong;
+
+typedef int32_t fileHandle_t;
 
 
 typedef enum { qfalse=0, qtrue } qboolean;

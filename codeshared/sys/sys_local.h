@@ -28,6 +28,10 @@ const char *Sys_Dirname( const char *path );
 **/
 void OS_Init( void );
 
+/**
+\brief Cleanly shut down on Sys_Quit()
+**/
+void OS_Shutdown( void );
 
 // end of Doxygen Group
 /// \}

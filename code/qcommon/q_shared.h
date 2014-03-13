@@ -121,23 +121,6 @@ float FloatSwap( const float *f );
 // ================================================================
 
 
-#if defined (_MSC_VER) && (_MSC_VER >= 1600)
-
-	// vsnprintf is ISO/IEC 9899:1999
-	// abstracting this to make it portable
-	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
-
-#elif defined (_MSC_VER)
-
-	// vsnprintf is ISO/IEC 9899:1999
-	// abstracting this to make it portable
-	int Q_vsnprintf( char *str, size_t size, const char *format, va_list args );
-#else // not using MSVC
-
-	#define Q_vsnprintf vsnprintf
-
-#endif
-
 // 32 bit field aliasing
 typedef union byteAlias_u {
 	float f;
@@ -148,7 +131,7 @@ typedef union byteAlias_u {
 	char c[4];
 } byteAlias_t;
 
-typedef int32_t qhandle_t, thandle_t, fxHandle_t, sfxHandle_t, fileHandle_t, clipHandle_t;
+typedef int32_t qhandle_t, thandle_t, fxHandle_t, sfxHandle_t, clipHandle_t;
 
 #define NULL_HANDLE ((qhandle_t)0)
 #define NULL_SOUND ((sfxHandle_t)0)

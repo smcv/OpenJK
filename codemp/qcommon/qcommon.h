@@ -732,6 +732,12 @@ int			Com_FilterPath(char *filter, char *name, int casesensitive);
 int			Com_RealTime(qtime_t *qtime);
 qboolean	Com_SafeMode( void );
 
+typedef void *( QDECL *gameAPI_t )( int, ... );
+typedef intptr_t( QDECL *vmMain_t )( int, ... );
+typedef intptr_t( QDECL *systemcalls_t )( intptr_t, ... );
+void* QDECL Com_LoadLegacyGameDll( const char *name, vmMain_t *vmMain, systemcalls_t systemcalls );
+void* QDECL Com_LoadGameDll( const char *name, gameAPI_t *moduleAPI );
+
 void		Com_StartupVariable( const char *match );
 // checks for and removes command line "+set var arg" constructs
 // if match is NULL, all set commands will be executed, otherwise

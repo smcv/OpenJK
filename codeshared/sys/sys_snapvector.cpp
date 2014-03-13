@@ -1,3 +1,5 @@
+#include "sys/sys_public.h"
+
 #include <math.h>
 #if _MSC_VER
 # include <float.h>

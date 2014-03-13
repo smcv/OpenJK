@@ -27,7 +27,7 @@ char *Window_GetClipboardData( void );
 **/
 void Window_Shutdown( void );
 
-void Window_Init( void );
+void Window_Create( void );
 
 void Window_Frame( void );
 

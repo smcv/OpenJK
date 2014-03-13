@@ -27,6 +27,11 @@ void Con_Print( const char *message )
 	fputs( message, stdout );
 }
 
+void Con_ShowError( const char *message )
+{
+	fputs( message, stderr );
+}
+
 void Con_Frame( void )
 {
 	static char str[ MAX_STRING_CHARS ];
@@ -63,6 +68,7 @@ void Con_Frame( void )
 		}
 		else if( isprint( ch ) && len < MAX_STRING_CHARS - 1 )
 		{
+			// FIXME: Linewrap will break deletion and thus display
 			_putch( ch );
 			str[ len ] = ch;
 			++len;
@@ -70,7 +76,7 @@ void Con_Frame( void )
 	}
 }
 
-void Con_ShutdownConsole( void )
+void Con_Shutdown( void )
 {
 	// Nothing to do here
 }

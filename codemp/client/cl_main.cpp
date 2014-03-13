@@ -2442,14 +2442,6 @@ void CL_InitRef( void ) {
 	ri.CGVM_RagCallback = CGVM_RagCallback;
 
 	// ugly win32 backend
-#ifdef _WIN32
-	ri.GetWinVars = GetWinVars;
-#endif
-#ifndef _WIN32
-    ri.IN_Init = IN_Init;
-    ri.IN_Shutdown = IN_Shutdown;
-    ri.IN_Restart = IN_Restart;
-#endif
 	ri.CM_GetCachedMapDiskImage = CM_GetCachedMapDiskImage;
 	ri.CM_SetCachedMapDiskImage = CM_SetCachedMapDiskImage;
 	ri.CM_SetUsingCache = CM_SetUsingCache;

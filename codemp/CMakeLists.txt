@@ -123,6 +123,11 @@ if(BuildMPEngine OR BuildMPDed)
 	# libraries: Botlib, CommonLib
 	set(MPEngineAndDedLibraries ${MPBotLib} ${CommonLib})
 	
+	# Platform-specific libraries
+	if(WIN32)
+		set(MPEngineAndDedLibraries ${MPEngineAndDedLibraries} "wsock32")
+	endif(WIN32)
+	
 	# Include directories
 	set(MPEngineAndDedIncludeDirectories ${MPDir} ${OpenJKLibDir} ${SharedDir}) # MPDir = codemp folder: since includes are not always relative in the files
 

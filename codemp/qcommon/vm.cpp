@@ -155,7 +155,7 @@ vm_t *VM_CreateLegacy( vmSlots_t vmSlot, intptr_t (*systemCalls)(intptr_t *) ) {
 	// find the legacy syscall api
 	FS_FindPureDLL( vm->name );
 	Com_Printf( "VM_CreateLegacy: %s"ARCH_STRING DLL_EXT, vm->name );
-	vm->dllHandle = Sys_LoadLegacyGameDll( vm->name, &vm->legacy.main, VM_DllSyscall );
+	vm->dllHandle = Com_LoadLegacyGameDll( vm->name, &vm->legacy.main, VM_DllSyscall );
 
 	if ( vm->dllHandle ) {
 		if ( com_developer->integer )	Com_Printf( " succeeded [0x%X]\n", vm->dllHandle );
@@ -191,7 +191,7 @@ vm_t *VM_Create( vmSlots_t vmSlot ) {
 
 	// find the module api
 	FS_FindPureDLL( vm->name );
-	vm->dllHandle = Sys_LoadGameDll( vm->name, &vm->GetModuleAPI );
+	vm->dllHandle = Com_LoadGameDll( vm->name, &vm->GetModuleAPI );
 
 	Com_Printf( "VM_Create: %s"ARCH_STRING DLL_EXT, vm->name );
 	if ( vm->dllHandle ) {

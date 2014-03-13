@@ -271,8 +271,6 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 		SV_Shutdown (va("Server fatal crashed: %s\n", com_errorMessage));
 	}
 
-	Com_Shutdown ();
-
 	Sys_Error ("%s", com_errorMessage);
 }
 
@@ -286,17 +284,45 @@ do the appropriate things.
 =============
 */
 void Com_Quit_f( void ) {
+	Sys_Quit( 0 );
+}
+
+/*
+=============
+Com_Shutdown
+
+Called on Sys_Quit() to clean up.
+=============
+*/
+void MSG_shutdownHuffman();
+void Com_Shutdown( void ) {
 	// don't try to shutdown if we are in a recursive error
 	if ( !com_errorEntered ) {
 		SV_Shutdown ("Server quit\n");
-		CL_Shutdown ();
-		Com_Shutdown ();
+		CL_Shutdown( );
+
+		CM_ClearMap();
+
+		if( logfile ) {
+			FS_FCloseFile( logfile );
+			logfile = 0;
+			com_logfile->integer = 0;//don't open up the log file again!!
+		}
+
+		if( com_journalFile ) {
+			FS_FCloseFile( com_journalFile );
+			com_journalFile = 0;
+		}
+
+		MSG_shutdownHuffman();
+
 		FS_Shutdown(qtrue);
-#ifndef _DEDICATED
+		NET_Shutdown ();
+#ifndef DEDICATED
 		Window_Shutdown();
 #endif
+		Con_Shutdown();
 	}
-	Sys_Quit ();
 }
 
 
@@ -1300,7 +1326,7 @@ void Com_Init( char *commandLine ) {
 		Sys_Init();
 
 #ifndef DEDICATED
-		Con_Init();
+		Window_Create( );
 #endif
 
 		// Pick a random port value
@@ -1357,12 +1383,6 @@ void Com_Init( char *commandLine ) {
 	}
 
 	NET_Init();
-
-	// hide the early console since we've reached the point where we
-	// have a working graphics subsystems
-	if( !com_dedicated->integer && !com_viewlog->integer ) {
-		Con_ShowConsole( 0, qfalse );
-	}
 }
 
 //==================================================================
@@ -1681,39 +1701,6 @@ void Com_Frame( void ) {
 
 	G2Time_ResetTimers();
 #endif
-}
-
-/*
-=================
-Com_Shutdown
-=================
-*/
-void MSG_shutdownHuffman();
-void Com_Shutdown (void)
-{
-	CM_ClearMap();
-
-	if (logfile) {
-		FS_FCloseFile (logfile);
-		logfile = 0;
-		com_logfile->integer = 0;//don't open up the log file again!!
-	}
-
-	if ( com_journalFile ) {
-		FS_FCloseFile( com_journalFile );
-		com_journalFile = 0;
-	}
-
-	MSG_shutdownHuffman();
-/*
-	// Only used for testing changes to huffman frequency table when tuning.
-	{
-		extern float Huff_GetCR(void);
-		char mess[256];
-		sprintf(mess,"Eff. CR = %f\n",Huff_GetCR());
-		OutputDebugString(mess);
-	}
-*/
 }
 
 /*
@@ -2083,3 +2070,204 @@ void Com_RandomBytes( byte *string, int len )
 	for( i = 0; i < len; i++ )
 		string[i] = (unsigned char)( rand() % 255 );
 }
+
+
+
+
+/**
+	\brief Retrieves a DLL (or other given file) from a PK3
+**/
+static bool Com_UnpackDLL( const char *filename )
+{
+	void *data;
+	fileHandle_t f;
+	int len = FS_ReadFile( filename, &data );
+	int ck;
+
+	if( len < 1 )
+	{ //failed to read the file (out of the pk3 if pure)
+		return false;
+	}
+
+	if( FS_FileIsInPAK( filename, &ck ) == -1 )
+	{ //alright, it isn't in a pk3 anyway, so we don't need to write it.
+		//this is allowable when running non-pure.
+		FS_FreeFile( data );
+		return true;
+	}
+
+	f = FS_FOpenFileWrite( filename, qfalse );
+	if( !f )
+	{ //can't open for writing? Might be in use.
+		//This is possibly a malicious user attempt to circumvent dll
+		//replacement so we won't allow it.
+		FS_FreeFile( data );
+		return false;
+	}
+
+	if( FS_Write( data, len, f ) < len )
+	{ //Failed to write the full length. Full disk maybe?
+		FS_FreeFile( data );
+		return false;
+	}
+
+	FS_FCloseFile( f );
+	FS_FreeFile( data );
+
+	return true;
+}
+
+
+
+#ifdef MACOS_X
+static void *Com_LoadMachOBundle( const char *name )
+{
+	if ( !FS_LoadMachOBundle(name) )
+		return NULL;
+
+	char *homepath = Cvar_VariableString( "fs_homepath" );
+	char *gamedir = Cvar_VariableString( "fs_game" );
+	char dllName[MAX_QPATH];
+
+	Com_sprintf( dllName, sizeof(dllName), "%s_pk3" DLL_EXT, name );
+
+	//load the unzipped library
+	char *fn = FS_BuildOSPath( homepath, gamedir, dllName );
+
+	void    *libHandle = Sys_LoadLibrary( fn );
+
+	if ( libHandle ) {
+		Com_Printf( "Loaded pk3 bundle %s.\n", name );
+	}
+
+	return libHandle;
+}
+#endif
+
+/**
+	Searches for a DLL at the various places it could be.
+	
+	\return Opened handle if found, NULL otherwise.
+**/
+static void *Com_FindDLL( const char *game, const char *name )
+{
+	static const char end = '\0';
+	const char* paths[] =
+	{
+		Cvar_VariableString( "fs_basepath" ),
+		Cvar_VariableString( "fs_homepath" ),
+#ifdef MACOS_X
+		Cvar_VariableString( "fs_apppath" ),
+#endif
+		Cvar_VariableString( "fs_cdpath" ),
+		&end
+	};
+	for( const char** pathIt = paths; *pathIt != &end; ++pathIt )
+	{
+		const char *path = *pathIt;
+		if( path && path[ 0 ] )
+		{
+			const char *filename = FS_BuildOSPath( *pathIt, game, name );
+			void *libHandle = Sys_LoadLibrary( filename );
+			if( libHandle )
+			{
+				return libHandle;
+			}
+			else
+			{
+				Com_Printf( "Com_LoadDLL(%s) failed: \"%s\"\n", filename, Sys_LibraryError() );
+			}
+		}
+	}
+	return NULL;
+}
+
+/**
+	Unpacks and Loads a DLL.
+**/
+static void* Com_LoadDLL( const char *name )
+{
+	char	filename[ MAX_QPATH ];
+	Com_sprintf( filename, sizeof( filename ), "%s%s", name, ARCH_STRING DLL_EXT );
+
+	// FIXE: Enable Unpacking on non-Win32? Something about fs_pure though?
+#	ifdef _WIN32
+		if( !Com_UnpackDLL( filename ) )
+		{
+			if( com_developer->integer )
+				Com_Printf( "Sys_LoadLegacyGameDll: Failed to unpack %s" ARCH_STRING DLL_EXT " from PK3.\n", name );
+
+			return NULL;
+		}
+#	endif
+
+	const char *gamedir = Cvar_VariableString( "fs_game" );
+	void *dllHandle = NULL;
+	
+#	ifdef MACOS_X
+    //First, look for the old-style mac .bundle that's inside a pk3
+    //It's actually zipped, and the zipfile has the same name as 'name'
+    dllHandle = Com_LoadMachOBundle( name );
+#	endif
+
+	if( !dllHandle )
+	{
+		dllHandle = Com_FindDLL( name, gamedir );
+	}
+	// Windows does not need to look at base - if it was there, it was unpacked to fs_game by Com_UnpackDLL().
+#	ifndef _WIN32
+		if( !dllHandle )
+		{
+			dllHandle = Com_FindDLL( name, BASEGAME );
+		}
+#	endif
+	return dllHandle;
+}
+
+void* QDECL Com_LoadLegacyGameDll( const char *name, vmMain_t *vmMain, systemcalls_t systemcalls )
+{
+	void *libHandle = Com_LoadDLL( name );
+	if( !libHandle)
+	{
+		return NULL;
+	}
+	
+	typedef void ( QDECL *dllEntry_t )( systemcalls_t );
+	dllEntry_t dllEntry = dllEntry_t( Sys_LoadFunction( libHandle, "dllEntry" ) );
+	*vmMain = vmMain_t( Sys_LoadFunction( libHandle, "vmMain" ) );
+	if( !dllEntry || !vmMain )
+	{
+		Com_Printf ( "Com_LoadLegacyGameDll(%s) failed to find vmMain or dllEntry function:\n\"%s\" !\n", name, Sys_LibraryError() );
+		Sys_UnloadLibrary( libHandle );
+		return NULL;
+	}
+	
+	Com_Printf ( "Com_LoadLegacyGameDll(%s) found vmMain function at %p\n", name, *vmMain );
+	dllEntry( systemcalls );
+	
+	return libHandle;
+}
+
+void *Com_LoadGameDll( const char *name, gameAPI_t *moduleAPI )
+{
+	void *libHandle = Com_LoadDLL( name );
+	if( !libHandle)
+	{
+		return NULL;
+	}
+	
+	typedef void ( QDECL *dllEntry_t )( systemcalls_t );
+	dllEntry_t dllEntry = dllEntry_t( Sys_LoadFunction( libHandle, "dllEntry" ) );
+	*moduleAPI = gameAPI_t( Sys_LoadFunction( libHandle, "GetModuleAPI" ) );
+	if( !moduleAPI )
+	{
+		Com_Printf ( "Sys_LoadGameDll(%s) failed to find GetModuleAPI function:\n\"%s\" !\n", name, Sys_LibraryError() );
+		Sys_UnloadLibrary( libHandle );
+		return NULL;
+	}
+	
+	Com_Printf( "Sys_LoadGameDll(%s) found GetModuleAPI function at %p\n", name, *moduleAPI );
+	
+	return libHandle;
+}
+

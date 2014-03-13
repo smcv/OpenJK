@@ -37,6 +37,13 @@ void Con_ShowConsole( int level, qboolean quitOnClose );
 void Con_Print( const char *message );
 
 /**
+	\brief Displays an error message to the user inasmuch as this console supports that.
+	
+	Might not return until the user has dealt with the message.
+**/
+void Con_ShowError( const char *message );
+
+/**
 	\brief Polls the console for input.
 **/
 void Con_Frame( void );
@@ -44,7 +51,7 @@ void Con_Frame( void );
 /**
 	\brief Shuts the console down.
 **/
-void Con_ShutdownConsole( void );
+void Con_Shutdown( void );
 
 // end of Doxygen Group
 /// \}
