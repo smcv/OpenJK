@@ -436,20 +436,20 @@ void CG_NewClientinfo( int clientNum )
 	// legsModel
 	v = Info_ValueForKey( configstring, "legsModel" );
 	
-	Q_strncpyz(			g_entities[clientNum].client->renderInfo.legsModelName, v,
-				sizeof(	g_entities[clientNum].client->renderInfo.legsModelName), qtrue);
+	Q_strncpyzChecked( g_entities[ clientNum ].client->renderInfo.legsModelName, v,
+				sizeof(	g_entities[clientNum].client->renderInfo.legsModelName));
 
 	// torsoModel
 	v = Info_ValueForKey( configstring, "torsoModel" );
 	
-	Q_strncpyz(			g_entities[clientNum].client->renderInfo.torsoModelName, v,
-				sizeof(	g_entities[clientNum].client->renderInfo.torsoModelName), qtrue);	
+	Q_strncpyzChecked( g_entities[ clientNum ].client->renderInfo.torsoModelName, v,
+				sizeof(	g_entities[clientNum].client->renderInfo.torsoModelName));	
 	
 	// headModel
 	v = Info_ValueForKey( configstring, "headModel" );
 	
-	Q_strncpyz(			g_entities[clientNum].client->renderInfo.headModelName, v,
-				sizeof(	g_entities[clientNum].client->renderInfo.headModelName), qtrue);
+	Q_strncpyzChecked( g_entities[ clientNum ].client->renderInfo.headModelName, v,
+				sizeof(	g_entities[clientNum].client->renderInfo.headModelName));
 
 	// sounds
 	cvar_t	*sex = gi.cvar( "sex", "male", 0 );

@@ -1222,7 +1222,7 @@ void G_LoadAnimFileSet( gentity_t *ent, const char *pModelName )
 	}
 	else
 	{
-		Q_strncpyz( animName, GLAName, sizeof( animName ), qtrue );
+		Q_strncpyzChecked( animName, GLAName, sizeof( animName ) );
 		slash = strrchr( animName, '/' );
 		if ( slash )
 		{
@@ -1313,7 +1313,7 @@ void NPC_PrecacheAnimationCFG( const char *NPC_type )
 				continue;
 			}
 			//must copy data out of this pointer into a different part of memory because the funcs we're about to call will call COM_ParseExt
-			Q_strncpyz( filename, value, sizeof( filename ), qtrue );
+			Q_strncpyzChecked( filename, value, sizeof( filename ) );
 			G_ParseAnimFileSet( filename );
 			COM_EndParseSession(  );
 			return;
@@ -1337,7 +1337,7 @@ void NPC_PrecacheAnimationCFG( const char *NPC_type )
 				GLAName = gi.G2API_GetAnimFileNameIndex( handle );
 				if ( GLAName )
 				{
-					Q_strncpyz( animName, GLAName, sizeof( animName ), qtrue );
+					Q_strncpyzChecked( animName, GLAName, sizeof( animName ), );
 					slash = strrchr( animName, '/' );
 					if ( slash )
 					{
@@ -1346,7 +1346,7 @@ void NPC_PrecacheAnimationCFG( const char *NPC_type )
 					strippedName = COM_SkipPath( animName );
 
 					//must copy data out of this pointer into a different part of memory because the funcs we're about to call will call COM_ParseExt
-					Q_strncpyz( filename, value, sizeof( filename ), qtrue );
+					Q_strncpyzChecked( filename, value, sizeof( filename ) );
 
 					G_ParseAnimFileSet(strippedName, filename);
 					COM_EndParseSession(  );
@@ -1655,7 +1655,7 @@ void CG_NPC_Precache ( gentity_t *spawner )
 			}
 			else
 			{
-				Q_strncpyz( ri.headModelName, value, sizeof(ri.headModelName), qtrue);
+				Q_strncpyzChecked( ri.headModelName, value, sizeof( ri.headModelName ) );
 			}
 			md3Model = qtrue;
 			continue;
@@ -1674,7 +1674,7 @@ void CG_NPC_Precache ( gentity_t *spawner )
 			}
 			else
 			{
-				Q_strncpyz( ri.torsoModelName, value, sizeof(ri.torsoModelName), qtrue);
+				Q_strncpyzChecked( ri.torsoModelName, value, sizeof( ri.torsoModelName ) );
 			}
 			md3Model = qtrue;
 			continue;
@@ -1687,7 +1687,7 @@ void CG_NPC_Precache ( gentity_t *spawner )
 			{
 				continue;
 			}
-			Q_strncpyz( ri.legsModelName, value, sizeof(ri.legsModelName), qtrue);			
+			Q_strncpyzChecked( ri.legsModelName, value, sizeof( ri.legsModelName ) );
 			md3Model = qtrue;
 			continue;
 		}
@@ -1699,7 +1699,7 @@ void CG_NPC_Precache ( gentity_t *spawner )
 			{
 				continue;
 			}
-			Q_strncpyz( playerModel, value, sizeof(playerModel), qtrue);			
+			Q_strncpyzChecked( playerModel, value, sizeof( playerModel ) );
 			md3Model = qfalse;
 			continue;
 		}
@@ -1711,7 +1711,7 @@ void CG_NPC_Precache ( gentity_t *spawner )
 			{
 				continue;
 			}
-			Q_strncpyz( customSkin, value, sizeof(customSkin), qtrue);			
+			Q_strncpyzChecked( customSkin, value, sizeof( customSkin ) );
 			continue;
 		}
 
@@ -2481,7 +2481,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				}
 				else
 				{
-					Q_strncpyz( ri->headModelName, value, sizeof(ri->headModelName), qtrue);
+					Q_strncpyzChecked( ri->headModelName, value, sizeof( ri->headModelName ) );
 				}
 				continue;
 			}
@@ -2505,7 +2505,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				}
 				else
 				{
-					Q_strncpyz( ri->torsoModelName, value, sizeof(ri->torsoModelName), qtrue);
+					Q_strncpyzChecked( ri->torsoModelName, value, sizeof( ri->torsoModelName ) );
 				}
 				continue;
 			}
@@ -2517,7 +2517,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				{
 					continue;
 				}
-				Q_strncpyz( ri->legsModelName, value, sizeof(ri->legsModelName), qtrue);			
+				Q_strncpyzChecked( ri->legsModelName, value, sizeof( ri->legsModelName ) );
 				//Need to do this here to get the right index
 				ci->animFileIndex = G_ParseAnimFileSet(ri->legsModelName);
 				continue;
@@ -2530,7 +2530,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				{
 					continue;
 				}
-				Q_strncpyz( playerModel, value, sizeof(playerModel), qtrue);			
+				Q_strncpyzChecked( playerModel, value, sizeof( playerModel ) );
 				md3Model = qfalse;
 				continue;
 			}
@@ -2542,7 +2542,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				{
 					continue;
 				}
-				Q_strncpyz( customSkin, value, sizeof(customSkin), qtrue);			
+				Q_strncpyzChecked( customSkin, value, sizeof( customSkin ) );
 				continue;
 			}
 
@@ -2562,7 +2562,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				}
 				else
 				{
-					Q_strncpyz( surfOff, value, sizeof(surfOff), qtrue);
+					Q_strncpyzChecked( surfOff, value, sizeof( surfOff ) );
 				}
 				continue;
 			}
@@ -2583,7 +2583,7 @@ qboolean NPC_ParseParms( const char *NPCName, gentity_t *NPC )
 				}
 				else
 				{
-					Q_strncpyz( surfOn, value, sizeof(surfOn), qtrue);
+					Q_strncpyzChecked( surfOn, value, sizeof( surfOn ) );
 				}
 				continue;
 			}
@@ -4018,7 +4018,7 @@ Ghoul2 Insert Start
 			{
 				int iVehIndex = BG_VehicleGetIndex( NPC->NPC_type );
 				strcpy(customSkin, "default");	// Ignore any custom skin that may have come from the NPC File
-				Q_strncpyz( playerModel, g_vehicleInfo[iVehIndex].model, sizeof(playerModel), qtrue);
+				Q_strncpyzChecked( playerModel, g_vehicleInfo[ iVehIndex ].model, sizeof( playerModel ) );
 				if ( g_vehicleInfo[iVehIndex].skin && g_vehicleInfo[iVehIndex].skin[0] )
 				{
 					bool	forceSkin = false;
@@ -4040,7 +4040,7 @@ Ghoul2 Insert Start
 					//---------------------------------------------------
 					if (forceSkin)
 					{
-						Q_strncpyz( customSkin, NPC->soundSet, sizeof(customSkin), qtrue);
+						Q_strncpyzChecked( customSkin, NPC->soundSet, sizeof( customSkin ) );
 					}
 
 					// Otherwise Choose A Random Skin

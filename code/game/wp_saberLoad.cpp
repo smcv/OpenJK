@@ -1729,7 +1729,7 @@ qboolean WP_SaberParseParms( const char *SaberName, saberInfo_t *saber, qboolean
 				SkipRestOfLine( &p );
 				continue;
 			}
-			Q_strncpyz( saber->g2MarksShader, value, sizeof(saber->g2MarksShader), qtrue );
+			Q_strncpyzChecked( saber->g2MarksShader, value, sizeof( saber->g2MarksShader ) );
 			//NOTE: registers this on cgame side where it registers all client assets
 			continue;
 		}
@@ -1742,7 +1742,7 @@ qboolean WP_SaberParseParms( const char *SaberName, saberInfo_t *saber, qboolean
 				SkipRestOfLine( &p );
 				continue;
 			}
-			Q_strncpyz( saber->g2WeaponMarkShader, value, sizeof(saber->g2WeaponMarkShader), qtrue );
+			Q_strncpyzChecked( saber->g2WeaponMarkShader, value, sizeof( saber->g2WeaponMarkShader ) );
 			//NOTE: registers this on cgame side where it registers all client assets
 			continue;
 		}
@@ -2106,7 +2106,7 @@ qboolean WP_SaberParseParms( const char *SaberName, saberInfo_t *saber, qboolean
 				SkipRestOfLine( &p );
 				continue;
 			}
-			Q_strncpyz( saber->g2MarksShader2, value, sizeof(saber->g2MarksShader2), qtrue );
+			Q_strncpyzChecked( saber->g2MarksShader2, value, sizeof( saber->g2MarksShader2 ) );
 			//NOTE: registers this on cgame side where it registers all client assets
 			continue;
 		}
@@ -2119,7 +2119,7 @@ qboolean WP_SaberParseParms( const char *SaberName, saberInfo_t *saber, qboolean
 				SkipRestOfLine( &p );
 				continue;
 			}
-			Q_strncpyz( saber->g2WeaponMarkShader2, value, sizeof(saber->g2WeaponMarkShader2), qtrue );
+			Q_strncpyzChecked( saber->g2WeaponMarkShader2, value, sizeof( saber->g2WeaponMarkShader2 ) );
 			//NOTE: registers this on cgame side where it registers all client assets
 			continue;
 		}

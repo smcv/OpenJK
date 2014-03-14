@@ -2356,7 +2356,7 @@ qboolean G_GetRootSurfNameWithVariant( gentity_t *ent, const char *rootSurfName,
 {
 	if ( !gi.G2API_GetSurfaceRenderStatus( &ent->ghoul2[ent->playerModel], rootSurfName ) )
 	{//see if the basic name without variants is on
-		Q_strncpyz( returnSurfName, rootSurfName, returnSize, qtrue );
+		Q_strncpyzChecked( returnSurfName, rootSurfName, returnSize );
 		return qtrue;
 	}
 	else
@@ -2371,7 +2371,7 @@ qboolean G_GetRootSurfNameWithVariant( gentity_t *ent, const char *rootSurfName,
 			}
 		}
 	}
-	Q_strncpyz( returnSurfName, rootSurfName, returnSize, qtrue );
+	Q_strncpyzChecked( returnSurfName, rootSurfName, returnSize );
 	return qfalse;
 }
 

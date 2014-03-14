@@ -7841,7 +7841,7 @@ int 	CQuake3GameInterface::PlayIcarusSound( int taskID, int entID, const char *n
 	soundChannel_t	voice_chan = CHAN_VOICE; // set a default so the compiler doesn't bitch
 	qboolean		type_voice = qfalse;
 
-	Q_strncpyz( finalName, name, MAX_QPATH, qfalse );
+	Q_strncpyz( finalName, name, MAX_QPATH );
 	Q_strlwr(finalName);
 	G_AddSexToPlayerString( finalName, qtrue );
 
@@ -11218,7 +11218,7 @@ void	CQuake3GameInterface::PrecacheSound( const char *name )
 {
 	char			finalName[MAX_QPATH];
 
-	Q_strncpyz( finalName, name, MAX_QPATH, qfalse );
+	Q_strncpyz( finalName, name, MAX_QPATH );
 	Q_strlwr(finalName);
 	if (com_buildScript->integer)
 	{	//get the male sound first
