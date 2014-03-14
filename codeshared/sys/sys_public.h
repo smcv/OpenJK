@@ -199,10 +199,17 @@ qboolean Sys_PathCmp( const char *path1, const char *path2 );
 	\return Null-terminated dynamically allocated array of files, to be freed via Sys_FreeFileList().
 **/
 char **Sys_ListFiles( const char *directory, const char *extension, const char *filter, int *numfiles, qboolean wantsubs );
+
 /**
 	\brief Frees a file list received from Sys_ListFiles().
 **/
 void Sys_FreeFileList( char **filelist );
+
+#ifdef _WIN32
+// for fs_copyfiles
+qboolean Sys_FileOutOfDate( const char *dest, const char * src );
+qboolean Sys_CopyFile( const char *lpExistingFileName, const char *lpNewFileName, qboolean bOverWrite );
+#endif
 
 
 //    Shared Library handling

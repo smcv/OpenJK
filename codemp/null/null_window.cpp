@@ -5,10 +5,10 @@
 
 int main( int argc, char **argv )
 {
-	ojk_main( argc, argv );
+	return ojk_main( argc, argv );
 }
 
-const char *Window_GetClipboardData( void )
+char *Window_GetClipboardData( void )
 {
 	return NULL;
 }

@@ -11,7 +11,7 @@
 #include <cctype>
 #include <cstring>
 
-void Con_CreateConsole( void )
+void Con_CreateConsole( const char *message )
 {
 	// Nothing to do
 }

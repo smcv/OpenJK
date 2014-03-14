@@ -6,7 +6,7 @@
 #include "../qcommon/qcommon.h"
 #include "../ghoul2/ghoul2_shared.h"
 
-#define	REF_API_VERSION 3
+#define	REF_API_VERSION 4
 
 //
 // these are the functions exported by the refresh module
@@ -231,6 +231,7 @@ typedef struct refexport_s {
 // these are the functions imported by the refresh module
 //
 typedef struct refimport_s {
+	// Keep this first and don't change it since legacy renderers need it to fail nicely.
 	void			(QDECL *Printf)						( int printLevel, const char *fmt, ...) __attribute__ ((format (printf, 2, 3)));
 	void			(QDECL *Error)						( int errorLevel, const char *fmt, ...) __attribute__ ((noreturn, format (printf, 2, 3)));
 	void			(QDECL *OPrintf)					( const char *fmt, ...) __attribute__ ((format (printf, 1, 2)));

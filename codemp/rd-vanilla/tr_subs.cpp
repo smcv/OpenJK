@@ -59,8 +59,8 @@ void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit, int iAlign ) {
 	return ri->Z_Malloc( iSize, eTag, bZeroit, iAlign );
 }
 
-void Z_Free( void *ptr ) {
-	ri->Z_Free( ptr );
+int Z_Free( void *ptr ) {
+	return ri->Z_Free( ptr );
 }
 
 int Z_MemSize( memtag_t eTag ) {

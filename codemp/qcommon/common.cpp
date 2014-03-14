@@ -64,6 +64,7 @@ int			com_frameMsec;
 int			com_frameNumber;
 
 qboolean	com_errorEntered = qfalse;
+qboolean	com_recursiveError = qfalse;
 qboolean	com_fullyInitialized = qfalse;
 
 char	com_errorMessage[MAXPRINTMSG] = {0};
@@ -234,6 +235,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	int			currentTime;
 
 	if ( com_errorEntered ) {
+		com_recursiveError = qtrue;
 		Sys_Error( "recursive error after: %s", com_errorMessage );
 	}
 	com_errorEntered = qtrue;
@@ -297,7 +299,7 @@ Called on Sys_Quit() to clean up.
 void MSG_shutdownHuffman();
 void Com_Shutdown( void ) {
 	// don't try to shutdown if we are in a recursive error
-	if ( !com_errorEntered ) {
+	if ( !com_recursiveError ) {
 		SV_Shutdown ("Server quit\n");
 		CL_Shutdown( );
 
@@ -1138,6 +1140,7 @@ static void Com_CatchError ( int code )
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks( "", "" );
 		com_errorEntered = qfalse;
+		com_recursiveError = qfalse;
 	} else if ( code == ERR_DROP ) {
 		Com_Printf ("********************\n"
 					"ERROR: %s\n"
@@ -1148,6 +1151,7 @@ static void Com_CatchError ( int code )
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks( "", "" );
 		com_errorEntered = qfalse;
+		com_recursiveError = qfalse;
 	} else if ( code == ERR_NEED_CD ) {
 		SV_Shutdown( "Server didn't have CD" );
 		if ( com_cl_running && com_cl_running->integer ) {
@@ -1159,6 +1163,7 @@ static void Com_CatchError ( int code )
 		// make sure we can get at our local stuff
 		FS_PureServerSetLoadedPaks( "", "" );
 		com_errorEntered = qfalse;
+		com_recursiveError = qfalse;
 	}
 }
 
@@ -1169,7 +1174,7 @@ Com_Init
 */
 void Com_Init( char *commandLine ) {
 	// Create Console for errors
-	Con_CreateConsole( );
+	Con_CreateConsole( CLIENT_CONSOLE_TITLE );
 	char	*s;
 	int		qport;
 
@@ -1326,7 +1331,7 @@ void Com_Init( char *commandLine ) {
 		Sys_Init();
 
 #ifndef DEDICATED
-		Window_Create( );
+		Window_Create( CLIENT_WINDOW_TITLE );
 #endif
 
 		// Pick a random port value

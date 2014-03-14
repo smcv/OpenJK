@@ -24,9 +24,9 @@ typedef struct vidmode_s
 	int         width, height;
 } vidmode_t;
 
-// What should Window_VideoMode_GetDisplayMode use when supplied with an invalid mode?
 enum
 {
+	// What should Window_VideoMode_GetDisplayMode use when supplied with an invalid mode?
 	R_MODE_FALLBACK = 4,
 };
 
@@ -246,6 +246,7 @@ SDL_DisplayMode Window_VideoMode_GetDisplayMode()
 			}
 			else
 			{
+				Com_Printf( S_COLOR_YELLOW "WARNING: Nothing close to desired r_mode available in fullscreen, falling back to %s", s_fixedVideoModes[ R_MODE_FALLBACK ].description );
 				int err = SDL_GetDisplayMode( s_displayIndex, s_modeTranslationTable[ R_MODE_FALLBACK ], &availableMode );
 				// This previously worked so it should work again.
 				SDL_assert( err >= 0 );

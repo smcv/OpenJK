@@ -12,6 +12,7 @@
 #include <io.h> // _finddata_t
 
 extern cvar_t *com_homepath;
+extern cvar_t *com_developer;
 // Used to determine where to store user-specific files
 static char homePath[ MAX_OSPATH ] = { 0 };
 
@@ -335,4 +336,82 @@ void Sys_FreeFileList( char **psList ) {
 	}
 
 	Z_Free( psList );
+}
+
+
+static qboolean Sys_GetFileTime( LPCSTR psFileName, FILETIME &ft )
+{
+	qboolean bSuccess = qfalse;
+	HANDLE hFile = INVALID_HANDLE_VALUE;
+
+	hFile = CreateFile( psFileName,	// LPCTSTR lpFileName,          // pointer to name of the file
+		GENERIC_READ,			// DWORD dwDesiredAccess,       // access (read-write) mode
+		FILE_SHARE_READ,		// DWORD dwShareMode,           // share mode
+		NULL,					// LPSECURITY_ATTRIBUTES lpSecurityAttributes,	// pointer to security attributes
+		OPEN_EXISTING,			// DWORD dwCreationDisposition,  // how to create
+		FILE_FLAG_NO_BUFFERING,// DWORD dwFlagsAndAttributes,   // file attributes
+		NULL					// HANDLE hTemplateFile          // handle to file with attributes to 
+		);
+
+	if( hFile != INVALID_HANDLE_VALUE )
+	{
+		if( GetFileTime( hFile,	// handle to file
+			NULL,	// LPFILETIME lpCreationTime
+			NULL,	// LPFILETIME lpLastAccessTime
+			&ft		// LPFILETIME lpLastWriteTime
+			)
+			)
+		{
+			bSuccess = qtrue;
+		}
+
+		CloseHandle( hFile );
+	}
+
+	return bSuccess;
+}
+
+
+qboolean Sys_FileOutOfDate( const char *dest, const char * src )
+{
+	FILETIME ftFinalFile, ftDataFile;
+
+	if( Sys_GetFileTime( dest, ftFinalFile ) && Sys_GetFileTime( src, ftDataFile ) )
+	{
+		// timer res only accurate to within 2 seconds on FAT, so can't do exact compare...
+		//
+		//LONG l = CompareFileTime( &ftFinalFile, &ftDataFile );
+		if( ( abs( long( ftFinalFile.dwLowDateTime - ftDataFile.dwLowDateTime ) ) <= 20000000 ) &&
+			ftFinalFile.dwHighDateTime == ftDataFile.dwHighDateTime
+			)
+		{
+			return qfalse;	// file not out of date, ie use it.
+		}
+		return qtrue;	// flag return code to copy over a replacement version of this file
+	}
+
+
+	// extra error check, report as suspicious if you find a file locally but not out on the net.,.
+	//
+	if( com_developer->integer )
+	{
+		if( !Sys_GetFileTime( dest, ftDataFile ) )
+		{
+			Com_Printf( "Sys_FileOutOfDate: reading %s but it's not on the net!\n", src );
+		}
+	}
+
+	return qfalse;
+}
+
+qboolean Sys_CopyFile( const char *lpExistingFileName, const char *lpNewFileName, qboolean bOverWrite )
+{
+	qboolean bOk = qtrue;
+	if( !CopyFile( lpExistingFileName, lpNewFileName, !bOverWrite ) && bOverWrite )
+	{
+		DWORD dwAttrs = GetFileAttributes( lpNewFileName );
+		SetFileAttributes( lpNewFileName, dwAttrs & ~FILE_ATTRIBUTE_READONLY );
+		bOk = ToQBoolean( CopyFile( lpExistingFileName, lpNewFileName, FALSE ) );
+	}
+	return bOk;
 }

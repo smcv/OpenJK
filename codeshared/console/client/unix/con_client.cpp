@@ -5,7 +5,7 @@
 
 // TODO: Use ioq3's con_tty
 
-void Con_CreateConsole( void )
+void Con_CreateConsole( const char *message )
 {
 	// Nothing to do here
 }

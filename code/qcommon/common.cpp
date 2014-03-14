@@ -45,6 +45,12 @@ static fileHandle_t	camerafile;
 fileHandle_t	com_journalFile;
 fileHandle_t	com_journalDataFile;		// config files are written here
 
+// Hack? Win32 console needs com_dedicated to know if it should be visible regardless of viewlog.
+#ifdef _WIN32
+static cvar_t s_com_dedicated = { "com_dedicated", "0", "0", NULL, CVAR_ROM, qfalse, 0, 0.f, 0, qfalse, qfalse, 0.f, 0.f, NULL, NULL, NULL, NULL, -1 };
+cvar_t	*com_dedicated = &s_com_dedicated;
+#endif
+
 cvar_t	*com_viewlog;
 cvar_t	*com_speeds;
 cvar_t	*com_developer;
@@ -1099,7 +1105,7 @@ Com_Init
 extern void Com_InitZoneMemory();
 void Com_Init( char *commandLine ) {
 	// Create Console for errors
-	Con_CreateConsole();
+	Con_CreateConsole( CLIENT_CONSOLE_TITLE );
 
 	char	*s;
 
@@ -1193,7 +1199,7 @@ void Com_Init( char *commandLine ) {
 	
 		Sys_Init();	// this also detects CPU type, so I can now do this CPU check below...
 
-		Window_Create( );
+		Window_Create( CLIENT_WINDOW_TITLE );
 
 		Netchan_Init( Com_Milliseconds() & 0xffff );	// pick a port value that should be nice and random
 //	VM_Init();

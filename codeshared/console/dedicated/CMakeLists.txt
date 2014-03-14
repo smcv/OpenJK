@@ -36,6 +36,7 @@ if(BuildDedicatedConsoleLib)
 	set(DedicatedConsoleLibCommonFiles
 		"${SharedDir}/qcommon/q_platform.h"
 		"${SharedDir}/qcommon/q_sharedtypes.h"
+		"${SharedDir}/qcommon/qcommon_shared.h"
 		)
 	source_group("Common" FILES ${DedicatedConsoleLibCommonFiles})
 	set(DedicatedConsoleLibFiles ${DedicatedConsoleLibFiles} ${DedicatedConsoleLibCommonFiles})

@@ -4,7 +4,7 @@
 #include "SDL.h"
 
 
-const char *Window_GetClipboardData( void ) {
+char *Window_GetClipboardData( void ) {
 	char *cb = SDL_GetClipboardText();
 	if( !cb )
 	{

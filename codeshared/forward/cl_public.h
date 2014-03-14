@@ -11,6 +11,7 @@
 
 #include "qcommon/q_platform.h"
 #include "qcommon/q_sharedtypes.h"
+#include "qcommon/qcommon_shared.h"
 
 // This is a common subset of the SP and MP tags that is safe to use in shared code.
 typedef enum
@@ -36,8 +37,9 @@ int	QDECL Com_sprintf( char *dest, int size, const char *fmt, ... );
 void Q_strcat( char *dest, int size, const char *src );
 void Q_strncpyz( char *dest, const char *src, int destsize );
 int Q_stricmp( const char *s1, const char *s2 );
+int Q_strncmp( const char *s1, const char *s2, int n );
 
-qboolean FS_FilenameCompare( const char *s1, const char *s2 );
+int FS_FilenameCompare( const char *s1, const char *s2 );
 char *FS_BuildOSPath( const char *base, const char *game, const char *qpath );
 
 void Com_Init( char *commandLine );
@@ -50,7 +52,15 @@ char *CopyString( const char *in ); // Z_Malloc's a string
 int Z_Free( void *pvAddress );
 void *Z_Malloc( int iSize, int eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );
 
-//void *Z_Malloc( int iSize, memtag_t eTag, qboolean bZeroit, int unusedAlign );
+int Key_GetCatcher( void );
+
+// Edit fields and command line history/completion
+// (These are probably the same between mp and sp and could go into CommonLib?)
+void Field_Clear( field_t *edit );
+void Field_AutoComplete( field_t *edit );
+void Field_CompleteKeyname( void );
+void Field_CompleteFilename( const char *dir, const char *ext, qboolean stripExt, qboolean allowNonPureFilesOnDisk );
+void Field_CompleteCommand( char *cmd, qboolean doCommands, qboolean doCvars );
 
 
 //    Console Commands
@@ -66,4 +76,4 @@ char	*Cmd_Argv( int arg );
 
 cvar_t *Cvar_Get( const char *var_name, const char *value, uint32_t flags );
 cvar_t *Cvar_Set( const char *var_name, const char *value );
-char	*Cvar_VariableString( const char *var_name );
+char *Cvar_VariableString( const char *var_name );

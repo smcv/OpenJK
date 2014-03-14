@@ -76,7 +76,7 @@ Please be aware of the implications of the GPLv2 licence. In short, be prepared 
 * rd-rend2 (Maintainer: Xycaleth)
 * rd-strawberry (Maintainer: Xycaleth)
 * rd-vader (Maintainer: mrwonko)
-* rd-palpatine (Maintainer: mrwonko)
+* rd-palpatine (Maintainer: mrwonko) - may turn out to be rd-raspberry in disguise?
 * rd-sidious (Maintainer: mrwonko)
 
 ### Engine "hax" ###

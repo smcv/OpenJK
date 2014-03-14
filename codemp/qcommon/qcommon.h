@@ -4,6 +4,7 @@
 
 #include "qcommon/cm_public.h"
 #include "qcommon/q_shared.h"
+#include "qcommon/qcommon_shared.h"
 
 //============================================================================
 
@@ -645,7 +646,7 @@ int		FS_FOpenFileByMode( const char *qpath, fileHandle_t *f, fsMode_t mode );
 int		FS_Seek( fileHandle_t f, long offset, int origin );
 // seek on a file
 
-qboolean FS_FilenameCompare( const char *s1, const char *s2 );
+int FS_FilenameCompare( const char *s1, const char *s2 );
 
 const char *FS_LoadedPakNames( void );
 const char *FS_LoadedPakChecksums( void );
@@ -684,16 +685,7 @@ Edit fields and command line history/completion
 ==============================================================
 */
 
-#define CONSOLE_PROMPT_CHAR ']'
-#define	MAX_EDIT_LINE		256
-#define COMMAND_HISTORY		32
-
-typedef struct field_s {
-	int		cursor;
-	int		scroll;
-	int		widthInChars;
-	char	buffer[MAX_EDIT_LINE];
-} field_t;
+// field_t is in q_commonshared.h
 
 void Field_Clear( field_t *edit );
 void Field_AutoComplete( field_t *edit );

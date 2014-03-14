@@ -420,26 +420,7 @@ CT_MAX
 
 extern vec4_t colorTable[CT_MAX];
 
-#define Q_COLOR_ESCAPE	'^'
-#define Q_COLOR_BITS 0xF // was 7
-
-// you MUST have the last bit on here about colour strings being less than 7 or taiwanese strings register as colour!!!!
-#define Q_IsColorString(p)	( p && *(p) == Q_COLOR_ESCAPE && *((p)+1) && *((p)+1) != Q_COLOR_ESCAPE && *((p)+1) <= '9' && *((p)+1) >= '0' )
-#define Q_IsColorStringExt(p)	((p) && *(p) == Q_COLOR_ESCAPE && *((p)+1) && *((p)+1) >= '0' && *((p)+1) <= '9') // ^[0-9]
-
-#define COLOR_BLACK		'0'
-#define COLOR_RED		'1'
-#define COLOR_GREEN		'2'
-#define COLOR_YELLOW	'3'
-#define COLOR_BLUE		'4'
-#define COLOR_CYAN		'5'
-#define COLOR_MAGENTA	'6'
-#define COLOR_WHITE		'7'
-#define COLOR_ORANGE	'8'
-#define COLOR_GREY		'9'
-#define ColorIndex(c)	( ( (c) - '0' ) & Q_COLOR_BITS )
-
-// color strings defined in q_sharedtypes.h
+// colors defined in q_sharedtypes.h
 
 extern vec4_t g_color_table[Q_COLOR_BITS+1];
 
@@ -1150,8 +1131,8 @@ typedef struct {
 
 // in order from highest priority to lowest
 // if none of the catchers are active, bound key strings will be executed
-#define KEYCATCH_CONSOLE	1
-#define	KEYCATCH_UI			2
+
+// see q_sharedtypes
 
 
 // sound channels

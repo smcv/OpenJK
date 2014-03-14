@@ -46,6 +46,7 @@ if(BuildCommonLib)
 	set(CommonLibCommonFiles
 		"${SharedDir}/qcommon/q_platform.h"
 		"${SharedDir}/qcommon/q_sharedtypes.h"
+		"${SharedDir}/qcommon/qcommon_shared.h"
 		)
 	source_group("Common" FILES ${CommonLibCommonFiles})
 	set(CommonLibFiles ${CommonLibFiles} ${CommonLibCommonFiles})

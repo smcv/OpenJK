@@ -30,12 +30,19 @@ if(BuildClientConsoleLib)
 		"${SharedDir}/console/con_public.h"
 		"${SharedDir}/console/client/${Platform}/con_client.cpp"
 		)
+	if(WIN32)
+		set(ClientConsoleLibSysFiles
+			${ClientConsoleLibSysFiles}
+			"${SharedDir}/win32/resource.h"
+			)
+	endif(WIN32)
 	source_group("Console" FILES ${ClientConsoleLibSysFiles})
 	set(ClientConsoleLibFiles ${ClientConsoleLibFiles} ${ClientConsoleLibSysFiles})
 	
 	set(ClientConsoleLibCommonFiles
 		"${SharedDir}/qcommon/q_platform.h"
 		"${SharedDir}/qcommon/q_sharedtypes.h"
+		"${SharedDir}/qcommon/qcommon_shared.h"
 		)
 	source_group("Common" FILES ${ClientConsoleLibCommonFiles})
 	set(ClientConsoleLibFiles ${ClientConsoleLibFiles} ${ClientConsoleLibCommonFiles})

@@ -325,7 +325,7 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 	if(WIN32)
 		set(SPEngineWin32Files
 			"${SPDir}/win32/AutoVersion.h"
-			"${SPDir}/win32/resource.h"
+			"${SharedDir}/win32/resource.h"
 			"${SPDir}/win32/winquake.rc"
 			)
 		source_group("win32" FILES ${SPEngineWin32Files})

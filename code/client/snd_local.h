@@ -25,6 +25,7 @@ This file is part of Jedi Academy.
 #include "../qcommon/qcommon.h"
 #include "snd_public.h"
 #include "../mp3code/mp3struct.h"
+#include "window/window_public.h"
 
 // Open AL Specific
 #ifdef _WIN32
@@ -89,15 +90,6 @@ typedef struct sfx_s {
 
 	struct sfx_s	*next;					// only used because of hash table when registering
 } sfx_t;
-
-typedef struct {
-	int			channels;
-	int			samples;				// mono samples in buffer
-	int			submission_chunk;		// don't mix less than this #
-	int			samplebits;
-	int			speed;
-	byte		*buffer;
-} dma_t;
 
 
 #define START_SAMPLE_IMMEDIATE	0x7fffffff
@@ -168,29 +160,6 @@ typedef struct {
 	int			samples;
 	int			dataofs;		// chunk starts this many bytes from file start
 } wavinfo_t;
-
-
-
-/*
-====================================================================
-
-  SYSTEM SPECIFIC FUNCTIONS
-
-====================================================================
-*/
-
-// initializes cycling through a DMA buffer and returns information on it
-qboolean SNDDMA_Init(void);
-
-// gets the current DMA position
-int		SNDDMA_GetDMAPos(void);
-
-// shutdown the DMA xfer.
-void	SNDDMA_Shutdown(void);
-
-void	SNDDMA_BeginPainting (void);
-
-void	SNDDMA_Submit(void);
 
 //====================================================================
 

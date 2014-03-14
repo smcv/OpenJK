@@ -24,6 +24,7 @@ This file is part of Jedi Academy.
 #include "q_shared.h"
 #include "strippublic.h"
 #include "cm_public.h"
+#include "qcommon/qcommon_shared.h"
 
 
 // some zone mem debugging stuff
@@ -529,16 +530,7 @@ Edit fields and command line history/completion
 ==============================================================
 */
 
-#define CONSOLE_PROMPT_CHAR ']'
-#define	MAX_EDIT_LINE		256
-#define COMMAND_HISTORY		32
-
-typedef struct {
-	int		cursor;
-	int		scroll;
-	int		widthInChars;
-	char	buffer[MAX_EDIT_LINE];
-} field_t;
+// field_t is in q_commonshared.h
 
 void Field_Clear( field_t *edit );
 void Field_AutoComplete( field_t *edit );

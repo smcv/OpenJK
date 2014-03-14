@@ -225,9 +225,6 @@ if(BuildMPEngine OR BuildMPDed)
 		"${MPDir}/qcommon/vm.cpp"
 		"${MPDir}/qcommon/z_memman_pc.cpp"
 		)
-	if(WIN32)
-		set(MPEngineAndDedCommonFiles ${MPEngineAndDedCommonFiles})
-	endif(WIN32)
 	source_group("common" FILES ${MPEngineAndDedCommonFiles})
 	set(MPEngineAndDedFiles ${MPEngineAndDedFiles} ${MPEngineAndDedCommonFiles})
 
@@ -481,14 +478,12 @@ if(BuildMPEngine)
 	if(WIN32)
 		set(MPEngineWin32Files
 			"${MPDir}/win32/icon.ico"
-			"${MPDir}/win32/resource.h"
+			"${SharedDir}/win32/resource.h"
 			"${MPDir}/win32/openjk.rc"
 			)
 		source_group("win32" FILES ${MPEngineWin32Files})
 		set(MPEngineFiles ${MPEngineFiles} ${MPEngineWin32Files})
 	endif(WIN32)
-
-	# todo: windows resources
 
 	if(MakeApplicationBundles)
 		set(MACOSX_BUNDLE_ICON_FILE OpenJK.icns)
@@ -590,7 +585,7 @@ if(BuildMPDed)
 	if(WIN32)
 		set(MPDedWin32Files
 			"${MPDir}/win32/openjkded.rc"
-			"${MPDir}/win32/resource.h"
+			"${SharedDir}/win32/resource.h"
 			)
 		source_group("win32" FILES ${MPDedWin32Files})
 		set(MPDedFiles ${MPDedFiles} ${MPDedWin32Files})

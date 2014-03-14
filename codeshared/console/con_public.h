@@ -19,7 +19,7 @@
 	On Unix client, it does nothing.
 	On Unix dedicated, this sets up stdin for nonblocking reading.
 **/
-void Con_CreateConsole( void );
+void Con_CreateConsole( const char *title );
 
 /**
 	\brief Changes visibility of the console window.

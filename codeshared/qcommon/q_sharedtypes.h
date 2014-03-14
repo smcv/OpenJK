@@ -138,6 +138,16 @@ typedef struct cvar_s
 	int				hashIndex;
 } cvar_t;
 
+
+typedef struct dma_s {
+	int			channels;
+	int			samples;				// mono samples in buffer
+	int			submission_chunk;		// don't mix less than this #
+	int			samplebits;
+	int			speed;
+	byte		*buffer;
+} dma_t;
+
 #define	MAX_QPATH			64		// max length of a quake game pathname
 #ifdef PATH_MAX
 #define MAX_OSPATH			PATH_MAX
@@ -149,7 +159,28 @@ typedef struct cvar_s
 // exceed MAX_STRING_CHARS
 #define	MAX_STRING_CHARS	1024	// max length of a string passed to Cmd_TokenizeString
 
-// Color Strings
+// Colors
+
+#define Q_COLOR_ESCAPE	'^'
+#define Q_COLOR_BITS 0xF // was 7
+
+// you MUST have the last bit on here about colour strings being less than 7 or taiwanese strings register as colour!!!!
+#define Q_IsColorString(p)	( p && *(p) == Q_COLOR_ESCAPE && *((p)+1) && *((p)+1) != Q_COLOR_ESCAPE && *((p)+1) <= '9' && *((p)+1) >= '0' )
+// Correct version of the above for Q_StripColor
+#define Q_IsColorStringExt(p)	((p) && *(p) == Q_COLOR_ESCAPE && *((p)+1) && *((p)+1) >= '0' && *((p)+1) <= '9') // ^[0-9]
+
+#define COLOR_BLACK		'0'
+#define COLOR_RED		'1'
+#define COLOR_GREEN		'2'
+#define COLOR_YELLOW	'3'
+#define COLOR_BLUE		'4'
+#define COLOR_CYAN		'5'
+#define COLOR_MAGENTA	'6'
+#define COLOR_WHITE		'7'
+#define COLOR_ORANGE	'8'
+#define COLOR_GREY		'9'
+#define ColorIndex(c)	( ( (c) - '0' ) & Q_COLOR_BITS )
+
 #define S_COLOR_BLACK	"^0"
 #define S_COLOR_RED		"^1"
 #define S_COLOR_GREEN	"^2"
@@ -160,3 +191,8 @@ typedef struct cvar_s
 #define S_COLOR_WHITE	"^7"
 #define S_COLOR_ORANGE	"^8"
 #define S_COLOR_GREY	"^9"
+
+// in order from highest priority to lowest
+// if none of the catchers are active, bound key strings will be executed
+#define KEYCATCH_CONSOLE		0x0001
+#define	KEYCATCH_UI				0x0002

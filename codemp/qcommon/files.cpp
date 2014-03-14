@@ -1069,7 +1069,7 @@ FS_FilenameCompare
 Ignore case and separator char distinctions
 ===========
 */
-qboolean FS_FilenameCompare( const char *s1, const char *s2 ) {
+int FS_FilenameCompare( const char *s1, const char *s2 ) {
 	int		c1, c2;
 
 	do {
@@ -1091,11 +1091,11 @@ qboolean FS_FilenameCompare( const char *s1, const char *s2 ) {
 		}
 
 		if (c1 != c2) {
-			return qtrue;		// strings not equal
+			return -1;		// strings not equal
 		}
 	} while (c1);
 
-	return qfalse;		// strings are equal
+	return 0;		// strings are equal
 }
 
 /*

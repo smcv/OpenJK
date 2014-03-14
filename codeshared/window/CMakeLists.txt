@@ -40,7 +40,7 @@ set(WindowLibFiles ${WindowLibFiles} ${WindowLibForwardFiles})
 set(WindowLibWindowFiles
 	"${SharedDir}/window/window_public.h"
 	"${SharedDir}/window/window_local.h"
-	"${SharedDir}/window/window_main.c"
+	"${SharedDir}/window/window_main.cpp"
 	"${SharedDir}/window/window_init.cpp"
 	"${SharedDir}/window/window_events.cpp"
 	"${SharedDir}/window/window_sound.cpp"
