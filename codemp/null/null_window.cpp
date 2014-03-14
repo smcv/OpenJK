@@ -8,7 +8,7 @@ int main( int argc, char **argv )
 	ojk_main( argc, argv );
 }
 
-char *Window_GetClipboardData( void )
+const char *Window_GetClipboardData( void )
 {
 	return NULL;
 }

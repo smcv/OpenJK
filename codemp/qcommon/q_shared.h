@@ -711,16 +711,7 @@ extern	vec4_t		colorDkBlue;
 #define COLOR_GREY		'9'
 #define ColorIndex(c)	( ( (c) - '0' ) & Q_COLOR_BITS )
 
-#define S_COLOR_BLACK	"^0"
-#define S_COLOR_RED		"^1"
-#define S_COLOR_GREEN	"^2"
-#define S_COLOR_YELLOW	"^3"
-#define S_COLOR_BLUE	"^4"
-#define S_COLOR_CYAN	"^5"
-#define S_COLOR_MAGENTA	"^6"
-#define S_COLOR_WHITE	"^7"
-#define S_COLOR_ORANGE	"^8"
-#define S_COLOR_GREY	"^9"
+// Color Strings defined in q_sharedtypes.h
 
 extern vec4_t g_color_table[Q_COLOR_BITS+1];
 

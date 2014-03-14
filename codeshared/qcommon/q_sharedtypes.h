@@ -148,3 +148,15 @@ typedef struct cvar_s
 // the game guarantees that no string from the network will ever
 // exceed MAX_STRING_CHARS
 #define	MAX_STRING_CHARS	1024	// max length of a string passed to Cmd_TokenizeString
+
+// Color Strings
+#define S_COLOR_BLACK	"^0"
+#define S_COLOR_RED		"^1"
+#define S_COLOR_GREEN	"^2"
+#define S_COLOR_YELLOW	"^3"
+#define S_COLOR_BLUE	"^4"
+#define S_COLOR_CYAN	"^5"
+#define S_COLOR_MAGENTA	"^6"
+#define S_COLOR_WHITE	"^7"
+#define S_COLOR_ORANGE	"^8"
+#define S_COLOR_GREY	"^9"

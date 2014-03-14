@@ -442,23 +442,6 @@ qboolean R_GetModeInfo( int *width, int *height, int mode ) {
 }
 
 /*
-** R_ModeList_f
-*/
-static void R_ModeList_f( void )
-{
-	int i;
-
-	ri->Printf( PRINT_ALL, "\n" );
-	ri->Printf( PRINT_ALL, "Mode -2: Use desktop resolution\n" );
-	ri->Printf( PRINT_ALL, "Mode -1: Use r_customWidth and r_customHeight variables\n" );
-	for ( i = 0; i < s_numVidModes; i++ )
-	{
-		ri->Printf( PRINT_ALL, "%s\n", r_vidModes[i].description );
-	}
-	ri->Printf( PRINT_ALL, "\n" );
-}
-
-/*
 ==============================================================================
 
 						SCREEN SHOTS
@@ -1135,12 +1118,6 @@ void R_Register( void )
 	r_overBrightBits					= ri->Cvar_Get( "r_overBrightBits",					"0",						CVAR_ARCHIVE|CVAR_LATCH );
 	r_mapOverBrightBits					= ri->Cvar_Get( "r_mapOverBrightBits",				"0",						CVAR_ARCHIVE|CVAR_LATCH );
 	r_ignorehwgamma						= ri->Cvar_Get( "r_ignorehwgamma",					"0",						CVAR_ARCHIVE|CVAR_LATCH );
-	r_mode								= ri->Cvar_Get( "r_mode",							"4",						CVAR_ARCHIVE|CVAR_LATCH );
-	r_fullscreen						= ri->Cvar_Get( "r_fullscreen",						"0",						CVAR_ARCHIVE|CVAR_LATCH );
-	r_noborder							= ri->Cvar_Get( "r_noborder",						"0",						CVAR_ARCHIVE|CVAR_LATCH );
-	r_centerWindow						= ri->Cvar_Get( "r_centerWindow",					"0",						CVAR_ARCHIVE|CVAR_LATCH );
-	r_customwidth						= ri->Cvar_Get( "r_customwidth",					"1600",						CVAR_ARCHIVE|CVAR_LATCH );
-	r_customheight						= ri->Cvar_Get( "r_customheight",					"1024",						CVAR_ARCHIVE|CVAR_LATCH );
 	r_simpleMipMaps						= ri->Cvar_Get( "r_simpleMipMaps",					"1",						CVAR_ARCHIVE|CVAR_LATCH );
 	r_vertexLight						= ri->Cvar_Get( "r_vertexLight",					"0",						CVAR_ARCHIVE|CVAR_LATCH );
 	r_uiFullScreen						= ri->Cvar_Get( "r_uifullscreen",					"0",						CVAR_NONE );
@@ -1273,7 +1250,6 @@ Ghoul2 Insert End
 	ri->Cmd_AddCommand( "r_we", R_WorldEffect_f );
 	ri->Cmd_AddCommand( "imagecacheinfo", RE_RegisterImages_Info_f );
 	ri->Cmd_AddCommand( "modellist", R_Modellist_f );
-	ri->Cmd_AddCommand( "modelist", R_ModeList_f );
 	ri->Cmd_AddCommand( "modelcacheinfo", RE_RegisterModels_Info_f );
 	ri->Cmd_AddCommand( "minimize", GLimp_Minimize );
 

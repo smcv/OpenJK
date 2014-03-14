@@ -20,7 +20,7 @@
 	\return Clipboard contents, or NULL if none.
 	\note Returns static memory that may be overwritten on the next call.
 **/
-char *Window_GetClipboardData( void );
+const char *Window_GetClipboardData( void );
 
 /**
 	\brief Shuts the window, event & input system down cleanly.
@@ -28,6 +28,11 @@ char *Window_GetClipboardData( void );
 void Window_Shutdown( void );
 
 void Window_Create( void );
+
+/**
+	\brief Applies any setting changes, such as resolution or fullscreen.
+**/
+void Window_ApplySettings( void );
 
 void Window_Frame( void );
 
