@@ -595,18 +595,14 @@ void Con_ShowError( const char *message )
 
 void Con_Frame( void )
 {
-	// TODO
-	/*
-	if ( s_wcd.consoleText[0] == 0 )
+	if ( s_wcd.consoleText[0] != 0 )
 	{
-		return NULL;
+		int len = strlen( s_wcd.consoleText ) + 1;
+		char *buf = (char *)Z_Malloc( len, TAG_EVENT );
+		Q_strncpyz( buf, s_wcd.consoleText, len );
+		Sys_QueEvent( 0, SE_CONSOLE, 0, 0, len, buf );
+		s_wcd.consoleText[0] = 0;
 	}
-
-	strcpy( s_wcd.returnedText, s_wcd.consoleText );
-	s_wcd.consoleText[0] = 0;
-
-	return s_wcd.returnedText;
-	*/
 }
 
 void Con_DestroyConsole( void )
