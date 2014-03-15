@@ -8,7 +8,6 @@
 
 extern int g_console_field_width;
 extern cvar_t *com_viewlog;
-extern cvar_t *com_dedicated;
 
 enum {
 	COPY_ID = 1,
@@ -174,7 +173,7 @@ static LRESULT CALLBACK ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 			SetFocus( s_wcd.hwndInputLine );
 		}
 
-		if( com_viewlog && ( com_dedicated && !com_dedicated->integer ) )
+		if( com_viewlog && !Cvar_VariableIntegerValue( "com_dedicated" ) )
 		{
 			// if the viewlog is open, check to see if it's being minimized
 			if( com_viewlog->integer == 1 )
@@ -195,7 +194,7 @@ static LRESULT CALLBACK ConWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 		break;
 
 	case WM_CLOSE:
-		if( ( com_dedicated && com_dedicated->integer ) )
+		if( Cvar_VariableIntegerValue( "com_dedicated" ) )
 		{
 			cmdString = CopyString( "quit" );
 			Sys_QueEvent( 0, SE_CONSOLE, 0, 0, strlen( cmdString ) + 1, ( void * )cmdString );
@@ -620,6 +619,7 @@ void Con_DestroyConsole( void )
 			TranslateMessage( &msg );
 			DispatchMessage( &msg );
 		}
+		s_showingError = qfalse;
 	}
 
 	if( s_wcd.hWnd )

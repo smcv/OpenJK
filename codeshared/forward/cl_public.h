@@ -77,3 +77,4 @@ char	*Cmd_Argv( int arg );
 cvar_t *Cvar_Get( const char *var_name, const char *value, uint32_t flags );
 cvar_t *Cvar_Set( const char *var_name, const char *value );
 char *Cvar_VariableString( const char *var_name );
+int Cvar_VariableIntegerValue( const char *var_name );

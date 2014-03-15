@@ -45,12 +45,6 @@ static fileHandle_t	camerafile;
 fileHandle_t	com_journalFile;
 fileHandle_t	com_journalDataFile;		// config files are written here
 
-// Hack? Win32 console needs com_dedicated to know if it should be visible regardless of viewlog.
-#ifdef _WIN32
-static cvar_t s_com_dedicated = { "com_dedicated", "0", "0", NULL, CVAR_ROM, qfalse, 0, 0.f, 0, qfalse, qfalse, 0.f, 0.f, NULL, NULL, NULL, NULL, -1 };
-cvar_t	*com_dedicated = &s_com_dedicated;
-#endif
-
 cvar_t	*com_viewlog;
 cvar_t	*com_speeds;
 cvar_t	*com_developer;
@@ -90,6 +84,7 @@ int			com_frameMsec;
 int			com_frameNumber = 0;
 
 qboolean	com_errorEntered = qfalse;
+qboolean	com_recursiveError = qfalse;
 qboolean	com_fullyInitialized = qfalse;
 
 char	com_errorMessage[MAXPRINTMSG] = {0};
@@ -258,7 +253,8 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	static int	errorCount;
 	int			currentTime;
 
-	if ( com_errorEntered ) {
+	if( com_errorEntered ) {
+		com_recursiveError = qtrue;
 		Sys_Error( "recursive error after: %s", com_errorMessage );
 	}
 	com_errorEntered = qtrue;
@@ -292,12 +288,7 @@ void QDECL Com_Error( int code, const char *fmt, ... ) {
 	SG_Shutdown();	// close any file pointers
 	if ( code == ERR_DISCONNECT || code == ERR_DROP ) {
 		throw code;
-	} else {
-		SV_Shutdown (va("Server fatal crashed: %s\n", com_errorMessage));
-		CL_Shutdown ();
 	}
-
-	Com_Shutdown ();
 
 	Sys_Error ("%s", com_errorMessage);
 }
@@ -318,8 +309,8 @@ void Com_Quit_f( void ) {
 extern void CM_FreeShaderText( void );
 void Com_Shutdown( void ) {
 	// don't try to shutdown if we are in a recursive error
-	if( !com_errorEntered ) {
-		SV_Shutdown( "Server quit\n" );
+	if( !com_recursiveError ) {
+		SV_Shutdown( com_errorEntered ? "Server fatal error\n" : "Server quit\n" );
 		CL_Shutdown();
 
 		CM_ClearMap( );
@@ -1083,6 +1074,7 @@ static void Com_CatchError ( int code )
 		CL_Disconnect( );
 		CL_FlushMemory(  );
 		com_errorEntered = qfalse;
+		com_recursiveError = qfalse;
 	} else if ( code == ERR_DROP ) {
 		// If loading/saving caused the crash/error - delete the temp file
 		SG_WipeSavegame("current");	// delete file
@@ -1094,6 +1086,7 @@ static void Com_CatchError ( int code )
 		CL_Disconnect( );
 		CL_FlushMemory( );
 		com_errorEntered = qfalse;
+		com_recursiveError = qfalse;
 	}
 }
 
