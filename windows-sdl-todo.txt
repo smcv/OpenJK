@@ -1,16 +1,16 @@
 # Code
 
-* Implement codeshared/window
-	* input
+* Implement/port unix & winded consoles
+* Better joystick support
 * fix up the renderers
     * rd-dedicated
         * also fix the com_dedicated issue while at it, i.e. load rd-dedicated in that case or something
     * rd-vanilla mp
     * (rd-vanilla sp)
-* Move Win32 client Console code to codeshared/console/client/windows
 * Remove win32 and sys directories
 
 # Test
 
 * modelist command - Are there the 13 legacy entries (0-12)? Are unavailable ones marked as such?
 * r_mode, r_display - do they work correctly?
+* input, esp. joysticks

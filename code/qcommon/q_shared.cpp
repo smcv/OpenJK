@@ -283,6 +283,12 @@ void COM_ParseInit( void )
 	parseDataCount = -1;
 }
 
+// SP/MP unification
+void COM_BeginParseSession( const char *name )
+{
+	COM_BeginParseSession();
+}
+
 void COM_BeginParseSession( void )
 {
 	parseDataCount++;

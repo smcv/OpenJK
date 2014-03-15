@@ -69,7 +69,7 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 	# Client files
 	set(SPEngineClientFiles
 		"${SPDir}/client/keys.h"
-		"${SPDir}/client/keycodes.h"
+		"${SharedDir}/client/keycodes.h"
 
 		"${SPDir}/client/cl_cgame.cpp"
 		"${SPDir}/client/cl_cin.cpp"

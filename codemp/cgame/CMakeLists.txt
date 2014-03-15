@@ -94,7 +94,7 @@ set(MPCGameFiles ${MPCGameFiles} ${MPCGameCommonFiles})
 
 set(MPCGameUiFiles
 	"${MPDir}/ui/ui_shared.c"
-	"${MPDir}/ui/keycodes.h"
+	"${SharedDir}/client/keycodes.h"
 	"${MPDir}/ui/menudef.h"
 	"${MPDir}/ui/ui_shared.h"
 	)

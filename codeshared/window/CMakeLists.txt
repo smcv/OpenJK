@@ -17,18 +17,6 @@ else(UseInternalSDL)
 	set(WindowLibIncludeDirectories ${WindowLibIncludeDirectories} ${SDL2_INCLUDE_DIR})
 endif(UseInternalSDL)
 
-# set(SPEngineSysFiles
-	# "${SPDir}/sys/sys_main.cpp"
-	# "${SPDir}/sys/sys_unix.cpp"
-	# "${SPDir}/sys/sys_local.h"
-	# "${SPDir}/sys/sys_loadlib.h"
-	# "${SPDir}/sdl/sdl_qgl.h"
-	# "${SPDir}/sdl/sdl_snd.cpp"
-	# "${SPDir}/sdl/sdl_input.cpp"
-	# )
-# source_group("sys" FILES ${SPEngineSysFiles})
-# set(SPEngineFiles ${SPEngineFiles} ${SPEngineSysFiles})
-
 # Add Files
 
 set(WindowLibForwardFiles
@@ -43,6 +31,7 @@ set(WindowLibWindowFiles
 	"${SharedDir}/window/window_main.cpp"
 	"${SharedDir}/window/window_init.cpp"
 	"${SharedDir}/window/window_events.cpp"
+	"${SharedDir}/window/window_events_joystick.cpp"
 	"${SharedDir}/window/window_sound.cpp"
 	"${SharedDir}/window/window_clipboard.cpp"
 	"${SharedDir}/window/window_videomode.cpp"

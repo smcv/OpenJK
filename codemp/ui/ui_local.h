@@ -6,7 +6,7 @@
 #include "qcommon/q_shared.h"
 #include "rd-common/tr_types.h"
 #include "ui_public.h"
-#include "keycodes.h"
+#include "../../codeshared/qcommon/keycodes.h"
 #include "game/bg_public.h"
 #include "ui_shared.h"
 

@@ -20,7 +20,7 @@ This file is part of Jedi Academy.
 #define __UI_PUBLIC_H__
 
 
-#include "../client/keycodes.h"
+#include "../../codeshared/client/keycodes.h"
 
 
 #define UI_API_VERSION	3

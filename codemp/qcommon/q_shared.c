@@ -336,6 +336,11 @@ void COM_BeginParseSession( const char *name )
 	Com_sprintf(com_parsename, sizeof(com_parsename), "%s", name);
 }
 
+// SP/MP unification
+void COM_EndParseSession()
+{
+}
+
 int COM_GetCurrentParseLine( void )
 {
 	return com_lines;

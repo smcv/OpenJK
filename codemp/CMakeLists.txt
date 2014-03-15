@@ -313,7 +313,7 @@ if(BuildMPEngine OR BuildMPDed)
 	set(MPEngineAndDedFiles ${MPEngineAndDedFiles} ${MPEngineAndDedServerFiles})
 
 	set(MPEngineAndDedUiFiles
-		"${MPDir}/ui/keycodes.h"
+		"${SharedDir}/client/keycodes.h"
 		"${MPDir}/ui/ui_public.h"
 		)
 	source_group("ui" FILES ${MPEngineAndDedUiFiles})

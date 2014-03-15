@@ -16,7 +16,7 @@ This file is part of Jedi Academy.
 */
 // Copyright 2001-2013 Raven Software
 
-#include "keycodes.h"
+#include "client/keycodes.h"
 
 typedef struct qkey_s {
 	qboolean	down;

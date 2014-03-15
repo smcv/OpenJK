@@ -11,7 +11,6 @@ cvar_t *r_centerWindow = NULL;
 cvar_t *r_customwidth = NULL;
 cvar_t *r_customheight = NULL;
 cvar_t *r_display = NULL;
-cvar_t *in_joystick = NULL;
 
 static void Window_ReloadCvars( void )
 {
@@ -31,12 +30,14 @@ static void Window_ReloadCvars( void )
 	r_centerWindow = Cvar_Get( "r_centerWindow", "0", CVAR_ARCHIVE | CVAR_LATCH );
 	// which display to put the window on
 	r_display = Cvar_Get( "r_display", "0", CVAR_ARCHIVE | CVAR_LATCH );
-
-	// whether joystick input is enabled
-	in_joystick = Cvar_Get( "in_joystick", "0", CVAR_ARCHIVE ); // can be changed on-the-fly.
 }
 
 static SDL_Window *s_window = NULL;
+
+SDL_Window *Window_GetWindow()
+{
+	return s_window;
+}
 
 static void Window_ApplyWindowSettings()
 {
@@ -105,11 +106,15 @@ void *Window_Create( const char *title )
 
 	Window_ApplySettings();
 
+	IN_Init();
+
 	return s_window;
 }
 
 void Window_Shutdown( void )
 {
+	IN_Shutdown();
+
 	Window_VideoMode_Shutdown();
 	if( !s_window )
 	{

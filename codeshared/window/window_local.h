@@ -15,3 +15,15 @@ void Window_VideoMode_Shutdown( void );
 	Call Window_VideoMode_Init() first!
 **/
 SDL_DisplayMode Window_VideoMode_GetDisplayMode();
+
+SDL_Window *Window_GetWindow();
+
+void IN_InitJoystick();
+
+void IN_JoyMove();
+
+void IN_ShutdownJoystick();
+
+void IN_Init();
+
+void IN_Shutdown();

@@ -196,3 +196,11 @@ typedef struct dma_s {
 // if none of the catchers are active, bound key strings will be executed
 #define KEYCATCH_CONSOLE		0x0001
 #define	KEYCATCH_UI				0x0002
+
+// paramters for command buffer stuffing
+typedef enum {
+	EXEC_NOW,			// don't return until completed, a VM should NEVER use this,
+	// because some commands might cause the VM to be unloaded...
+	EXEC_INSERT,		// insert at current position, but don't run yet
+	EXEC_APPEND			// add to end of the command buffer (normal case)
+} cbufExec_t;

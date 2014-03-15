@@ -74,9 +74,7 @@ cvar_t	*cl_activeAction;
 
 cvar_t	*cl_inGameVideo;
 
-#ifndef _WIN32
 cvar_t	*cl_consoleKeys;
-#endif
 
 clientActive_t		cl;
 clientConnection_t	clc;
@@ -1297,10 +1295,8 @@ void CL_Init( void ) {
 	m_side = Cvar_Get ("m_side", "0.25", CVAR_ARCHIVE);
 	m_filter = Cvar_Get ("m_filter", "0", CVAR_ARCHIVE);
 	
-#ifndef _WIN32
 	// ~ and `, as keys and characters
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
-#endif
 
 	// userinfo
 	Cvar_Get ("name", "Jaden", CVAR_USERINFO | CVAR_ARCHIVE );

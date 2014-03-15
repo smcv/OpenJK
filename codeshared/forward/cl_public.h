@@ -31,6 +31,7 @@ typedef enum {
 	\brief Print a formatted string to the console. Format like printf.
 **/
 void QDECL Com_Printf( const char *format, ... );
+void QDECL Com_DPrintf( const char *fmt, ... );
 void QDECL Com_Error( int level, const char *error, ... );
 int	QDECL Com_sprintf( char *dest, int size, const char *fmt, ... );
 
@@ -48,6 +49,13 @@ void Com_GenerateEvent( void );
 void Com_Shutdown( void );
 int Com_FilterPath( const char *filter, const char *name, int casesensitive );
 char *CopyString( const char *in ); // Z_Malloc's a string
+qboolean Com_IsLoading( void );
+
+void COM_BeginParseSession( const char *name );
+void COM_EndParseSession( void );
+char *COM_Parse( const char **data_p );
+int Key_StringToKeynum( char *str );
+int Com_HexStrToInt( const char *str );
 
 int Z_Free( void *pvAddress );
 void *Z_Malloc( int iSize, int eTag, qboolean bZeroit = qfalse, int iUnusedAlign = 4 );
@@ -70,6 +78,11 @@ void	Cmd_AddCommand( const char *cmd_name, xcommand_t function );
 void	Cmd_RemoveCommand( const char *cmd_name );
 int		Cmd_Argc( void );
 char	*Cmd_Argv( int arg );
+
+
+// Command Buffer
+
+void Cbuf_ExecuteText( int exec_when, const char *text );
 
 
 //    CVar

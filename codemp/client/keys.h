@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ui/keycodes.h"
+#include "client/keycodes.h"
 
 typedef struct qkey_s {
 	qboolean	down;

@@ -74,9 +74,7 @@ cvar_t	*cl_guidServerUniq;
 
 cvar_t	*cl_autolodscale;
 
-#ifndef _WIN32
 cvar_t	*cl_consoleKeys;
-#endif
 
 cvar_t  *cl_lanForcePackets;
 
@@ -2702,10 +2700,8 @@ void CL_Init( void ) {
 
 	cl_guidServerUniq = Cvar_Get ("cl_guidServerUniq", "1", CVAR_ARCHIVE);
 
-#ifndef _WIN32
 	// ~ and `, as keys and characters
 	cl_consoleKeys = Cvar_Get( "cl_consoleKeys", "~ ` 0x7e 0x60", CVAR_ARCHIVE);
-#endif
 
 	// userinfo
 	Cvar_Get ("name", "Padawan", CVAR_USERINFO | CVAR_ARCHIVE );
