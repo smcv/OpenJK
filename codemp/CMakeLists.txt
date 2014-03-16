@@ -341,7 +341,24 @@ if(BuildMPEngine)
 	#    Dependencies
 	
 	# WindowLib, ClientConsoleLib
-	set(MPEngineLibraries ${MPEngineLibraries} ${WindowLib} ${SDL2_LIBRARY} ${ClientConsoleLib})
+	set(MPEngineLibraries ${MPEngineLibraries} ${WindowLib} ${ClientConsoleLib})
+	
+	# SDL
+	if(UseInternalSDL)
+		find_library(LibSDL2 NAMES SDL2 PATHS ${OpenJKLibDir})
+		if(NOT LibSDL2)
+			message(FATAL_ERROR "UseInternalSDL enabled, but lib/SDL2.lib not found!")
+		endif(NOT LibSDL2)
+		find_library(LibSDL2main NAMES SDL2main PATHS ${OpenJKLibDir})
+		if(NOT LibSDL2main)
+			message(FATAL_ERROR "UseInternalSDL enabled, but lib/SDL2main.lib not found!")
+		endif(NOT LibSDL2main)
+		set(MPEngineLibraries ${MPEngineLibraries} ${LibSDL2} ${LibSDL2main})
+	else(UseInternalSDL)
+		set(SDL2_BUILDING_LIBRARY OFF) # want main()
+		find_package(SDL2 REQUIRED)
+		set(MPEngineLibraries ${MPEngineLibraries} ${SDL2_LIBRARY})
+	endif(UseInternalSDL)
 
 	# OpenAL (is optionally included for Windows)
 	if(UseInternalOpenAL)

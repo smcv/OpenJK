@@ -127,16 +127,23 @@ else(UseInternalZlib)
 	set(MPVanillaRendererLibraries ${MPVanillaRendererLibraries} ${ZLIB_LIBRARY})
 endif(UseInternalZlib)
 
-if(NOT WIN32)
-	find_package(OpenGL REQUIRED)
-	set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${OPENGL_INCLUDE_DIR})
-	set(MPVanillaRendererLibraries ${MPVanillaRendererLibraries} ${OPENGL_LIBRARIES})
+find_package(OpenGL REQUIRED)
+set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${OPENGL_INCLUDE_DIR})
+set(MPVanillaRendererLibraries ${MPVanillaRendererLibraries} ${OPENGL_LIBRARIES})
 
+if(UseInternalSDL)
+	find_library(LibSDL2 NAMES SDL2 PATHS ${OpenJKLibDir})
+	if(NOT LibSDL2)
+		message(FATAL_ERROR "UseInternalSDL enabled, but lib/SDL2.lib not found!")
+	endif(NOT LibSDL2)
+	set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} "${OpenJKLibDir}/sdl2")
+	set(MPVanillaRendererLibraries ${MPVanillaRendererLibraries} ${LibSDL2})
+else(UseInternalSDL)
 	set(SDL2_BUILDING_LIBRARY ON) # don't want main() in Renderer
 	find_package(SDL2 REQUIRED)
 	set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${SDL2_INCLUDE_DIR})
 	set(MPVanillaRendererLibraries ${MPVanillaRendererLibraries} ${SDL2_LIBRARY})
-endif(NOT WIN32)
+endif(UseInternalSDL)
 
 
 set(MPVanillaRendererSysFiles
