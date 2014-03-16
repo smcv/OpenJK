@@ -486,8 +486,7 @@ void Window_Frame( void )
 	IN_JoyMove( );
 	IN_ProcessEvents( );
 
-	// If not DISCONNECTED (main menu) or ACTIVE (in game), we're loading
-	qboolean loading = Com_IsLoading();
+	qboolean loading = CL_IsLoading();
 	bool fullscreen = SDL_GetWindowFlags( Window_GetWindow() ) & SDL_WINDOW_FULLSCREEN;
 
 

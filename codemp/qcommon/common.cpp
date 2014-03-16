@@ -7,7 +7,6 @@
 #include "stringed_ingame.h"
 #include "qcommon/game_version.h"
 #include "../server/NPCNav/navigator.h"
-#include "client/client.h"
 
 #include "sys/sys_public.h"
 #include "window/window_public.h"
@@ -98,18 +97,6 @@ void Com_EndRedirect (void)
 	rd_buffer = NULL;
 	rd_buffersize = 0;
 	rd_flush = NULL;
-}
-
-/*
-=============
-Com_IsLoading
-
-To determine whether the mouse should be released
-=============
-*/
-qboolean Com_IsLoading( void )
-{
-	return ToQBoolean( cls.state != CA_DISCONNECTED && cls.state != CA_ACTIVE );
 }
 
 /*

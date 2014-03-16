@@ -22,7 +22,6 @@ This file is part of Jedi Academy.
 #include "qcommon.h"
 #include "sstring.h"	// to get Gil's string class, because MS's doesn't compile properly in here
 #include "stv_version.h"
-#include "client/client.h"
 
 #include "sys/sys_public.h"
 #include "window/window_public.h"
@@ -119,18 +118,6 @@ void Com_EndRedirect (void)
 	rd_buffer = NULL;
 	rd_buffersize = 0;
 	rd_flush = NULL;
-}
-
-/*
-=============
-Com_IsLoading
-
-To determine whether the mouse should be released
-=============
-*/
-qboolean Com_IsLoading( void )
-{
-	return ToQBoolean( cls.state != CA_DISCONNECTED && cls.state != CA_ACTIVE );
 }
 
 /*

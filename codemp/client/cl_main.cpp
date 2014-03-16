@@ -667,6 +667,19 @@ void CL_FlushMemory( void ) {
 }
 
 /*
+=============
+CL_IsLoading
+
+To determine whether the mouse should be released
+=============
+*/
+qboolean CL_IsLoading( void )
+{
+	// If not DISCONNECTED (main menu) or ACTIVE (in game), we're loading
+	return ToQBoolean( cls.state != CA_DISCONNECTED && cls.state != CA_ACTIVE );
+}
+
+/*
 =====================
 CL_MapLoading
 

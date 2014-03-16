@@ -49,7 +49,8 @@ void Com_GenerateEvent( void );
 void Com_Shutdown( void );
 int Com_FilterPath( const char *filter, const char *name, int casesensitive );
 char *CopyString( const char *in ); // Z_Malloc's a string
-qboolean Com_IsLoading( void );
+
+qboolean CL_IsLoading( void );
 
 void COM_BeginParseSession( const char *name );
 void COM_EndParseSession( void );
