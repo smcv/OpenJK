@@ -2,7 +2,7 @@
 
 #include "qcommon/q_shared.h"
 #include "rd-common/tr_types.h"
-#include "keycodes.h"
+#include "../../codeshared/qcommon/keycodes.h"
 
 #include "ui/menudef.h"
 

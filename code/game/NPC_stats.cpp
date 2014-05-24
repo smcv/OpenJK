@@ -1337,7 +1337,7 @@ void NPC_PrecacheAnimationCFG( const char *NPC_type )
 				GLAName = gi.G2API_GetAnimFileNameIndex( handle );
 				if ( GLAName )
 				{
-					Q_strncpyzChecked( animName, GLAName, sizeof( animName ), );
+					Q_strncpyzChecked( animName, GLAName, sizeof( animName ) );
 					slash = strrchr( animName, '/' );
 					if ( slash )
 					{
