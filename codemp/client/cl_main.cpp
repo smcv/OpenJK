@@ -83,7 +83,7 @@ cvar_t	*cl_activeAction;
 
 cvar_t	*cl_motdString;
 
-cvar_t	*cl_allowDownload;
+static cvar_t	*cl_allowDownload;
 cvar_t	*cl_allowAltEnter;
 cvar_t	*cl_conXOffset;
 cvar_t	*cl_inGameVideo;
@@ -2705,7 +2705,10 @@ void CL_Init( void ) {
 
 	cl_showMouseRate = Cvar_Get ("cl_showmouserate", "0", 0);
 	cl_framerate	= Cvar_Get ("cl_framerate", "0", CVAR_TEMP);
-	cl_allowDownload = Cvar_Get ("cl_allowDownload", "0", CVAR_ARCHIVE);
+	/* Force client-side auto-download to be disabled because in combination
+	 * with Sys_UnpackDLL() it is a security vulnerability.
+	 * https://github.com/JACoders/OpenJK/issues/646 */
+	cl_allowDownload = Cvar_Get ("cl_allowDownload", "0", CVAR_ROM);
 	cl_allowAltEnter = Cvar_Get ("cl_allowAltEnter", "1", CVAR_ARCHIVE);
 
 	cl_autolodscale = Cvar_Get( "cl_autolodscale", "1", CVAR_ARCHIVE );
