@@ -3,9 +3,32 @@
 set -e
 set -x
 
-host="$1"
-flavour="$2"
-shift 2
+flavour=Release
+host=native
+
+getopt="$(getopt -o "" --long host:,flavour: -n "$0" -- "$@")"
+eval set -- "$getopt"
+
+while true; do
+	case "$1" in
+		(--host)
+			host="$2"
+			shift 2
+			;;
+		(--flavour)
+			flavour="$2"
+			shift 2
+			;;
+		(--)
+			shift
+			break
+			;;
+		(*)
+			echo "error parsing options: \"$1\" not understood"
+			exit 2
+			;;
+	esac
+done
 
 mkdir deps build
 
