@@ -43,7 +43,7 @@ case "${host}" in
 esac
 
 sudo apt-get update -qq
-sudo apt-get -q -y install cmake dpkg
+sudo apt-get -q -y install clang cmake dpkg
 
 case "${host}" in
 	(native)

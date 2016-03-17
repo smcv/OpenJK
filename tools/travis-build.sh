@@ -3,10 +3,13 @@
 set -e
 set -x
 
+cmake=cmake
 flavour=Release
 host=native
+make=make
+scan_build=
 
-getopt="$(getopt -o "" --long host:,flavour: -n "$0" -- "$@")"
+getopt="$(getopt -o "" --long host:,flavour:,scan-build -n "$0" -- "$@")"
 eval set -- "$getopt"
 
 while true; do
@@ -18,6 +21,10 @@ while true; do
 		(--flavour)
 			flavour="$2"
 			shift 2
+			;;
+		(--scan-build)
+			scan_build=yes
+			shift
 			;;
 		(--)
 			shift
@@ -57,15 +64,24 @@ case "${host}" in
 		;;
 esac
 
+if [ -n "$scan_build" ]; then
+	cmake="scan-build --use-cc=$CC --use-c++=$CXX $cmake"
+	make="scan-build --use-cc=$CC --use-c++=$CXX $make"
+	export CCC_CC="$CC"
+	export CCC_CXX="$CXX"
+	unset CC
+	unset CXX
+fi
+
 set -- -D CMAKE_BUILD_TYPE="$flavour" "$@"
 
 # Build JK2, so that the CI build is testing everything
-( cd build && cmake \
+( cd build && $cmake \
 	-D BuildJK2SPEngine=ON \
 	-D BuildJK2SPGame=ON \
 	-D BuildJK2SPRdVanilla=ON \
 	-D CMAKE_INSTALL_PREFIX=/prefix \
 	"$@" .. )
-make -C build
-make -C build install DESTDIR=$(pwd)/build/DESTDIR
+$make -C build
+$make -C build install DESTDIR=$(pwd)/build/DESTDIR
 ( cd $(pwd)/build/DESTDIR && find . -ls )
