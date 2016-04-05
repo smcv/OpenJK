@@ -768,26 +768,23 @@ int main ( int argc, char* argv[] )
 	// main game loop
 	while (1)
 	{
-		if ( com_busyWait->integer )
-		{
-			bool shouldSleep = false;
+		int yield_msec;
 
 #if !defined(_JK2EXE)
-			if ( com_dedicated->integer )
-			{
-				shouldSleep = true;
-			}
+		if ( com_dedicated->integer && com_dedicated_sleep->integer )
+		{
+			yield_msec = com_dedicated_sleep->integer;
+		}
 #endif
 
-			if ( com_minimized->integer )
-			{
-				shouldSleep = true;
-			}
+		if ( com_minimized->integer && com_busyWait->integer )
+		{
+			yield_msec = 5;
+		}
 
-			if ( shouldSleep )
-			{
-				Sys_Sleep( 5 );
-			}
+		if ( yield_msec > 0 )
+		{
+			Sys_Sleep( yield_msec );
 		}
 
 		// make sure mouse and joystick are only called once a frame

@@ -41,6 +41,7 @@ fileHandle_t	com_journalDataFile;		// config files are written here
 cvar_t	*com_speeds;
 cvar_t	*com_developer;
 cvar_t	*com_dedicated;
+cvar_t	*com_dedicated_sleep;
 cvar_t	*com_timescale;
 cvar_t	*com_fixedtime;
 cvar_t	*com_journal;
@@ -1200,6 +1201,12 @@ void Com_Init( char *commandLine ) {
 		com_dedicated = Cvar_Get ("_dedicated", "0", CVAR_ROM|CVAR_INIT|CVAR_PROTECTED);
 	//	Cvar_CheckRange( com_dedicated, 0, 2, qtrue );
 	#endif
+
+		// If positive, the dedicated server will sleep this long
+		// before each frame, reducing CPU usage but increasing
+		// latency. This is basically cooperative multi-tasking.
+		com_dedicated_sleep = Cvar_Get("com_dedicated_sleep", "0", CVAR_ARCHIVE);
+
 		// allocate the stack based hunk allocator
 		Com_InitHunkMemory();
 
